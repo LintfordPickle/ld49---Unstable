@@ -1,4 +1,4 @@
-package com.ruse.empty;
+package net.ld.unstable;
 
 import org.lwjgl.opengl.GL11;
 
@@ -6,6 +6,7 @@ import net.lintford.library.GameInfo;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.graphics.fonts.BitmapFontManager;
 import net.lintford.library.core.graphics.fonts.FontUnit;
+import net.lintford.library.screenmanager.ScreenManager;
 
 public class BaseGame extends LintfordCore {
 
@@ -13,17 +14,15 @@ public class BaseGame extends LintfordCore {
 	// Constants
 	// ---------------------------------------------
 
-	private static final String WINDOW_TITLE = "LintfordCore Game";
-	private static final String APPLICATION_NAME = "Game Template";
+	private static final String WINDOW_TITLE = "Unstable";
+	private static final String APPLICATION_NAME = "Unstable";
 
-	private static final int WINDOW_WIDTH = 800;
-	private static final int WINDOW_HEIGHT = 600;
+	private static final int WINDOW_WIDTH = 960;
+	private static final int WINDOW_HEIGHT = 540;
 
 	// ---------------------------------------------
 	// Variables
 	// ---------------------------------------------
-
-	private FontUnit mCoreText;
 
 	// ---------------------------------------------
 	// Constructor
@@ -59,22 +58,11 @@ public class BaseGame extends LintfordCore {
 	@Override
 	protected void onInitializeApp() {
 		super.onInitializeApp();
-
-	}
-
-	@Override
-	protected void onInitializeBitmapFontSources(BitmapFontManager pFontManager) {
-		super.onInitializeBitmapFontSources(pFontManager);
-
-		BitmapFontManager.CoreFonts.AddOrUpdate(BitmapFontManager.SYSTEM_FONT_CORE_TEXT_NAME, "res/fonts/fontCoreText.json");
-		BitmapFontManager.CoreFonts.AddOrUpdate(BitmapFontManager.SYSTEM_FONT_CORE_TITLE_NAME, "res/fonts/fontCoreTitle.json");
 	}
 
 	@Override
 	protected void onLoadGLContent() {
 		super.onLoadGLContent();
-
-		mCoreText = mResourceManager.fontManager().getFontUnit(BitmapFontManager.SYSTEM_FONT_CORE_TITLE_NAME);
 	}
 
 	@Override
@@ -92,19 +80,16 @@ public class BaseGame extends LintfordCore {
 	@Override
 	protected void onDraw() {
 		super.onDraw();
+	}
 
-		final var lTextScale = 1.f;
-		final var lText = "Hello LintfordLibGame";
-		final var lTextWidth = mCoreText.getStringWidth(lText, lTextScale);
+	// ------------------------------
 
-		final float lTimeMod = 0.0005f;
-		final float sin = (float) Math.sin(mGameTime.totalTimeMilli() * lTimeMod);
-		final float cos = (float) Math.cos(mGameTime.totalTimeMilli() * lTimeMod);
+	@Override
+	protected void onInitializeBitmapFontSources(BitmapFontManager pFontManager) {
+		super.onInitializeBitmapFontSources(pFontManager);
 
-		mCoreText.begin(mHUD);
-		final float lMagnitude = 200.f;
-		mCoreText.drawText(lText, (int) (-lTextWidth * .5f + (sin * lMagnitude)), (int) (0 + (sin * cos * lMagnitude)), -1.01f, 1.f);
-		mCoreText.end();
+		BitmapFontManager.CoreFonts.AddOrUpdate(BitmapFontManager.SYSTEM_FONT_CORE_TEXT_NAME, "res/fonts/fontCoreText.json");
+		BitmapFontManager.CoreFonts.AddOrUpdate(BitmapFontManager.SYSTEM_FONT_CORE_TITLE_NAME, "res/fonts/fontCoreTitle.json");
 	}
 
 	// -------------------------------
