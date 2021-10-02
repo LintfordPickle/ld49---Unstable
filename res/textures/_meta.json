@@ -1,0 +1,11 @@
+{
+	"textureDefinitions" : [
+		{
+			"textureName":"TEXTURE_MOBS",
+			"filepath":"res/textures/textureMobs.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
+		}
+	]
+}

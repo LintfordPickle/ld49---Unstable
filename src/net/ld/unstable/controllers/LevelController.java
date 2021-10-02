@@ -13,12 +13,21 @@ public class LevelController extends BaseController {
 	public static final String CONTROLLER_NAME = "Level Controller";
 
 	// --------------------------------------
+	// Variables
+	// --------------------------------------
+
+	private float mSeaLevel = 30.f;
+
+	// --------------------------------------
 	// Properties
 	// --------------------------------------
 
+	public float seaLevel() {
+		return mSeaLevel;
+	}
+
 	@Override
 	public boolean isInitialized() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
@@ -47,4 +56,10 @@ public class LevelController extends BaseController {
 
 	}
 
+	@Override
+	public void update(LintfordCore pCore) {
+		super.update(pCore);
+
+		mSeaLevel = 5.f;
+	}
 }

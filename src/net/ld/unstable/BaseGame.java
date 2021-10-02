@@ -3,11 +3,11 @@ package net.ld.unstable;
 import org.lwjgl.opengl.GL11;
 
 import net.ld.unstable.screens.BackgroundScreen;
+import net.ld.unstable.screens.GameScreen;
 import net.ld.unstable.screens.MainMenuScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.graphics.fonts.BitmapFontManager;
-import net.lintford.library.core.graphics.fonts.FontUnit;
 import net.lintford.library.screenmanager.ScreenManager;
 
 public class BaseGame extends LintfordCore {
@@ -21,6 +21,8 @@ public class BaseGame extends LintfordCore {
 
 	private static final int WINDOW_WIDTH = 960;
 	private static final int WINDOW_HEIGHT = 540;
+
+	private static boolean DEBUG_SKIP_MENU = true;
 
 	// ---------------------------------------------
 	// Variables
@@ -49,8 +51,12 @@ public class BaseGame extends LintfordCore {
 		super.onInitializeApp();
 
 		mScreenManager.initialize();
-		mScreenManager.addScreen(new BackgroundScreen(mScreenManager));
-		mScreenManager.addScreen(new MainMenuScreen(mScreenManager));
+		if (DEBUG_SKIP_MENU == false) {
+			mScreenManager.addScreen(new BackgroundScreen(mScreenManager));
+			mScreenManager.addScreen(new MainMenuScreen(mScreenManager));
+		} else {
+			mScreenManager.addScreen(new GameScreen(mScreenManager));
+		}
 	}
 
 	@Override
@@ -108,7 +114,7 @@ public class BaseGame extends LintfordCore {
 	@Override
 	protected void onInitializeBitmapFontSources(BitmapFontManager pFontManager) {
 		super.onInitializeBitmapFontSources(pFontManager);
-		
+
 		BitmapFontManager.CoreFonts.AddOrUpdate(ScreenManager.FONT_MENU_ENTRY_NAME, "res/fonts/fontOrangeKid24.json");
 	}
 

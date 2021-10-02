@@ -1,0 +1,28 @@
+{
+  "outputDataFilename": "D:\\dev\\java\\ludumdare\\49 - Unstable\\projects\\LD49\\res\\spritesheets\\spritesheetMobs.json",
+  "outputNameDataFilename": "D:\\dev\\java\\ludumdare\\49 - Unstable\\projects\\LD49\\src\\net\\ld\\unstable\\data\\Textures\\MobTextureNames.json",
+  "outputImageFilename": "D:\\dev\\java\\ludumdare\\49 - Unstable\\projects\\LD49\\res\\textures\\textureMobs.png",
+  "workingDirectory": "D:\\dev\\java\\ludumdare\\49 - Unstable\\projects\\LD49\\raw\\spritesheets\\mobs",
+  "spriteSheetName": "SPRITESHEET_MOBS",
+  "textureName": "TEXTURE_MOBS",
+  "exportDataFile": true,
+  "exportTextureFile": true,
+  "exportNamesFile": true,
+  "sortMode": "Area",
+  "borderPadding": 0,
+  "shapeOutlines": false,
+  "crop": false,
+  "trim": false,
+  "allowRotations": false,
+  "spritePadding": 0,
+  "textureWidthMax": 512,
+  "textureWidthActual": 512,
+  "textureHeightMax": 512,
+  "textureHeightActual": 511,
+  "forcePoTTextures": true,
+  "autoSizeTexture": false,
+  "itemFilenames": [
+    "D:\\dev\\java\\ludumdare\\49 - Unstable\\projects\\LD49\\raw\\spritesheets\\mobs\\*.*"
+  ],
+  "animationItems": {}
+}

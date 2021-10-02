@@ -9,6 +9,7 @@ import net.ld.unstable.data.MobManager;
 import net.ld.unstable.renderers.LevelRenderer;
 import net.ld.unstable.renderers.SubRenderer;
 import net.lintford.library.core.LintfordCore;
+import net.lintford.library.core.ResourceManager;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
 
@@ -51,6 +52,14 @@ public class GameScreen extends BaseGameScreen {
 	// --------------------------------------
 	// Core-Methods
 	// --------------------------------------
+
+	@Override
+	public void loadGLContent(ResourceManager pResourceManager) {
+		super.loadGLContent(pResourceManager);
+
+		pResourceManager.textureManager().loadTexturesFromMetafile("res/textures/_meta.json", entityGroupID());
+
+	}
 
 	@Override
 	public void handleInput(LintfordCore pCore) {

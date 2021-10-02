@@ -3,6 +3,7 @@ package net.ld.unstable.renderers;
 import net.ld.unstable.controllers.LevelController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.renderers.BaseRenderer;
@@ -67,10 +68,11 @@ public class LevelRenderer extends BaseRenderer {
 
 	@Override
 	public void draw(LintfordCore pCore) {
-		final var lTextureBatch = rendererManager().uiTextureBatch();
+		final var lCameraRect = pCore.gameCamera().boundingRectangle();
 
-		lTextureBatch.begin(pCore.gameCamera());
-		lTextureBatch.draw(mCoreTexture, 0, 0, 32, 32, 0, 0, 100, 100, -0.01f, ColorConstants.WHITE);
-		lTextureBatch.end();
+		final float lSeaLevel = mLevelController.seaLevel();
+
+		Debug.debugManager().drawers().drawLineImmediate(pCore.gameCamera(), lCameraRect.left(), lSeaLevel, lCameraRect.w(), lSeaLevel, -0.01f, 1.f, 0.f, 0.f);
+
 	}
 }
