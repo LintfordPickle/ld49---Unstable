@@ -11,25 +11,37 @@ public class Submarine extends ShmupEntity implements AnimatedSpriteGraphListene
 	// Variables
 	// --------------------------------------
 
+	public final int uid;
+
 	public float minCollisionDistance = 52.f; // 25.0 front and back + 25 radius + insecurity
 	public boolean isPlayerControlled;
-	
+
 	public float health;
 	public float coolant;
-	
+
 	public float invulnerabilityTimer;
 	public float flashTimer;
 	public boolean flashOn;
 	
+	public float shootTimer;
+
 	private transient SpriteGraphInstance mSpriteGraphInstance;
 	public transient ParticleEmitterInstance bubbleEmitter;
+
+	// --------------------------------------
+	// Properties
+	// --------------------------------------
+
+	public SpriteGraphInstance spriteGraphInstance() {
+		return mSpriteGraphInstance;
+	}
 
 	// --------------------------------------
 	// Constructor
 	// --------------------------------------
 
-	public SpriteGraphInstance spriteGraphInstance() {
-		return mSpriteGraphInstance;
+	public Submarine(final int pUid) {
+		uid = pUid;
 	}
 
 	// --------------------------------------

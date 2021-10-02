@@ -1,6 +1,15 @@
 package net.ld.unstable.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ld.unstable.data.projectiles.Projectile;
+import net.ld.unstable.data.projectiles.ProjectileManager;
 import net.ld.unstable.data.projectiles.modifiers.BarrelPhysicsModifier;
+import net.ld.unstable.data.projectiles.patterns.CosShooter;
+import net.ld.unstable.data.projectiles.patterns.ProjectilePattern;
+import net.ld.unstable.data.projectiles.patterns.SinShooter;
+import net.ld.unstable.data.projectiles.patterns.StraightShooter;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
@@ -19,15 +28,26 @@ public class ProjectileController extends BaseController {
 	public static final String CONTROLLER_NAME = "Projectile Controller";
 
 	private SubController mSubController;
+	private ProjectileManager mProjectileManager;
 	private ParticleFrameworkController mParticleFrameworkController;
 
-	private ParticleSystemInstance mTorpedoeParticleSystem;
+	private ParticleSystemInstance mBubbleParticleSystem;
 	private ParticleSystemInstance mBarrels;
-	private ParticleSystemInstance mMuzzleFlash00;
+
+	// TODO: Clean
+	private final List<Projectile> projectileUpdateList = new ArrayList<>();
+	private final List<ProjectilePattern> patterns = new ArrayList<>();
+	StraightShooter strightShot = new StraightShooter();
+	SinShooter sinShot = new SinShooter();
+	CosShooter cosShot = new CosShooter();
 
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
+
+	public ProjectileManager projectileManager() {
+		return mProjectileManager;
+	}
 
 	@Override
 	public boolean isInitialized() {
@@ -39,8 +59,9 @@ public class ProjectileController extends BaseController {
 	// Constructor
 	// --------------------------------------
 
-	public ProjectileController(ControllerManager pControllerManager, int pEntityGroupUid) {
+	public ProjectileController(ControllerManager pControllerManager, ProjectileManager projectiles, int pEntityGroupUid) {
 		super(pControllerManager, CONTROLLER_NAME, pEntityGroupUid);
+		mProjectileManager = projectiles;
 	}
 
 	// --------------------------------------
@@ -53,12 +74,16 @@ public class ProjectileController extends BaseController {
 		mParticleFrameworkController = (ParticleFrameworkController) lControllerManager.getControllerByNameRequired(ParticleFrameworkController.CONTROLLER_NAME, entityGroupID());
 		mSubController = (SubController) lControllerManager.getControllerByNameRequired(SubController.CONTROLLER_NAME, entityGroupID());
 
-		mTorpedoeParticleSystem = mParticleFrameworkController.particleFrameworkData().particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_TORPEDO");
+		mBubbleParticleSystem = mParticleFrameworkController.particleFrameworkData().particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BUBBLE_SMALL");
 		mBarrels = mParticleFrameworkController.particleFrameworkData().particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BARREL");
 
-		mTorpedoeParticleSystem.addModifier(new ParticlePhysicsModifier());
+		mBubbleParticleSystem.addModifier(new ParticlePhysicsModifier());
 		mBarrels.addModifier(new BarrelPhysicsModifier());
 
+		// Patterns
+		patterns.add(strightShot);
+		patterns.add(sinShot);
+		patterns.add(cosShot);
 	}
 
 	@Override
@@ -71,25 +96,63 @@ public class ProjectileController extends BaseController {
 	public void update(LintfordCore pCore) {
 		super.update(pCore);
 
-		checkCollisionsWithTorpedoes(pCore);
+		checkCollisionsWithProjectiles(pCore);
 
 		// Handle projectile lifetime
+		updateProjectiles(pCore);
+
+		updateProjectilePatterns(pCore);
 	}
 
-	private void checkCollisionsWithTorpedoes(LintfordCore pCore) {
+	private void updateProjectiles(LintfordCore pCore) {
+		projectileUpdateList.clear();
+
+		final var lProjectiles = projectileManager().projectiles();
+		final int lNumProjectiles = lProjectiles.size();
+
+		for (int i = 0; i < lNumProjectiles; i++) {
+			projectileUpdateList.addAll(lProjectiles);
+		}
+
+		for (int i = 0; i < lNumProjectiles; i++) {
+			final var lProjectile = projectileUpdateList.get(i);
+			if (lProjectile.isAssigned() == false)
+				continue;
+
+			lProjectile.timeSinceStart += pCore.gameTime().elapsedTimeMilli();
+			if (lProjectile.timeSinceStart > lProjectile.lifeTime()) {
+				lProjectile.reset();
+				continue;
+			}
+
+			if (RandomNumbers.getRandomChance(25f)) {
+				mBubbleParticleSystem.spawnParticle(lProjectile.worldPositionX, lProjectile.worldPositionY, 0.f, 0.f);
+			}
+		}
+	}
+
+	private void updateProjectilePatterns(LintfordCore pCore) {
+		final int lPatternCount = patterns.size();
+		for (int i = 0; i < lPatternCount; i++) {
+			final var lPattern = patterns.get(i);
+			lPattern.update(pCore);
+		}
+	}
+
+	private void checkCollisionsWithProjectiles(LintfordCore pCore) {
 		final float lTorpedoRadius = 10.f;
 
-		final var lTorpedoes = mTorpedoeParticleSystem.particles();
-		final int lNumTorpedoes = lTorpedoes.size();
-		for (int i = 0; i < lNumTorpedoes; i++) {
-			if (!lTorpedoes.get(i).isAssigned())
+		final var lProjectiles = mProjectileManager.projectiles();
+		final int lNumProjectiles = lProjectiles.size();
+		for (int i = 0; i < lNumProjectiles; i++) {
+			if (!lProjectiles.get(i).isAssigned())
 				continue;
-			final var lTorpedo = lTorpedoes.get(i);
+			final var lProjectile = lProjectiles.get(i);
 
 			// collisions only count afer .05 second of life
-			if (lTorpedo.timeSinceStart > 50) {
-				if (checkProjCollisionsWithSubmarines(lTorpedo.worldPositionX, lTorpedo.worldPositionY, lTorpedoRadius)) {
-					lTorpedo.reset();
+			if (lProjectile.timeSinceStart > 50) {
+				if (checkProjectileCollisionsWithSubmarines(lProjectile.shooterUid, lProjectile.worldPositionX, lProjectile.worldPositionY, lTorpedoRadius)) {
+					lProjectile.reset();
 					// TODO: Minor Explosion
 					continue;
 				}
@@ -97,12 +160,12 @@ public class ProjectileController extends BaseController {
 		}
 	}
 
-	private boolean checkProjCollisionsWithSubmarines(float pProjX, float pProjY, float pProjRadius) {
+	private boolean checkProjectileCollisionsWithSubmarines(int pProjShooterUid, float pProjX, float pProjY, float pProjRadius) {
 		final var lMobs = mSubController.mobManager().mobs();
 		final var lNumMobs = lMobs.size();
 		for (int j = 0; j < lNumMobs; j++) {
 			final var lMobInstance = lMobs.get(j);
-			if (lMobInstance.invulnerabilityTimer > 0.f)
+			if (lMobInstance.invulnerabilityTimer > 0.f || lMobInstance.uid == pProjShooterUid)
 				continue;
 
 			final float lMinMobCol = pProjRadius + lMobInstance.minCollisionDistance;
@@ -123,7 +186,9 @@ public class ProjectileController extends BaseController {
 
 			if (lCollisionFront || lCollisionRear) {
 				lMobInstance.invulnerabilityTimer = 100.f;
-				lMobInstance.health -= 10.f;
+
+				if (!lMobInstance.isPlayerControlled)
+					lMobInstance.health -= 10.f;
 				return true;
 			}
 		}
@@ -135,10 +200,26 @@ public class ProjectileController extends BaseController {
 	// Methods
 	// --------------------------------------
 
-	public void shootTorpedo(float pStartX, float pStartY) {
+	public void shootTorpedo(int pShooterUid, float pStartX, float pStartY) {
 		final float lOffsetY = RandomNumbers.random(-4.0f, 4.0f);
+		final var lTorpedo = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, 2000.0f);
+		lTorpedo.setupSourceTexture(0, 16, 46, 10);
+		lTorpedo.shooterUid = pShooterUid;
 
-		final var lTorpedo = mTorpedoeParticleSystem.spawnParticle(pStartX, pStartY + lOffsetY, 1500.f, 0.f);
+		strightShot.addProjectile(lTorpedo);
+
+		final var lTorpedo2 = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, 2000.0f);
+		lTorpedo2.setupSourceTexture(0, 16, 46, 10);
+		lTorpedo2.shooterUid = pShooterUid;
+
+		sinShot.addProjectile(lTorpedo2);
+
+		final var lTorpedo3 = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, 2000.0f);
+		lTorpedo3.setupSourceTexture(0, 16, 46, 10);
+		lTorpedo3.shooterUid = pShooterUid;
+
+		cosShot.addProjectile(lTorpedo3);
+
 	}
 
 	public void dropBarrel(float pStartX, float pStartY) {
@@ -148,5 +229,4 @@ public class ProjectileController extends BaseController {
 		final float lStr = RandomNumbers.random(-1.f, 1.f);
 		final var lBarrel = mBarrels.spawnParticle(pStartX, pStartY + lOffsetY, 50.f * lSignum + lStr, 60.f);
 	}
-
 }

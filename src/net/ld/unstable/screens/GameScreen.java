@@ -8,9 +8,11 @@ import net.ld.unstable.controllers.ProjectileController;
 import net.ld.unstable.controllers.SubController;
 import net.ld.unstable.data.mobs.MobManager;
 import net.ld.unstable.data.mobs.definitions.PlayerSubmarine;
+import net.ld.unstable.data.projectiles.ProjectileManager;
 import net.ld.unstable.data.projectiles.initializers.BubbleParticleInitializer;
 import net.ld.unstable.data.projectiles.modifiers.BubblePhysicsModifier;
 import net.ld.unstable.renderers.LevelRenderer;
+import net.ld.unstable.renderers.ProjectilesRenderer;
 import net.ld.unstable.renderers.SubRenderer;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
 import net.lintford.library.controllers.geometry.SpriteGraphController;
@@ -33,6 +35,8 @@ public class GameScreen extends BaseGameScreen {
 	private MobManager mMobManager;
 	private ParticleFrameworkData mParticleFrameworkData;
 
+	private ProjectileManager mProjectileSystemManager;
+
 	// Controllers
 	private SpriteGraphController mSpriteGraphController;
 	private SubController mSubController;
@@ -45,6 +49,7 @@ public class GameScreen extends BaseGameScreen {
 	private SubRenderer mSubRenderer;
 	private LevelRenderer mLevelRenderer;
 	private ParticleFrameworkRenderer mParticleFrameworkRenderer;
+	private ProjectilesRenderer mProjectilesRenderer;
 
 	// --------------------------------------
 	// Constructor
@@ -59,6 +64,7 @@ public class GameScreen extends BaseGameScreen {
 
 		mMobManager = new MobManager();
 		mParticleFrameworkData = new ParticleFrameworkData();
+		mProjectileSystemManager = new ProjectileManager(1000);
 
 		createControllers();
 	}
@@ -131,7 +137,7 @@ public class GameScreen extends BaseGameScreen {
 		mSubController = new SubController(lControllerManager, mMobManager, entityGroupID());
 		mPlayerSubController = new PlayerSubController(lControllerManager, mMobManager, entityGroupID());
 		mParticleFrameworkController = new ParticleFrameworkController(lControllerManager, mParticleFrameworkData, entityGroupID());
-		mProjectileController = new ProjectileController(lControllerManager, entityGroupID());
+		mProjectileController = new ProjectileController(lControllerManager, mProjectileSystemManager, entityGroupID());
 	}
 
 	private void initializeControllers() {
@@ -155,6 +161,10 @@ public class GameScreen extends BaseGameScreen {
 		mParticleFrameworkRenderer = new ParticleFrameworkRenderer(rendererManager, entityGroupID());
 		mParticleFrameworkRenderer.initialize(lCore);
 		mParticleFrameworkRenderer.loadGLContent(pResourceManager);
+
+		mProjectilesRenderer = new ProjectilesRenderer(rendererManager, entityGroupID());
+		mProjectilesRenderer.initialize(lCore);
+		mProjectilesRenderer.loadGLContent(pResourceManager);
 
 		mSubRenderer = new SubRenderer(rendererManager, entityGroupID());
 		mSubRenderer.initialize(lCore);

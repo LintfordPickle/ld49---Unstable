@@ -90,7 +90,11 @@ public class PlayerSubController extends BaseController {
 		}
 
 		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_RIGHT)) {
-			mProjectileController.shootTorpedo(lPlayerSub.x, lPlayerSub.y);
+			if(lPlayerSub.shootTimer <= 0.f) {
+				mProjectileController.shootTorpedo(lPlayerSub.uid, lPlayerSub.x, lPlayerSub.y);
+				lPlayerSub.shootTimer = 150;
+				
+			}
 		}
 		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_DOWN)) {
 			mProjectileController.dropBarrel(lPlayerSub.x, lPlayerSub.y);

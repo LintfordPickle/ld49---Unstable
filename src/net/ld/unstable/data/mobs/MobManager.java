@@ -46,6 +46,8 @@ public class MobManager {
 	// Variables
 	// --------------------------------------
 
+	private int shooterUidCounter;
+
 	private final MobDefinitionManager mMobDefinitionManager = new MobDefinitionManager();
 	public Submarine playerSubmarine;
 	private final List<Submarine> mMobEntities = new ArrayList<>();
@@ -58,12 +60,16 @@ public class MobManager {
 		return mMobEntities;
 	}
 
+	public MobDefinitionManager mobDefinitionManager() {
+		return mMobDefinitionManager;
+	}
+
 	// --------------------------------------
 	// Constructor
 	// --------------------------------------
 
-	public MobDefinitionManager mobDefinitionManager() {
-		return mMobDefinitionManager;
+	public MobManager() {
+		shooterUidCounter = 0;
 	}
 
 	// --------------------------------------
@@ -87,7 +93,7 @@ public class MobManager {
 	}
 
 	public Submarine addNewMob(MobDefinition pMobDefinition, float pPosX, float pPosY) {
-		final var lNewMob = new Submarine();
+		final var lNewMob = new Submarine(shooterUidCounter++);
 		lNewMob.x = pPosX;
 		lNewMob.y = pPosY;
 

@@ -107,6 +107,9 @@ public class SubController extends BaseController {
 	private void updateSubmarine(LintfordCore pCore, Submarine pSubmarine) {
 		final var lSubmarineSpriteGraph = pSubmarine.spriteGraphInstance();
 
+		if (pSubmarine.shootTimer > 0.f)
+			pSubmarine.shootTimer -= pCore.gameTime().elapsedTimeMilli();
+
 		//
 		if (pSubmarine.invulnerabilityTimer > .0f) {
 			pSubmarine.invulnerabilityTimer -= pCore.gameTime().elapsedTimeMilli();
