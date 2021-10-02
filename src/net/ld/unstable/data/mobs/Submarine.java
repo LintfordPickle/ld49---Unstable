@@ -3,11 +3,13 @@ package net.ld.unstable.data.mobs;
 import net.lintford.library.core.geometry.spritegraph.AnimatedSpriteGraphListener;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 import net.lintford.library.core.graphics.sprites.SpriteDefinition;
+import net.lintford.library.core.particles.particleemitters.ParticleEmitterInstance;
 
 public class Submarine extends ShmupEntity implements AnimatedSpriteGraphListener {
 
 	public boolean isPlayerControlled;
 	private transient SpriteGraphInstance mSpriteGraphInstance;
+	public transient ParticleEmitterInstance bubbleEmitter;
 
 	public SpriteGraphInstance spriteGraphInstance() {
 		return mSpriteGraphInstance;

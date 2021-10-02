@@ -1,0 +1,21 @@
+{
+	"name":"PARTICLESYSTEM_MUZZLE_FLASH_00",
+	"maxParticleCount":32,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":40,
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":0,
+			"srcY":42,
+			"srcW":32,
+			"srcH":32
+		}
+	
+	]
+	
+}

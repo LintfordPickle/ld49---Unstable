@@ -1,0 +1,30 @@
+{
+	"name":"PARTICLESYSTEM_TORPEDO",
+	"maxParticleCount":128,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":"1500",
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":0,
+			"srcY":16,
+			"srcW":46,
+			"srcH":10
+		}, 
+		
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":46,
+			"height":10
+		}
+	
+	],
+	
+	"modifiers" : [
+		
+	]
+}

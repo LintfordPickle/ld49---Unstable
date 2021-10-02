@@ -4,15 +4,19 @@ import org.lwjgl.glfw.GLFW;
 
 import net.ld.unstable.controllers.LevelController;
 import net.ld.unstable.controllers.PlayerSubController;
+import net.ld.unstable.controllers.ProjectileController;
 import net.ld.unstable.controllers.SubController;
 import net.ld.unstable.data.mobs.MobManager;
 import net.ld.unstable.data.mobs.definitions.PlayerSubmarine;
 import net.ld.unstable.renderers.LevelRenderer;
 import net.ld.unstable.renderers.SubRenderer;
+import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
 import net.lintford.library.controllers.geometry.SpriteGraphController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.geometry.spritegraph.SpriteGraphManager;
+import net.lintford.library.core.particles.ParticleFrameworkData;
+import net.lintford.library.renderers.particles.ParticleFrameworkRenderer;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
 
@@ -25,16 +29,20 @@ public class GameScreen extends BaseGameScreen {
 	// Data
 	private SpriteGraphManager mSpriteGraphManager;
 	private MobManager mMobManager;
+	private ParticleFrameworkData mParticleFrameworkData;
 
 	// Controllers
 	private SpriteGraphController mSpriteGraphController;
 	private SubController mSubController;
 	private PlayerSubController mPlayerSubController;
 	private LevelController mLevelController;
+	private ProjectileController mProjectileController;
+	private ParticleFrameworkController mParticleFrameworkController;
 
 	// Renderers
 	private SubRenderer mSubRenderer;
 	private LevelRenderer mLevelRenderer;
+	private ParticleFrameworkRenderer mParticleFrameworkRenderer;
 
 	// --------------------------------------
 	// Constructor
@@ -48,6 +56,7 @@ public class GameScreen extends BaseGameScreen {
 		mSpriteGraphManager = new SpriteGraphManager();
 
 		mMobManager = new MobManager();
+		mParticleFrameworkData = new ParticleFrameworkData();
 
 		createControllers();
 	}
@@ -60,6 +69,7 @@ public class GameScreen extends BaseGameScreen {
 	public void initialize() {
 		super.initialize();
 
+		mParticleFrameworkData.initialize(null);
 		mMobManager.initialize();
 	}
 
@@ -108,6 +118,8 @@ public class GameScreen extends BaseGameScreen {
 		mLevelController = new LevelController(lControllerManager, entityGroupID());
 		mSubController = new SubController(lControllerManager, mMobManager, entityGroupID());
 		mPlayerSubController = new PlayerSubController(lControllerManager, mMobManager, entityGroupID());
+		mParticleFrameworkController = new ParticleFrameworkController(lControllerManager, mParticleFrameworkData, entityGroupID());
+		mProjectileController = new ProjectileController(lControllerManager, entityGroupID());
 	}
 
 	private void initializeControllers() {
@@ -115,17 +127,26 @@ public class GameScreen extends BaseGameScreen {
 		mLevelController.initialize(screenManager.core());
 		mSubController.initialize(screenManager.core());
 		mPlayerSubController.initialize(screenManager.core());
+		mParticleFrameworkController.initialize(screenManager.core());
+		mProjectileController.initialize(screenManager.core());
 	}
 
 	private void createRenderers(ResourceManager pResourceManager) {
+		// FIXME: the call order is messed up here because of the way the SpriteGraphs depend on SpriteSheets etc.
+
 		final var lCore = screenManager.core();
-		mSubRenderer = new SubRenderer(rendererManager, entityGroupID());
-		mSubRenderer.initialize(lCore);
-		mSubRenderer.loadGLContent(pResourceManager);
 
 		mLevelRenderer = new LevelRenderer(rendererManager, entityGroupID());
 		mLevelRenderer.initialize(lCore);
 		mLevelRenderer.loadGLContent(pResourceManager);
+
+		mParticleFrameworkRenderer = new ParticleFrameworkRenderer(rendererManager, entityGroupID());
+		mParticleFrameworkRenderer.initialize(lCore);
+		mParticleFrameworkRenderer.loadGLContent(pResourceManager);
+
+		mSubRenderer = new SubRenderer(rendererManager, entityGroupID());
+		mSubRenderer.initialize(lCore);
+		mSubRenderer.loadGLContent(pResourceManager);
 
 	}
 }

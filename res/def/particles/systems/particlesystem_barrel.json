@@ -1,0 +1,30 @@
+{
+	"name":"PARTICLESYSTEM_BARREL",
+	"maxParticleCount":64,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":"10000",
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":0,
+			"srcY":26,
+			"srcW":32,
+			"srcH":32
+		}, 
+		
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":32,
+			"height":32
+		}
+	
+	],
+	
+	"modifiers" : [
+		
+	]
+}

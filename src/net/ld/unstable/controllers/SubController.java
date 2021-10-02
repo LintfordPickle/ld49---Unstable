@@ -6,6 +6,7 @@ import net.ld.unstable.data.mobs.attachments.PropellerAttachment;
 import net.ld.unstable.data.mobs.attachments.SubAttachment;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
+import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
 import net.lintford.library.controllers.geometry.SpriteGraphController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.debug.Debug;
@@ -22,6 +23,7 @@ public class SubController extends BaseController {
 	// Variables
 	// --------------------------------------
 
+	private ParticleFrameworkController mParticleFrameworkController;
 	private SpriteGraphController mSpriteGraphController;
 	private final MobManager mMobManager;
 
@@ -57,6 +59,7 @@ public class SubController extends BaseController {
 	public void initialize(LintfordCore pCore) {
 		final var lControllerManager = pCore.controllerManager();
 		mSpriteGraphController = (SpriteGraphController) lControllerManager.getControllerByNameRequired(SpriteGraphController.CONTROLLER_NAME, entityGroupID());
+		mParticleFrameworkController = (ParticleFrameworkController) lControllerManager.getControllerByNameRequired(ParticleFrameworkController.CONTROLLER_NAME, entityGroupID());
 	}
 
 	@Override
@@ -81,6 +84,12 @@ public class SubController extends BaseController {
 			lSubmarineSpriteGraph.rotationInRadians = 0.f;
 			lSubmarineSpriteGraph.mFlipHorizontal = lMobInstance.isPlayerControlled == false;
 			lSubmarineSpriteGraph.update(pCore);
+
+			final var lEmitter = lMobInstance.bubbleEmitter;
+			if (lEmitter != null) {
+				lEmitter.worldPositionX = lMobInstance.x;
+				lEmitter.worldPositionY = lMobInstance.y;
+			}
 		}
 	}
 
@@ -106,12 +115,18 @@ public class SubController extends BaseController {
 		lSpriteGraphInstance.attachItemToNode(new SubAttachment());
 		lSpriteGraphInstance.attachItemToNode(new PropellerAttachment());
 		lSpriteGraphInstance.mFlipHorizontal = lNewMobInstance.isPlayerControlled == false;
-		
+
 		lNewMobInstance.isPlayerControlled = false;
 		if (pPlayerControlled) {
 			lNewMobInstance.isPlayerControlled = true;
 			mMobManager.playerSubmarine = lNewMobInstance;
 			lSpriteGraphInstance.attachItemToNode(new PowerCoreAttachment());
+		}
+
+		// particles
+		{
+			final var lBubbleEmitter = mParticleFrameworkController.particleFrameworkData().emitterManager().getNewParticleEmitterInstanceByDefName("EMITTER_BUBBLE");
+			lNewMobInstance.bubbleEmitter = lBubbleEmitter;
 		}
 
 	}

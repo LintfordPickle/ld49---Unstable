@@ -1,0 +1,12 @@
+{
+	"rootDirectory":"res/def/particles/systems/",
+	"itemFileLocations" : [
+	
+		"particlesystem_bubble",
+		"particlesystem_fire",
+		"particlesystem_smoke",
+		"particlesystem_muzzle_00",
+		"particlesystem_torpedo",
+		"particlesystem_barrel"
+	]
+}

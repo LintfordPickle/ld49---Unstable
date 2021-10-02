@@ -1,0 +1,34 @@
+{
+	"name":"PARTICLESYSTEM_BUBBLE",
+	"maxParticleCount":256,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":"2000",
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":0,
+			"srcY":0,
+			"srcW":16,
+			"srcH":16
+		}, 
+
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":16,
+			"height":16
+		}	
+	],
+	
+	"modifiers" : [
+	
+		{
+			"className":"ParticleLifetimeAlphaFadeInOutModifier"
+		}
+	
+	]
+	
+}

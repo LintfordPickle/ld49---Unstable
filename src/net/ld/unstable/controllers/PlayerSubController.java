@@ -20,6 +20,7 @@ public class PlayerSubController extends BaseController {
 	// Variables
 	// --------------------------------------
 
+	private ProjectileController mProjectileController;
 	private LevelController mLevelController;
 	private final MobManager mMobManager;
 	private final Vector2f mAcceleration = new Vector2f();
@@ -54,7 +55,7 @@ public class PlayerSubController extends BaseController {
 		final var lControllerManager = pCore.controllerManager();
 
 		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
-
+		mProjectileController = (ProjectileController) lControllerManager.getControllerByNameRequired(ProjectileController.CONTROLLER_NAME, entityGroupID());
 	}
 
 	@Override
@@ -69,7 +70,8 @@ public class PlayerSubController extends BaseController {
 			return false;
 
 		final float lMovementSpeed = 0.25f;
-		final boolean isUnderWater = mMobManager.playerSubmarine.y > mLevelController.seaLevel();
+		final var lPlayerSub = mMobManager.playerSubmarine;
+		final boolean isUnderWater = lPlayerSub.y > mLevelController.seaLevel();
 
 		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_W)) {
 			mAcceleration.y -= lMovementSpeed;
@@ -85,6 +87,13 @@ public class PlayerSubController extends BaseController {
 
 		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_D)) {
 			mAcceleration.x += lMovementSpeed;
+		}
+
+		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_RIGHT)) {
+			mProjectileController.shootTorpedo(lPlayerSub.x, lPlayerSub.y);
+		}
+		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_DOWN)) {
+			mProjectileController.dropBarrel(lPlayerSub.x, lPlayerSub.y);
 		}
 
 		return super.handleInput(pCore);

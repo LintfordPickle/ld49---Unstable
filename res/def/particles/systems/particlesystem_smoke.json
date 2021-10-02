@@ -1,0 +1,55 @@
+{
+	"name":"PARTICLESYSTEM_SMOKE",
+	"maxParticleCount":128,
+	"textureName":"TEXTURE_PARTICLES",
+	"textureFilename":"res/textures/particles/textureParticles.png",
+	"textureFilterMode":"0",
+	"particleLife":750,
+	
+	"initializers" : [ 
+	
+		{ 
+			"className":"ParticleSourceRegionInitializer",
+			"srcX":16,
+			"srcY":0,
+			"srcW":16,
+			"srcH":16
+		}, 
+		
+		{ 
+			"className":"ParticleDestinationRegionInitializer",
+			"width":4,
+			"height":4
+		}, 
+		
+		{
+			"className":"ParticleRandomSizeInitializer",
+			"minValue":1,
+			"maxValue":2
+		},
+		{
+			"className":"ParticleRandomOffsetInitializer",
+			"minValue0":-8,
+			"maxValue0":8,
+			"minValue1":-3,
+			"maxValue1":3
+		}
+	
+	],
+	
+	"modifiers" : [
+	
+		{
+			"className":"ParticleLifetimeAlphaFadeOutModifier"
+		}, 
+		{
+			"className":"ParticleGravityModifier",
+			"gravity": -0.22
+		}, 
+		{
+			"className":"ParticlePhysicsModifier"
+		}
+	
+	]
+	
+}
