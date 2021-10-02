@@ -71,7 +71,7 @@ public class PlayerSubController extends BaseController {
 
 		final float lMovementSpeed = 0.25f;
 		final var lPlayerSub = mMobManager.playerSubmarine;
-		final boolean isUnderWater = lPlayerSub.y > mLevelController.seaLevel();
+		final boolean isUnderWater = lPlayerSub.worldPositionY > mLevelController.seaLevel();
 
 		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_W)) {
 			mAcceleration.y -= lMovementSpeed;
@@ -90,17 +90,17 @@ public class PlayerSubController extends BaseController {
 		}
 
 		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_RIGHT)) {
-			if(lPlayerSub.shootTimer <= 0.f) {
-				mProjectileController.shootTorpedo(lPlayerSub.uid, lPlayerSub.x, lPlayerSub.y);
+			if (lPlayerSub.shootTimer <= 0.f) {
+				mProjectileController.shootTorpedo(lPlayerSub.uid, lPlayerSub.worldPositionX, lPlayerSub.worldPositionY, 1, 0);
 				lPlayerSub.shootTimer = 150;
-				
+
 			}
 		}
 		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_DOWN)) {
-			if(lPlayerSub.barrelTimer <= 0.f) {
-				mProjectileController.dropBarrel(lPlayerSub.x, lPlayerSub.y);
+			if (lPlayerSub.barrelTimer <= 0.f) {
+				mProjectileController.dropBarrel(lPlayerSub.worldPositionX, lPlayerSub.worldPositionY);
 				lPlayerSub.barrelTimer = 300;
-				
+
 			}
 		}
 
@@ -126,17 +126,17 @@ public class PlayerSubController extends BaseController {
 //		}
 
 		final var lPlayerSubmarine = mMobManager.playerSubmarine;
-		final boolean isUnderWater = lPlayerSubmarine.y > mLevelController.seaLevel();
+		final boolean isUnderWater = lPlayerSubmarine.worldPositionY > mLevelController.seaLevel();
 
 		mVelocity.x += mAcceleration.x;
 		mVelocity.y += mAcceleration.y;
 
-		if (lPlayerSubmarine.y < mLevelController.seaLevel()) {
+		if (lPlayerSubmarine.worldPositionY < mLevelController.seaLevel()) {
 			mVelocity.y += .12f;
 		}
 
-		lPlayerSubmarine.x += mVelocity.x;
-		lPlayerSubmarine.y += mVelocity.y;
+		lPlayerSubmarine.worldPositionX += mVelocity.x;
+		lPlayerSubmarine.worldPositionY += mVelocity.y;
 
 //		mPlayerSubmarine.x = 0;
 //		mPlayerSubmarine.y = 0;

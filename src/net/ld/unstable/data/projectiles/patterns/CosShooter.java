@@ -16,7 +16,7 @@ public class CosShooter extends ProjectilePattern {
 		super.update(pCore, pProjectile);
 		float lDelta = (float) pCore.appTime().elapsedTimeMilli() / 1000f;
 
-		pProjectile.dx = 20.0f + (30.0f * pProjectile.timeSinceStart * lDelta);
+		pProjectile.dx = (20.0f + (30.0f * pProjectile.timeSinceStart * lDelta)) * pProjectile.odx;
 		pProjectile.dy = 0;
 
 		pProjectile.worldPositionX += pProjectile.dx * lDelta;

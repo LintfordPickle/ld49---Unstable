@@ -61,13 +61,13 @@ public class ProjectileManager {
 	// --------------------------------------
 
 	/** Spawns a new {@link Particle} and applys the {@link IParticleinitializer} attached to this {@link ParticleSystemInstance}. */
-	public Projectile spawnParticle(float pX, float pY, float pLife) {
+	public Projectile spawnParticle(float pX, float pY, float pVX, float pVY, float pLife) {
 		for (int i = 0; i < mCapacity; i++) {
 			Projectile lSpawnedParticle = mProjectiles.get(i);
 			if (lSpawnedParticle.isAssigned())
 				continue;
 
-			lSpawnedParticle.spawnParticle(pX, pY, pLife);
+			lSpawnedParticle.spawnParticle(pX, pY, pVX, pVY, pLife);
 
 			return lSpawnedParticle;
 		}

@@ -1,0 +1,142 @@
+{
+  "spriteSheetName": "SPRITESHEET_OCEAN",
+  "textureName": "TEXTURE_OCEAN",
+  "frameMapNameArray": [
+    "WAVES_00",
+    "WAVES_01",
+    "WAVES_02",
+    "WAVES_03",
+    "WAVES_04",
+    "WAVES_05",
+    "WAVES_06",
+    "WAVES_07",
+    "UNDERWATER"
+  ],
+  "frameMapObjectArray": [
+    {
+      "name": null,
+      "x": 0,
+      "y": 32,
+      "w": 256,
+      "h": 64,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 32,
+      "w": 256,
+      "h": 64,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 0,
+      "y": 96,
+      "w": 256,
+      "h": 64,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 96,
+      "w": 256,
+      "h": 64,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 0,
+      "y": 160,
+      "w": 256,
+      "h": 64,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 160,
+      "w": 256,
+      "h": 64,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 0,
+      "y": 224,
+      "w": 256,
+      "h": 64,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 224,
+      "w": 256,
+      "h": 64,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 0,
+      "y": 0,
+      "w": 32,
+      "h": 32,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    }
+  ],
+  "spriteMap": {
+    "waves": {
+      "animationName": "waves",
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSpriteIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    }
+  }
+}

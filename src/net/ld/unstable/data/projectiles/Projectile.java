@@ -30,6 +30,7 @@ public class Projectile extends PreAllocatedInstanceData {
 	public float rox;
 	public float roy;
 
+	public float odx, ody;
 	public float dx, dy, dr;
 	public final Color color = new Color();
 	public float scale;
@@ -83,7 +84,7 @@ public class Projectile extends PreAllocatedInstanceData {
 
 	}
 
-	public void spawnParticle(float pWorldX, float pWorldY, float pLife) {
+	public void spawnParticle(float pWorldX, float pWorldY, float pVX, float pVY, float pLife) {
 		mIsFree = false;
 		mLifeTime = pLife;
 		timeSinceStart = 0;
@@ -91,6 +92,8 @@ public class Projectile extends PreAllocatedInstanceData {
 		sx = sy = 1;
 		color.setRGBA(1.f, 1.f, 1.f, 1.f);
 
+		odx = pVX;
+		ody = pVY;
 		baseWorldPositionX = pWorldX;
 		baseWorldPositionY = pWorldY;
 
@@ -109,6 +112,8 @@ public class Projectile extends PreAllocatedInstanceData {
 		worldPositionX = 0;
 		worldPositionY = 0;
 
+		odx = 0f;
+		ody = 0f;
 		dx = 0f;
 		dy = 0f;
 	}

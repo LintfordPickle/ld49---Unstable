@@ -170,15 +170,15 @@ public class ProjectileController extends BaseController {
 
 			final float lMinMobCol = pProjRadius + lMobInstance.minCollisionDistance;
 
-			if (Vector2f.distance2(lMobInstance.x, lMobInstance.y, pProjX, pProjY) > lMinMobCol * lMinMobCol)
+			if (Vector2f.distance2(lMobInstance.worldPositionX, lMobInstance.worldPositionY, pProjX, pProjY) > lMinMobCol * lMinMobCol)
 				continue;
 
-			final float lSubFrontX = lMobInstance.x + 25.f;
-			final float lSubFrontY = lMobInstance.y;
+			final float lSubFrontX = lMobInstance.worldPositionX + 25.f;
+			final float lSubFrontY = lMobInstance.worldPositionY;
 			final float lMinMobCol2 = pProjRadius + 25.f;
 
-			final float lSubRearX = lMobInstance.x - 25.f;
-			final float lSubRearY = lMobInstance.y;
+			final float lSubRearX = lMobInstance.worldPositionX - 25.f;
+			final float lSubRearY = lMobInstance.worldPositionY;
 			final float lMinMobCol3 = pProjRadius + 25.f;
 
 			final boolean lCollisionFront = (Vector2f.distance2(lSubFrontX, lSubFrontY, pProjX, pProjY) < lMinMobCol2 * lMinMobCol2);
@@ -200,26 +200,25 @@ public class ProjectileController extends BaseController {
 	// Methods
 	// --------------------------------------
 
-	public void shootTorpedo(int pShooterUid, float pStartX, float pStartY) {
+	public void shootTorpedo(int pShooterUid, float pStartX, float pStartY, float pVX, float pVY) {
 		final float lOffsetY = RandomNumbers.random(-4.0f, 4.0f);
-		final var lTorpedo = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, 2000.0f);
+		final var lTorpedo = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, pVX, pVY, 2000.0f);
 		lTorpedo.setupSourceTexture(0, 16, 46, 10);
 		lTorpedo.shooterUid = pShooterUid;
 
 		strightShot.addProjectile(lTorpedo);
 
-		final var lTorpedo2 = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, 2000.0f);
-		lTorpedo2.setupSourceTexture(0, 16, 46, 10);
-		lTorpedo2.shooterUid = pShooterUid;
-
-		sinShot.addProjectile(lTorpedo2);
-
-		final var lTorpedo3 = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, 2000.0f);
-		lTorpedo3.setupSourceTexture(0, 16, 46, 10);
-		lTorpedo3.shooterUid = pShooterUid;
-
-		cosShot.addProjectile(lTorpedo3);
-
+//		final var lTorpedo2 = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, pVX, pVY, 2000.0f);
+//		lTorpedo2.setupSourceTexture(0, 16, 46, 10);
+//		lTorpedo2.shooterUid = pShooterUid;
+//
+//		sinShot.addProjectile(lTorpedo2);
+//
+//		final var lTorpedo3 = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, pVX, pVY, 2000.0f);
+//		lTorpedo3.setupSourceTexture(0, 16, 46, 10);
+//		lTorpedo3.shooterUid = pShooterUid;
+//
+//		cosShot.addProjectile(lTorpedo3);
 	}
 
 	public void dropBarrel(float pStartX, float pStartY) {

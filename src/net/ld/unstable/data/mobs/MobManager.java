@@ -3,7 +3,7 @@ package net.ld.unstable.data.mobs;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.ld.unstable.data.mobs.definitions.EnemySubmarine00;
+import net.ld.unstable.data.mobs.definitions.EnemySubmarineStraight00;
 import net.ld.unstable.data.mobs.definitions.MobDefinition;
 import net.ld.unstable.data.mobs.definitions.PlayerSubmarine;
 
@@ -38,7 +38,7 @@ public class MobManager {
 
 		public void loadDefintions() {
 			mobDefinitions.add(new PlayerSubmarine());
-			mobDefinitions.add(new EnemySubmarine00());
+			mobDefinitions.add(new EnemySubmarineStraight00());
 		}
 	}
 
@@ -84,7 +84,7 @@ public class MobManager {
 	// Methods
 	// --------------------------------------
 
-	public ShmupEntity getMobByIndex(int pIndex) {
+	public Submarine getMobByIndex(int pIndex) {
 		if (pIndex < 0 || pIndex >= mMobEntities.size()) {
 			return null;
 		}
@@ -92,10 +92,13 @@ public class MobManager {
 		return mMobEntities.get(pIndex);
 	}
 
+	// FIXME: recycle
 	public Submarine addNewMob(MobDefinition pMobDefinition, float pPosX, float pPosY) {
-		final var lNewMob = new Submarine(shooterUidCounter++);
-		lNewMob.x = pPosX;
-		lNewMob.y = pPosY;
+		final var lNewMob = new Submarine();
+		lNewMob.worldPositionX = pPosX;
+		lNewMob.worldPositionY = pPosY;
+		lNewMob.baseWorldPositionX = pPosX;
+		lNewMob.baseWorldPositionY = pPosY;
 
 		mMobEntities.add(lNewMob);
 

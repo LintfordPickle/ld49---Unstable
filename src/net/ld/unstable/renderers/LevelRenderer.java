@@ -1,11 +1,12 @@
 package net.ld.unstable.renderers;
 
 import net.ld.unstable.controllers.LevelController;
+import net.ld.unstable.data.Textures.WavesTextureNames;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.ColorConstants;
-import net.lintford.library.core.graphics.textures.Texture;
+import net.lintford.library.core.graphics.sprites.SpriteInstance;
+import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
@@ -22,7 +23,8 @@ public class LevelRenderer extends BaseRenderer {
 	// --------------------------------------
 
 	private LevelController mLevelController;
-	private Texture mCoreTexture;
+	private SpriteSheetDefinition mOceanSpritesheet;
+	private SpriteInstance mWaveSpriteInstance;
 
 	// --------------------------------------
 	// Properties
@@ -56,14 +58,15 @@ public class LevelRenderer extends BaseRenderer {
 	public void loadGLContent(ResourceManager pResourceManager) {
 		super.loadGLContent(pResourceManager);
 
-		mCoreTexture = pResourceManager.textureManager().getTexture("TEXTURE_CORE", LintfordCore.CORE_ENTITY_GROUP_ID);
+		mOceanSpritesheet = pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetOcean.json", entityGroupID());
+		mWaveSpriteInstance = mOceanSpritesheet.getSpriteInstance("waves");
 	}
 
 	@Override
 	public void unloadGLContent() {
 		super.unloadGLContent();
 
-		mCoreTexture = null;
+		mOceanSpritesheet = null;
 	}
 
 	@Override
@@ -71,11 +74,26 @@ public class LevelRenderer extends BaseRenderer {
 		if (!isInitialized())
 			return;
 
+		final var lSpriteBatch = rendererManager().uiSpriteBatch();
 		final var lCameraRect = pCore.gameCamera().boundingRectangle();
 
 		final float lSeaLevel = mLevelController.seaLevel();
+		mWaveSpriteInstance.update(pCore);
 
-		Debug.debugManager().drawers().drawLineImmediate(pCore.gameCamera(), lCameraRect.left(), lSeaLevel, lCameraRect.w(), lSeaLevel, -0.01f, 1.f, 0.f, 0.f);
+		final float lWavesWidth = mWaveSpriteInstance.width();
+		final float lWavesHeight = mWaveSpriteInstance.height();
 
+		lSpriteBatch.begin(pCore.gameCamera());
+
+		final float lLeftEdge = lCameraRect.left();
+		for (int t = (int) lLeftEdge; t < lLeftEdge + lCameraRect.w(); t += (int) lWavesWidth) {
+			lSpriteBatch.draw(mOceanSpritesheet.texture(), mWaveSpriteInstance.currentSpriteFrame(), t, lSeaLevel - lWavesHeight * .5f, lWavesWidth, lWavesHeight, -0.7f, ColorConstants.WHITE);
+		}
+
+		lSpriteBatch.draw(mOceanSpritesheet, WavesTextureNames.UNDERWATER, lLeftEdge, lSeaLevel, lCameraRect.width(), lCameraRect.width(), -0.7f, ColorConstants.WHITE);
+
+		lSpriteBatch.end();
+
+		// Debug.debugManager().drawers().drawLineImmediate(pCore.gameCamera(), lCameraRect.left(), lSeaLevel, lCameraRect.w(), lSeaLevel, -0.01f, 1.f, 0.f, 0.f);
 	}
 }

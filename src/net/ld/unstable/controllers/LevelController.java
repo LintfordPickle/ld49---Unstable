@@ -16,7 +16,7 @@ public class LevelController extends BaseController {
 	// Variables
 	// --------------------------------------
 
-	private float mSeaLevel = 30.f;
+	private float mSeaLevel = -145.f;
 
 	// --------------------------------------
 	// Properties
@@ -59,7 +59,5 @@ public class LevelController extends BaseController {
 	@Override
 	public void update(LintfordCore pCore) {
 		super.update(pCore);
-
-		mSeaLevel = 5.f;
 	}
 }

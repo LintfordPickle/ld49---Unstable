@@ -81,6 +81,8 @@ public class SubRenderer extends BaseRenderer {
 		final int lMobCount = lMobs.size();
 		for (int i = 0; i < lMobCount; i++) {
 			final var lMobInstance = lMobs.get(i);
+			if (lMobInstance.isAlive == false || lMobInstance.spriteGraphDirty)
+				continue;
 
 			final var lSubmarineSpritegraph = lMobInstance.spriteGraphInstance();
 			if (lSubmarineSpritegraph != null) {

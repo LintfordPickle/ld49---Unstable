@@ -14,7 +14,7 @@ public class StraightShooter extends ProjectilePattern {
 	@Override
 	protected void update(LintfordCore pCore, Projectile pProjectile) {
 		float lDelta = (float) pCore.appTime().elapsedTimeMilli() / 1000f;
-		pProjectile.dx = 30.0f + (60.0f * pProjectile.timeSinceStart * lDelta);
+		pProjectile.dx = (30.0f + (60.0f * pProjectile.timeSinceStart * lDelta)) * pProjectile.odx;
 		pProjectile.dy = 0.f;
 
 		pProjectile.worldPositionX += pProjectile.dx * lDelta;

@@ -8,12 +8,16 @@ import net.ld.unstable.data.mobs.Submarine;
 import net.ld.unstable.data.mobs.attachments.PowerCoreAttachment;
 import net.ld.unstable.data.mobs.attachments.PropellerAttachment;
 import net.ld.unstable.data.mobs.attachments.SubAttachment;
+import net.ld.unstable.data.mobs.definitions.EnemySubmarineStraight00;
+import net.ld.unstable.data.mobs.patterns.CosMover;
+import net.ld.unstable.data.mobs.patterns.StraightMover;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
 import net.lintford.library.controllers.geometry.SpriteGraphController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.debug.Debug;
+import net.lintford.library.core.maths.RandomNumbers;
 
 public class SubController extends BaseController {
 
@@ -23,10 +27,14 @@ public class SubController extends BaseController {
 
 	public static final String CONTROLLER_NAME = "Submarine Controller";
 
+	public final static StraightMover StraightPattern = new StraightMover();
+	public final static CosMover CosMover = new CosMover();
+
 	// --------------------------------------
 	// Variables
 	// --------------------------------------
 
+	private ProjectileController mProjectileController;
 	private ParticleFrameworkController mParticleFrameworkController;
 	private SpriteGraphController mSpriteGraphController;
 	private final MobManager mMobManager;
@@ -65,6 +73,7 @@ public class SubController extends BaseController {
 	public void initialize(LintfordCore pCore) {
 		final var lControllerManager = pCore.controllerManager();
 		mSpriteGraphController = (SpriteGraphController) lControllerManager.getControllerByNameRequired(SpriteGraphController.CONTROLLER_NAME, entityGroupID());
+		mProjectileController = (ProjectileController) lControllerManager.getControllerByNameRequired(ProjectileController.CONTROLLER_NAME, entityGroupID());
 		mParticleFrameworkController = (ParticleFrameworkController) lControllerManager.getControllerByNameRequired(ParticleFrameworkController.CONTROLLER_NAME, entityGroupID());
 	}
 
@@ -89,7 +98,17 @@ public class SubController extends BaseController {
 		for (int i = 0; i < lMobCount; i++) {
 			final var lMobInstance = mUpdateMobList.get(i);
 
+			if (lMobInstance.worldPositionX + 200.0f < pCore.gameCamera().boundingRectangle().left()) {
+				lMobInstance.kill();
+				lMobs.remove(lMobInstance);
+
+				mParticleFrameworkController.particleFrameworkData().emitterManager().returnPooledItem(lMobInstance.bubbleEmitter);
+				lMobInstance.bubbleEmitter = null;
+				continue;
+			}
+
 			if (lMobInstance.health < 0.f) {
+				lMobInstance.kill();
 				lMobs.remove(lMobInstance);
 
 				mParticleFrameworkController.particleFrameworkData().emitterManager().returnPooledItem(lMobInstance.bubbleEmitter);
@@ -101,11 +120,24 @@ public class SubController extends BaseController {
 			}
 
 			updateSubmarine(pCore, lMobInstance);
+
+			if (lMobInstance.isPlayerControlled == false) {
+				if (lMobInstance.movementPattern != null) {
+					lMobInstance.movementPattern.update(pCore, lMobInstance);
+				}
+			}
 		}
+
+		if (lMobCount < 3) {
+			addNewSubmarine(false, EnemySubmarineStraight00.MOB_DEFINITION_NAME, 600, RandomNumbers.random(-10.f, 300.0f));
+		}
+
 	}
 
 	private void updateSubmarine(LintfordCore pCore, Submarine pSubmarine) {
 		final var lSubmarineSpriteGraph = pSubmarine.spriteGraphInstance();
+
+		pSubmarine.timeSinceStart += pCore.gameTime().elapsedTimeMilli();
 
 		if (pSubmarine.shootTimer > 0.f)
 			pSubmarine.shootTimer -= pCore.gameTime().elapsedTimeMilli();
@@ -128,22 +160,35 @@ public class SubController extends BaseController {
 			pSubmarine.flashOn = false;
 		}
 
-		lSubmarineSpriteGraph.positionX = pSubmarine.x;
-		lSubmarineSpriteGraph.positionY = pSubmarine.y;
+		// ---
+		if (pSubmarine.isPlayerControlled == false) {
+			if (pSubmarine.shootTimer <= 0.f) {
+				pSubmarine.shootTimer -= pCore.gameTime().elapsedTimeMilli();
+				mProjectileController.shootTorpedo(pSubmarine.uid, pSubmarine.worldPositionX, pSubmarine.worldPositionY, -1, 0);
+				pSubmarine.shootTimer = 350.f;
+			}
+		}
+		// ---
+
+		lSubmarineSpriteGraph.positionX = pSubmarine.worldPositionX;
+		lSubmarineSpriteGraph.positionY = pSubmarine.worldPositionY;
 		lSubmarineSpriteGraph.rotationInRadians = 0.f;
 		lSubmarineSpriteGraph.mFlipHorizontal = pSubmarine.isPlayerControlled == false;
 		lSubmarineSpriteGraph.update(pCore);
+		pSubmarine.spriteGraphDirty = false;
 
 		final var lEmitter = pSubmarine.bubbleEmitter;
 		if (lEmitter != null) {
-			lEmitter.worldPositionX = pSubmarine.x - 50.f;
-			lEmitter.worldPositionY = pSubmarine.y;
+			lEmitter.worldPositionX = pSubmarine.worldPositionX - 50.f;
+			lEmitter.worldPositionY = pSubmarine.worldPositionY;
 		}
 	}
 
 	// --------------------------------------
 	// Methods
 	// --------------------------------------
+
+	private static int subCounter = 0;
 
 	public void addNewSubmarine(boolean pPlayerControlled, String pDefinitionName, float pWorldX, float pWorldY) {
 		final var lNewMobDefinition = mMobManager.mobDefinitionManager().getMobDefinitionByName(pDefinitionName);
@@ -153,6 +198,8 @@ public class SubController extends BaseController {
 			return;
 		}
 		final var lNewMobInstance = mMobManager.addNewMob(lNewMobDefinition, pWorldX, pWorldY);
+		lNewMobInstance.init(subCounter++);
+
 		final var lSpriteGraphInstance = mSpriteGraphController.getSpriteGraphInstance(lNewMobDefinition.SpritegraphName, entityGroupID());
 
 		lSpriteGraphInstance.animatedSpriteGraphListener(lNewMobInstance);
@@ -170,6 +217,9 @@ public class SubController extends BaseController {
 			lNewMobInstance.isPlayerControlled = true;
 			mMobManager.playerSubmarine = lNewMobInstance;
 			lSpriteGraphInstance.attachItemToNode(new PowerCoreAttachment());
+		} else {
+
+			lNewMobInstance.movementPattern = CosMover;
 		}
 
 		// particles
@@ -177,6 +227,5 @@ public class SubController extends BaseController {
 			final var lBubbleEmitter = mParticleFrameworkController.particleFrameworkData().emitterManager().getNewParticleEmitterInstanceByDefName("EMITTER_BUBBLE");
 			lNewMobInstance.bubbleEmitter = lBubbleEmitter;
 		}
-
 	}
 }
