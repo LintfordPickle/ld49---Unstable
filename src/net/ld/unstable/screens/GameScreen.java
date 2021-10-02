@@ -8,6 +8,8 @@ import net.ld.unstable.controllers.ProjectileController;
 import net.ld.unstable.controllers.SubController;
 import net.ld.unstable.data.mobs.MobManager;
 import net.ld.unstable.data.mobs.definitions.PlayerSubmarine;
+import net.ld.unstable.data.projectiles.initializers.BubbleParticleInitializer;
+import net.ld.unstable.data.projectiles.modifiers.BubblePhysicsModifier;
 import net.ld.unstable.renderers.LevelRenderer;
 import net.ld.unstable.renderers.SubRenderer;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
@@ -89,6 +91,16 @@ public class GameScreen extends BaseGameScreen {
 
 		mSubController.addNewSubmarine(true, PlayerSubmarine.MOB_DEFINITION_NAME, 0, 0);
 		mSubController.addNewSubmarine(false, PlayerSubmarine.MOB_DEFINITION_NAME, 100, 0);
+
+		//
+
+		final var lBubbleParticlesLarge = mParticleFrameworkData.particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BUBBLE_LARGE");
+		lBubbleParticlesLarge.addInitializer(new BubbleParticleInitializer());
+		lBubbleParticlesLarge.addModifier(new BubblePhysicsModifier(mLevelController.seaLevel()));
+
+		final var lBubbleParticlesSmall = mParticleFrameworkData.particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BUBBLE_SMALL");
+		lBubbleParticlesSmall.addInitializer(new BubbleParticleInitializer());
+		lBubbleParticlesSmall.addModifier(new BubblePhysicsModifier(mLevelController.seaLevel()));
 	}
 
 	@Override

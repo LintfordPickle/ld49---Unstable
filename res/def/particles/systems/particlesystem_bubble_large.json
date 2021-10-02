@@ -1,40 +1,34 @@
 {
-	"name":"PARTICLESYSTEM_BARREL",
-	"maxParticleCount":64,
+	"name":"PARTICLESYSTEM_BUBBLE_LARGE",
+	"maxParticleCount":256,
 	"textureName":"TEXTURE_PARTICLES",
 	"textureFilename":"res/textures/particles/textureParticles.png",
 	"textureFilterMode":"0",
-	"particleLife":"10000",
+	"particleLife":"2000",
 	
 	"initializers" : [ 
 	
 		{ 
 			"className":"ParticleSourceRegionInitializer",
 			"srcX":0,
-			"srcY":26,
-			"srcW":32,
-			"srcH":32
+			"srcY":0,
+			"srcW":16,
+			"srcH":16
 		}, 
-		
+
 		{ 
 			"className":"ParticleDestinationRegionInitializer",
 			"width":32,
 			"height":32
-		}, 
-		
-		{ 
-			"className":"ParticleRandomRotationInitializer",
-			"minValue" : "-.15",
-			"maxValue" : ".15"
-
-		}
-	
+		}	
 	],
 	
 	"modifiers" : [
-		
-		{ 
-			"className":"ParticleRotationModifier"
+	
+		{
+			"className":"ParticleLifetimeAlphaFadeInOutModifier"
 		}
+	
 	]
+	
 }

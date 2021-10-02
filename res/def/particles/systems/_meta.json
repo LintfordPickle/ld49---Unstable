@@ -2,7 +2,8 @@
 	"rootDirectory":"res/def/particles/systems/",
 	"itemFileLocations" : [
 	
-		"particlesystem_bubble",
+		"particlesystem_bubble_large",
+		"particlesystem_bubble_small",
 		"particlesystem_fire",
 		"particlesystem_smoke",
 		"particlesystem_muzzle_00",

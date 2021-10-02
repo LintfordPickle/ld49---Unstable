@@ -8,6 +8,8 @@ public class PlayerSubmarine extends MobDefinition {
 		super(MOB_DEFINITION_NAME);
 
 		SpritegraphName = "SPRITEGRAPH_SUBMARINE";
+		
+		maxHealth = 100;
 	}
 
 }

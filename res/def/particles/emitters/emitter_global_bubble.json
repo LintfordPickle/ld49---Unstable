@@ -5,11 +5,22 @@
 	"childEmitters" : 
 	[
 		{
-			"name":"EMITTER_BUBBLE_CHILD_BUBBLE",
-			"displayName":"CHILD_FIRE_EMITTER_BUBBLE",
-			"particleSystemName":"PARTICLESYSTEM_BUBBLE",
+			"name":"EMITTER_BUBBLE_CHILD_BUBBLE_L",
+			"displayName":"CHILD_FIRE_EMITTER_BUBBLE_L",
+			"particleSystemName":"PARTICLESYSTEM_BUBBLE_LARGE",
 			"emitTimeMin":100,
-			"emitTimeMax":200,
+			"emitTimeMax":300,
+			"emitAmountMin":1,
+			"emitAmountMax":2,
+			"PositionRelOffsetX":0,
+			"PositionRelOffsetY":0
+	  	},
+		{
+			"name":"EMITTER_BUBBLE_CHILD_BUBBLE_S",
+			"displayName":"CHILD_FIRE_EMITTER_BUBBLE_L",
+			"particleSystemName":"PARTICLESYSTEM_BUBBLE_SMALL",
+			"emitTimeMin":100,
+			"emitTimeMax":300,
 			"emitAmountMin":1,
 			"emitAmountMax":2,
 			"PositionRelOffsetX":0,

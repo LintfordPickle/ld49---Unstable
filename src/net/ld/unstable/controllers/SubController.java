@@ -1,6 +1,10 @@
 package net.ld.unstable.controllers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.ld.unstable.data.mobs.MobManager;
+import net.ld.unstable.data.mobs.Submarine;
 import net.ld.unstable.data.mobs.attachments.PowerCoreAttachment;
 import net.ld.unstable.data.mobs.attachments.PropellerAttachment;
 import net.ld.unstable.data.mobs.attachments.SubAttachment;
@@ -26,6 +30,8 @@ public class SubController extends BaseController {
 	private ParticleFrameworkController mParticleFrameworkController;
 	private SpriteGraphController mSpriteGraphController;
 	private final MobManager mMobManager;
+
+	private List<Submarine> mUpdateMobList = new ArrayList<>();
 
 	// --------------------------------------
 	// Properties
@@ -74,22 +80,55 @@ public class SubController extends BaseController {
 
 		final var lMobs = mMobManager.mobs();
 		final int lMobCount = lMobs.size();
+
+		mUpdateMobList.clear();
 		for (int i = 0; i < lMobCount; i++) {
-			final var lMobInstance = lMobs.get(i);
+			mUpdateMobList.add(lMobs.get(i));
+		}
 
-			final var lSubmarineSpriteGraph = lMobInstance.spriteGraphInstance();
+		for (int i = 0; i < lMobCount; i++) {
+			final var lMobInstance = mUpdateMobList.get(i);
 
-			lSubmarineSpriteGraph.positionX = lMobInstance.x;
-			lSubmarineSpriteGraph.positionY = lMobInstance.y;
-			lSubmarineSpriteGraph.rotationInRadians = 0.f;
-			lSubmarineSpriteGraph.mFlipHorizontal = lMobInstance.isPlayerControlled == false;
-			lSubmarineSpriteGraph.update(pCore);
+			if (lMobInstance.health < 0.f) {
+				lMobs.remove(lMobInstance);
 
-			final var lEmitter = lMobInstance.bubbleEmitter;
-			if (lEmitter != null) {
-				lEmitter.worldPositionX = lMobInstance.x;
-				lEmitter.worldPositionY = lMobInstance.y;
+				mParticleFrameworkController.particleFrameworkData().emitterManager().returnPooledItem(lMobInstance.bubbleEmitter);
+				lMobInstance.bubbleEmitter = null;
+
+				// TODO: explosions
+
+				continue;
 			}
+
+			updateSubmarine(pCore, lMobInstance);
+		}
+	}
+
+	private void updateSubmarine(LintfordCore pCore, Submarine pSubmarine) {
+		final var lSubmarineSpriteGraph = pSubmarine.spriteGraphInstance();
+
+		//
+		if (pSubmarine.invulnerabilityTimer > .0f) {
+			pSubmarine.invulnerabilityTimer -= pCore.gameTime().elapsedTimeMilli();
+			pSubmarine.flashTimer -= pCore.gameTime().elapsedTimeMilli();
+			if (pSubmarine.flashTimer < 0.f) {
+				pSubmarine.flashTimer = 50.f;
+				pSubmarine.flashOn = !pSubmarine.flashOn;
+			}
+		} else {
+			pSubmarine.flashOn = false;
+		}
+
+		lSubmarineSpriteGraph.positionX = pSubmarine.x;
+		lSubmarineSpriteGraph.positionY = pSubmarine.y;
+		lSubmarineSpriteGraph.rotationInRadians = 0.f;
+		lSubmarineSpriteGraph.mFlipHorizontal = pSubmarine.isPlayerControlled == false;
+		lSubmarineSpriteGraph.update(pCore);
+
+		final var lEmitter = pSubmarine.bubbleEmitter;
+		if (lEmitter != null) {
+			lEmitter.worldPositionX = pSubmarine.x - 50.f;
+			lEmitter.worldPositionY = pSubmarine.y;
 		}
 	}
 
@@ -116,6 +155,7 @@ public class SubController extends BaseController {
 		lSpriteGraphInstance.attachItemToNode(new PropellerAttachment());
 		lSpriteGraphInstance.mFlipHorizontal = lNewMobInstance.isPlayerControlled == false;
 
+		lNewMobInstance.health = lNewMobDefinition.maxHealth;
 		lNewMobInstance.isPlayerControlled = false;
 		if (pPlayerControlled) {
 			lNewMobInstance.isPlayerControlled = true;

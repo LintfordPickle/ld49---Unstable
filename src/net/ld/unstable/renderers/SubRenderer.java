@@ -3,6 +3,7 @@ package net.ld.unstable.renderers;
 import net.ld.unstable.controllers.SubController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.sprites.spritegraph.SpriteGraphRenderer;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.renderers.BaseRenderer;
@@ -85,9 +86,17 @@ public class SubRenderer extends BaseRenderer {
 			if (lSubmarineSpritegraph != null) {
 				lMobInstance.spriteGraphInstance().update(pCore);
 
+				final var lCrazyWhite = lMobInstance.flashOn ? ColorConstants.getColor(1000.f, 1000.0f, 1000.f) : ColorConstants.WHITE;
+
 				mSpriteGraphRenderer.begin(pCore.gameCamera());
-				mSpriteGraphRenderer.drawSpriteGraphList(pCore, lSubmarineSpritegraph);
+				mSpriteGraphRenderer.drawSpriteGraphList(pCore, lSubmarineSpritegraph, lCrazyWhite);
 				mSpriteGraphRenderer.end();
+
+//				GL11.glLineWidth(2.f);
+//				Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.x - 25, lMobInstance.y, 25.f);
+//				Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.x + 25, lMobInstance.y, 25.f);
+//				
+//				Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.x, lMobInstance.y, 52.f);
 			}
 		}
 	}

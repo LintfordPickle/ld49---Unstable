@@ -7,13 +7,34 @@ import net.lintford.library.core.particles.particleemitters.ParticleEmitterInsta
 
 public class Submarine extends ShmupEntity implements AnimatedSpriteGraphListener {
 
+	// --------------------------------------
+	// Variables
+	// --------------------------------------
+
+	public float minCollisionDistance = 52.f; // 25.0 front and back + 25 radius + insecurity
 	public boolean isPlayerControlled;
+	
+	public float health;
+	public float coolant;
+	
+	public float invulnerabilityTimer;
+	public float flashTimer;
+	public boolean flashOn;
+	
 	private transient SpriteGraphInstance mSpriteGraphInstance;
 	public transient ParticleEmitterInstance bubbleEmitter;
+
+	// --------------------------------------
+	// Constructor
+	// --------------------------------------
 
 	public SpriteGraphInstance spriteGraphInstance() {
 		return mSpriteGraphInstance;
 	}
+
+	// --------------------------------------
+	// Methods
+	// --------------------------------------
 
 	public void setSpriteGraphInstance(SpriteGraphInstance pSpriteGraphInstance) {
 		mSpriteGraphInstance = pSpriteGraphInstance;
