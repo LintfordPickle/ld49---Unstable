@@ -14,8 +14,9 @@ public class PauseScreen extends MenuScreen {
 	// --------------------------------------
 
 	private static final int BUTTON_RESUME = 0;
-	private static final int BUTTON_EXIT_MENU = 1;
-	private static final int BUTTON_EXIT_DESKTOP = 2;
+	private static final int BUTTON_RESTART = 1;
+	private static final int BUTTON_EXIT_MENU = 2;
+	private static final int BUTTON_EXIT_DESKTOP = 3;
 
 	// --------------------------------------
 	// Constructor
@@ -27,21 +28,25 @@ public class PauseScreen extends MenuScreen {
 		BaseLayout lMainLayout = new ListLayout(this);
 
 		var lResumeGameEntry = new MenuEntry(pScreenManager, lMainLayout, "Resume");
+		var lRestartGameEntry = new MenuEntry(pScreenManager, lMainLayout, "Restart");
+		
 		var lExitMenuEntry = new MenuEntry(pScreenManager, lMainLayout, "Exit to Menu");
 		var lExitDesktopEntry = new MenuEntry(pScreenManager, lMainLayout, "Exit to Desktop");
 
 		lResumeGameEntry.registerClickListener(this, BUTTON_RESUME);
+		lRestartGameEntry.registerClickListener(this, BUTTON_RESTART);
+		
 		lExitMenuEntry.registerClickListener(this, BUTTON_EXIT_MENU);
 		lExitDesktopEntry.registerClickListener(this, BUTTON_EXIT_DESKTOP);
 
 		lMainLayout.addMenuEntry(lResumeGameEntry);
+		lMainLayout.addMenuEntry(lRestartGameEntry);
 		lMainLayout.addMenuEntry(MenuEntry.menuSeparator());
 		lMainLayout.addMenuEntry(lExitMenuEntry);
 		lMainLayout.addMenuEntry(lExitDesktopEntry);
 
 		addLayout(lMainLayout);
 
-		// mESCBackEnabled = false;
 		mBlockInputInBackground = true;
 	}
 
