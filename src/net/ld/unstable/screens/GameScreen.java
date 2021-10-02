@@ -158,17 +158,17 @@ public class GameScreen extends BaseGameScreen {
 		mLevelRenderer.initialize(lCore);
 		mLevelRenderer.loadGLContent(pResourceManager);
 
-		mParticleFrameworkRenderer = new ParticleFrameworkRenderer(rendererManager, entityGroupID());
-		mParticleFrameworkRenderer.initialize(lCore);
-		mParticleFrameworkRenderer.loadGLContent(pResourceManager);
+		mSubRenderer = new SubRenderer(rendererManager, entityGroupID());
+		mSubRenderer.initialize(lCore);
+		mSubRenderer.loadGLContent(pResourceManager);
 
 		mProjectilesRenderer = new ProjectilesRenderer(rendererManager, entityGroupID());
 		mProjectilesRenderer.initialize(lCore);
 		mProjectilesRenderer.loadGLContent(pResourceManager);
 
-		mSubRenderer = new SubRenderer(rendererManager, entityGroupID());
-		mSubRenderer.initialize(lCore);
-		mSubRenderer.loadGLContent(pResourceManager);
+		mParticleFrameworkRenderer = new ParticleFrameworkRenderer(rendererManager, entityGroupID());
+		mParticleFrameworkRenderer.initialize(lCore);
+		mParticleFrameworkRenderer.loadGLContent(pResourceManager);
 
 	}
 }

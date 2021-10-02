@@ -97,7 +97,11 @@ public class PlayerSubController extends BaseController {
 			}
 		}
 		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_DOWN)) {
-			mProjectileController.dropBarrel(lPlayerSub.x, lPlayerSub.y);
+			if(lPlayerSub.barrelTimer <= 0.f) {
+				mProjectileController.dropBarrel(lPlayerSub.x, lPlayerSub.y);
+				lPlayerSub.barrelTimer = 300;
+				
+			}
 		}
 
 		return super.handleInput(pCore);

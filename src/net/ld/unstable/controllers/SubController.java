@@ -110,6 +110,12 @@ public class SubController extends BaseController {
 		if (pSubmarine.shootTimer > 0.f)
 			pSubmarine.shootTimer -= pCore.gameTime().elapsedTimeMilli();
 
+		if (pSubmarine.barrelTimer > 0.f)
+			pSubmarine.barrelTimer -= pCore.gameTime().elapsedTimeMilli();
+
+		if (pSubmarine.missileTimer > 0.f)
+			pSubmarine.missileTimer -= pCore.gameTime().elapsedTimeMilli();
+
 		//
 		if (pSubmarine.invulnerabilityTimer > .0f) {
 			pSubmarine.invulnerabilityTimer -= pCore.gameTime().elapsedTimeMilli();

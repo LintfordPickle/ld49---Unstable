@@ -24,6 +24,8 @@ public class Submarine extends ShmupEntity implements AnimatedSpriteGraphListene
 	public boolean flashOn;
 	
 	public float shootTimer;
+	public float barrelTimer;
+	public float missileTimer;
 
 	private transient SpriteGraphInstance mSpriteGraphInstance;
 	public transient ParticleEmitterInstance bubbleEmitter;
