@@ -6,6 +6,7 @@ import net.ld.unstable.controllers.LevelController;
 import net.ld.unstable.controllers.PlayerSubController;
 import net.ld.unstable.controllers.SubController;
 import net.ld.unstable.data.mobs.MobManager;
+import net.ld.unstable.data.mobs.definitions.PlayerSubmarine;
 import net.ld.unstable.renderers.LevelRenderer;
 import net.ld.unstable.renderers.SubRenderer;
 import net.lintford.library.controllers.geometry.SpriteGraphController;
@@ -47,7 +48,6 @@ public class GameScreen extends BaseGameScreen {
 		mSpriteGraphManager = new SpriteGraphManager();
 
 		mMobManager = new MobManager();
-		mMobManager.addNewPlayerSub(0.f, 0.f);
 
 		createControllers();
 	}
@@ -55,6 +55,13 @@ public class GameScreen extends BaseGameScreen {
 	// --------------------------------------
 	// Core-Methods
 	// --------------------------------------
+
+	@Override
+	public void initialize() {
+		super.initialize();
+
+		mMobManager.initialize();
+	}
 
 	@Override
 	public void loadGLContent(ResourceManager pResourceManager) {
@@ -66,10 +73,12 @@ public class GameScreen extends BaseGameScreen {
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetSubmarines.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPropeller.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPowercore.json", entityGroupID());
-		
-		initializeControllers();
 
+		initializeControllers();
 		createRenderers(pResourceManager);
+
+		mSubController.addNewSubmarine(true, PlayerSubmarine.MOB_DEFINITION_NAME, 0, 0);
+		mSubController.addNewSubmarine(false, PlayerSubmarine.MOB_DEFINITION_NAME, 100, 0);
 	}
 
 	@Override

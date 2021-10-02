@@ -6,6 +6,7 @@ import net.lintford.library.core.graphics.sprites.SpriteDefinition;
 
 public class Submarine extends ShmupEntity implements AnimatedSpriteGraphListener {
 
+	public boolean isPlayerControlled;
 	private transient SpriteGraphInstance mSpriteGraphInstance;
 
 	public SpriteGraphInstance spriteGraphInstance() {

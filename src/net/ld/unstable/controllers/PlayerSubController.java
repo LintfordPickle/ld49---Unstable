@@ -3,7 +3,6 @@ package net.ld.unstable.controllers;
 import org.lwjgl.glfw.GLFW;
 
 import net.ld.unstable.data.mobs.MobManager;
-import net.ld.unstable.data.mobs.ShmupEntity;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
@@ -23,17 +22,12 @@ public class PlayerSubController extends BaseController {
 
 	private LevelController mLevelController;
 	private final MobManager mMobManager;
-	private final ShmupEntity mPlayerSubmarine;
 	private final Vector2f mAcceleration = new Vector2f();
 	private final Vector2f mVelocity = new Vector2f();
 
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
-
-	public ShmupEntity playerSubmarine() {
-		return mPlayerSubmarine;
-	}
 
 	@Override
 	public boolean isInitialized() {
@@ -49,7 +43,6 @@ public class PlayerSubController extends BaseController {
 		super(pControllerManager, CONTROLLER_NAME, pEntityGroupID);
 
 		mMobManager = pMobManager;
-		mPlayerSubmarine = mMobManager.getPlayerSubmarine();
 	}
 
 	// --------------------------------------
@@ -72,9 +65,11 @@ public class PlayerSubController extends BaseController {
 
 	@Override
 	public boolean handleInput(LintfordCore pCore) {
+		if (mMobManager.playerSubmarine == null)
+			return false;
 
 		final float lMovementSpeed = 0.25f;
-		final boolean isUnderWater = mPlayerSubmarine.y > mLevelController.seaLevel();
+		final boolean isUnderWater = mMobManager.playerSubmarine.y > mLevelController.seaLevel();
 
 		if (isUnderWater && pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_W)) {
 			mAcceleration.y -= lMovementSpeed;
@@ -99,6 +94,9 @@ public class PlayerSubController extends BaseController {
 	public void update(LintfordCore pCore) {
 		super.update(pCore);
 
+		if (mMobManager.playerSubmarine == null)
+			return;
+
 //		{
 //			// DEMO / DEBUG
 //			final float lTimeMod = 0.001f;
@@ -110,21 +108,22 @@ public class PlayerSubController extends BaseController {
 //
 //		}
 
-		final boolean isUnderWater = mPlayerSubmarine.y > mLevelController.seaLevel();
+		final var lPlayerSubmarine = mMobManager.playerSubmarine;
+		final boolean isUnderWater = lPlayerSubmarine.y > mLevelController.seaLevel();
 
 		mVelocity.x += mAcceleration.x;
 		mVelocity.y += mAcceleration.y;
 
-		if (mPlayerSubmarine.y < mLevelController.seaLevel()) {
+		if (lPlayerSubmarine.y < mLevelController.seaLevel()) {
 			mVelocity.y += .12f;
 		}
 
-		mPlayerSubmarine.x += mVelocity.x;
-		mPlayerSubmarine.y += mVelocity.y;
+		lPlayerSubmarine.x += mVelocity.x;
+		lPlayerSubmarine.y += mVelocity.y;
 
 //		mPlayerSubmarine.x = 0;
 //		mPlayerSubmarine.y = 0;
-		
+
 		if (isUnderWater)
 			mVelocity.x *= .958f;
 

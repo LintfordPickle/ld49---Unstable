@@ -3,7 +3,6 @@ package net.ld.unstable.renderers;
 import net.ld.unstable.controllers.SubController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
-import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.sprites.spritegraph.SpriteGraphRenderer;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.renderers.BaseRenderer;
@@ -77,22 +76,19 @@ public class SubRenderer extends BaseRenderer {
 			return;
 
 		final var lMobManager = mSubController.mobManager();
-		final var lPlayerSubmarine = lMobManager.getPlayerSubmarine();
+		final var lMobs = lMobManager.mobs();
+		final int lMobCount = lMobs.size();
+		for (int i = 0; i < lMobCount; i++) {
+			final var lMobInstance = lMobs.get(i);
 
-		final var lWidth = 150.f;
-		final var lHeight = 90.f;
+			final var lSubmarineSpritegraph = lMobInstance.spriteGraphInstance();
+			if (lSubmarineSpritegraph != null) {
+				lMobInstance.spriteGraphInstance().update(pCore);
 
-		final float lSubmarinePositionX = lPlayerSubmarine.x - lWidth * .5f;
-		final float lSubmarinePositionY = lPlayerSubmarine.y - lHeight * .5f;
-
-		Debug.debugManager().drawers().drawRectImmediate(pCore.gameCamera(), lSubmarinePositionX, lSubmarinePositionY, lWidth, lHeight, 2.f, 1.f, 1.f, 0.f);
-
-		final var lPlayerSub = lMobManager.getPlayerSubmarine();
-		lPlayerSub.spriteGraphInstance().update(pCore);
-
-		mSpriteGraphRenderer.begin(pCore.gameCamera());
-		mSpriteGraphRenderer.drawSpriteGraphList(pCore, lPlayerSub.spriteGraphInstance());
-		mSpriteGraphRenderer.end();
-
+				mSpriteGraphRenderer.begin(pCore.gameCamera());
+				mSpriteGraphRenderer.drawSpriteGraphList(pCore, lSubmarineSpritegraph);
+				mSpriteGraphRenderer.end();
+			}
+		}
 	}
 }
