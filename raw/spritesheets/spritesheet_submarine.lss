@@ -1,0 +1,36 @@
+{
+  "outputDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\spritesheets\\spritesheetSubmarines.json",
+  "outputNameDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\src\\net\\ld\\unstable\\data\\Textures\\MobTextureNames.java",
+  "outputImageFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\textures\\textureSubmarines.png",
+  "workingDirectory": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs",
+  "spriteSheetName": "SPRITESHEET_SUBMARINES",
+  "textureName": "TEXTURE_SUBMARINES",
+  "exportDataFile": true,
+  "exportTextureFile": true,
+  "exportNamesFile": true,
+  "sortMode": "Area",
+  "borderPadding": 0,
+  "shapeOutlines": false,
+  "crop": false,
+  "trim": false,
+  "allowRotations": false,
+  "spritePadding": 0,
+  "textureWidthMax": 256,
+  "textureWidthActual": 256,
+  "textureHeightMax": 256,
+  "textureHeightActual": 255,
+  "forcePoTTextures": true,
+  "autoSizeTexture": false,
+  "itemFilenames": [
+    "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs\\submarine\\*.*"
+  ],
+  "animationItems": {
+    "normal": {
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSprites": [
+        "NORMAL_00"
+      ]
+    }
+  }
+}

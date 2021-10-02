@@ -1,8 +1,22 @@
 {
 	"textureDefinitions" : [
 		{
-			"textureName":"TEXTURE_MOBS",
-			"filepath":"res/textures/textureMobs.png",
+			"textureName":"TEXTURE_SUBMARINES",
+			"filepath":"res/textures/textureSubmarines.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
+		},
+		{
+			"textureName":"TEXTURE_PROPELLER",
+			"filepath":"res/textures/texturePropeller.png",
+			"filterIndex":1,
+			"wrapSIndex":1,
+			"wrapTIndex":1
+		},
+		{
+			"textureName":"TEXTURE_POWERCORE",
+			"filepath":"res/textures/texturePowercore.png",
 			"filterIndex":1,
 			"wrapSIndex":1,
 			"wrapTIndex":1

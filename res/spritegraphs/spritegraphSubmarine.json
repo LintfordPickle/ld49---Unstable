@@ -1,0 +1,33 @@
+{
+	"name": "SPRITEGRAPH_SUBMARINE",
+	"rootNode": {
+		"name": "NODE_MAIN",
+		"zDepth": 2,
+		"childParts": [
+			{
+				"name": "NODE_SUBMARINE_MAIN",
+				"anchorNodeName": "NODE_SUBMARINE_MAIN",
+				"attachmentCategory":1,
+				"zDepth": 8,
+				"childParts": [	
+					{
+						"name": "NODE_POWERCORE",
+						"anchorNodeName": "NODE_POWERCORE",
+						"attachmentCategory":2,
+						"zDepth": 10,
+						"childParts": [
+						]
+					},			
+					{
+						"name": "NODE_PROPELLER",
+						"anchorNodeName": "NODE_PROPELLER",
+						"attachmentCategory":3,
+						"zDepth": 10,
+						"childParts": [
+						]
+					}
+				]
+			}
+		]
+	}
+}

@@ -1,0 +1,1 @@
+Call "D:\dev\tools\spritecropper\SpriteCropper.exe" -p D:\dev\java\ludumdare\49\projects\LD49\raw\spritesheets\mobs\ -s true -b 1

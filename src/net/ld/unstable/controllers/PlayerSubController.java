@@ -2,8 +2,8 @@ package net.ld.unstable.controllers;
 
 import org.lwjgl.glfw.GLFW;
 
-import net.ld.unstable.data.MobManager;
-import net.ld.unstable.data.ShmupEntity;
+import net.ld.unstable.data.mobs.MobManager;
+import net.ld.unstable.data.mobs.ShmupEntity;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
@@ -99,6 +99,17 @@ public class PlayerSubController extends BaseController {
 	public void update(LintfordCore pCore) {
 		super.update(pCore);
 
+//		{
+//			// DEMO / DEBUG
+//			final float lTimeMod = 0.001f;
+//			final float sin = (float) Math.sin(pCore.gameTime().totalTimeMilli() * lTimeMod);
+//			final float cos = (float) Math.cos(pCore.gameTime().totalTimeMilli() * lTimeMod);
+//
+//			mAcceleration.x = cos * .025f;
+//			mAcceleration.y = sin * cos * .025f;
+//
+//		}
+
 		final boolean isUnderWater = mPlayerSubmarine.y > mLevelController.seaLevel();
 
 		mVelocity.x += mAcceleration.x;
@@ -111,6 +122,9 @@ public class PlayerSubController extends BaseController {
 		mPlayerSubmarine.x += mVelocity.x;
 		mPlayerSubmarine.y += mVelocity.y;
 
+//		mPlayerSubmarine.x = 0;
+//		mPlayerSubmarine.y = 0;
+		
 		if (isUnderWater)
 			mVelocity.x *= .958f;
 

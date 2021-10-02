@@ -30,7 +30,7 @@ public class LevelRenderer extends BaseRenderer {
 
 	@Override
 	public boolean isInitialized() {
-		return false;
+		return mLevelController != null;
 	}
 
 	// --------------------------------------
@@ -68,6 +68,9 @@ public class LevelRenderer extends BaseRenderer {
 
 	@Override
 	public void draw(LintfordCore pCore) {
+		if (!isInitialized())
+			return;
+
 		final var lCameraRect = pCore.gameCamera().boundingRectangle();
 
 		final float lSeaLevel = mLevelController.seaLevel();

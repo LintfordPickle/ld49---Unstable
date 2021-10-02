@@ -1,14 +1,14 @@
-package net.ld.unstable.data;
+package net.ld.unstable.data.mobs;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MobManager {
 
-	private ShmupEntity mPlayerSubmarine;
+	private Submarine mPlayerSubmarine;
 	private final List<ShmupEntity> mMobEntities = new ArrayList<>();
 
-	public ShmupEntity getPlayerSubmarine() {
+	public Submarine getPlayerSubmarine() {
 		return mPlayerSubmarine;
 	}
 
@@ -21,7 +21,7 @@ public class MobManager {
 	}
 
 	public void addNewPlayerSub(float x, float y) {
-		mPlayerSubmarine = new ShmupEntity();
+		mPlayerSubmarine = new Submarine();
 	}
 
 	public void addNewMob(float x, float y, int type) {

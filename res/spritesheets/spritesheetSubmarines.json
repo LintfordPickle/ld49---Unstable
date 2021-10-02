@@ -1,0 +1,44 @@
+{
+  "spriteSheetName": "SPRITESHEET_SUBMARINES",
+  "textureName": "TEXTURE_SUBMARINES",
+  "frameMapNameArray": [
+    "NORMAL_00"
+  ],
+  "frameMapObjectArray": [
+    {
+      "name": null,
+      "x": 0,
+      "y": 0,
+      "w": 136,
+      "h": 78,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": [
+        {
+          "anchorName": "NODE_PROPELLER",
+          "x": -62,
+          "y": 9,
+          "r": 0.0
+        },
+        {
+          "anchorName": "NODE_POWERCORE",
+          "x": -16,
+          "y": -3,
+          "r": 0.0
+        }
+      ]
+    }
+  ],
+  "spriteMap": {
+    "normal": {
+      "animationName": "normal",
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSpriteIndices": [
+        0
+      ]
+    }
+  }
+}

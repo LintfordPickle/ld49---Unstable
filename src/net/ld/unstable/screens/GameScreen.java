@@ -5,11 +5,13 @@ import org.lwjgl.glfw.GLFW;
 import net.ld.unstable.controllers.LevelController;
 import net.ld.unstable.controllers.PlayerSubController;
 import net.ld.unstable.controllers.SubController;
-import net.ld.unstable.data.MobManager;
+import net.ld.unstable.data.mobs.MobManager;
 import net.ld.unstable.renderers.LevelRenderer;
 import net.ld.unstable.renderers.SubRenderer;
+import net.lintford.library.controllers.geometry.SpriteGraphController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.geometry.spritegraph.SpriteGraphManager;
 import net.lintford.library.screenmanager.ScreenManager;
 import net.lintford.library.screenmanager.screens.BaseGameScreen;
 
@@ -20,9 +22,11 @@ public class GameScreen extends BaseGameScreen {
 	// --------------------------------------
 
 	// Data
+	private SpriteGraphManager mSpriteGraphManager;
 	private MobManager mMobManager;
 
 	// Controllers
+	private SpriteGraphController mSpriteGraphController;
 	private SubController mSubController;
 	private PlayerSubController mPlayerSubController;
 	private LevelController mLevelController;
@@ -40,13 +44,12 @@ public class GameScreen extends BaseGameScreen {
 
 		mShowBackgroundScreens = true;
 
+		mSpriteGraphManager = new SpriteGraphManager();
+
 		mMobManager = new MobManager();
 		mMobManager.addNewPlayerSub(0.f, 0.f);
 
 		createControllers();
-		initializeControllers();
-
-		createRenderers();
 	}
 
 	// --------------------------------------
@@ -57,8 +60,16 @@ public class GameScreen extends BaseGameScreen {
 	public void loadGLContent(ResourceManager pResourceManager) {
 		super.loadGLContent(pResourceManager);
 
+		pResourceManager.spriteGraphRepository().loadSpriteGraphsFromMeta("res/spritegraphs/_meta.json", entityGroupID());
 		pResourceManager.textureManager().loadTexturesFromMetafile("res/textures/_meta.json", entityGroupID());
 
+		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetSubmarines.json", entityGroupID());
+		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPropeller.json", entityGroupID());
+		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPowercore.json", entityGroupID());
+		
+		initializeControllers();
+
+		createRenderers(pResourceManager);
 	}
 
 	@Override
@@ -84,19 +95,28 @@ public class GameScreen extends BaseGameScreen {
 	private void createControllers() {
 		final var lControllerManager = screenManager.core().controllerManager();
 
+		mSpriteGraphController = new SpriteGraphController(lControllerManager, mSpriteGraphManager, entityGroupID());
 		mLevelController = new LevelController(lControllerManager, entityGroupID());
 		mSubController = new SubController(lControllerManager, mMobManager, entityGroupID());
 		mPlayerSubController = new PlayerSubController(lControllerManager, mMobManager, entityGroupID());
 	}
 
 	private void initializeControllers() {
+		mSpriteGraphController.initialize(screenManager.core());
 		mLevelController.initialize(screenManager.core());
 		mSubController.initialize(screenManager.core());
 		mPlayerSubController.initialize(screenManager.core());
 	}
 
-	private void createRenderers() {
+	private void createRenderers(ResourceManager pResourceManager) {
+		final var lCore = screenManager.core();
 		mSubRenderer = new SubRenderer(rendererManager, entityGroupID());
+		mSubRenderer.initialize(lCore);
+		mSubRenderer.loadGLContent(pResourceManager);
+
 		mLevelRenderer = new LevelRenderer(rendererManager, entityGroupID());
+		mLevelRenderer.initialize(lCore);
+		mLevelRenderer.loadGLContent(pResourceManager);
+
 	}
 }

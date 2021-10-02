@@ -1,11 +1,10 @@
 package net.ld.unstable.renderers;
 
 import net.ld.unstable.controllers.SubController;
-import net.ld.unstable.data.Textures.MobTextureNames;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.debug.Debug;
-import net.lintford.library.core.graphics.ColorConstants;
+import net.lintford.library.core.graphics.sprites.spritegraph.SpriteGraphRenderer;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
@@ -24,6 +23,7 @@ public class SubRenderer extends BaseRenderer {
 
 	private SubController mSubController;
 	private SpriteSheetDefinition mMobSpritesheet;
+	private SpriteGraphRenderer mSpriteGraphRenderer;
 
 	// --------------------------------------
 	// Properties
@@ -31,7 +31,7 @@ public class SubRenderer extends BaseRenderer {
 
 	@Override
 	public boolean isInitialized() {
-		return false;
+		return mSubController != null;
 	}
 
 	// --------------------------------------
@@ -40,6 +40,8 @@ public class SubRenderer extends BaseRenderer {
 
 	public SubRenderer(RendererManager pRendererManager, int pEntityGroupID) {
 		super(pRendererManager, RENDERER_NAME, pEntityGroupID);
+
+		mSpriteGraphRenderer = new SpriteGraphRenderer();
 	}
 
 	// --------------------------------------
@@ -57,21 +59,23 @@ public class SubRenderer extends BaseRenderer {
 	public void loadGLContent(ResourceManager pResourceManager) {
 		super.loadGLContent(pResourceManager);
 
-		mMobSpritesheet = pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetMobs.json", entityGroupID());
+		mSpriteGraphRenderer.loadGLContent(pResourceManager);
+		mMobSpritesheet = pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetSubmarines.json", entityGroupID());
 	}
 
 	@Override
 	public void unloadGLContent() {
 		super.unloadGLContent();
 
+		mSpriteGraphRenderer.unloadGLContent();
 		mMobSpritesheet = null;
 	}
 
 	@Override
 	public void draw(LintfordCore pCore) {
-		final var lSpriteBatch = rendererManager().uiSpriteBatch();
+		if (!isInitialized())
+			return;
 
-		// Render the player separtely
 		final var lMobManager = mSubController.mobManager();
 		final var lPlayerSubmarine = lMobManager.getPlayerSubmarine();
 
@@ -83,9 +87,12 @@ public class SubRenderer extends BaseRenderer {
 
 		Debug.debugManager().drawers().drawRectImmediate(pCore.gameCamera(), lSubmarinePositionX, lSubmarinePositionY, lWidth, lHeight, 2.f, 1.f, 1.f, 0.f);
 
-		lSpriteBatch.begin(pCore.gameCamera());
-		lSpriteBatch.draw(mMobSpritesheet, MobTextureNames.SUBMARINE, lSubmarinePositionX, lSubmarinePositionY, lWidth, lHeight, -0.01f, ColorConstants.WHITE);
-		lSpriteBatch.end();
+		final var lPlayerSub = lMobManager.getPlayerSubmarine();
+		lPlayerSub.spriteGraphInstance().update(pCore);
+
+		mSpriteGraphRenderer.begin(pCore.gameCamera());
+		mSpriteGraphRenderer.drawSpriteGraphList(pCore, lPlayerSub.spriteGraphInstance());
+		mSpriteGraphRenderer.end();
 
 	}
 }

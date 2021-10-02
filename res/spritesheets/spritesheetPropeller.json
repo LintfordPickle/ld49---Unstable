@@ -1,0 +1,87 @@
+{
+  "spriteSheetName": "SPRITESHEET_PROPELLER",
+  "textureName": "TEXTURE_PROPELLER",
+  "frameMapNameArray": [
+    "NORMAL_02",
+    "NORMAL_04",
+    "NORMAL_03",
+    "NORMAL_00",
+    "NORMAL_01"
+  ],
+  "frameMapObjectArray": [
+    {
+      "name": null,
+      "x": 0,
+      "y": 0,
+      "w": 8,
+      "h": 34,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 8,
+      "y": 0,
+      "w": 8,
+      "h": 34,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 16,
+      "y": 0,
+      "w": 8,
+      "h": 32,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 24,
+      "y": 0,
+      "w": 8,
+      "h": 30,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 32,
+      "y": 0,
+      "w": 8,
+      "h": 30,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    }
+  ],
+  "spriteMap": {
+    "normal": {
+      "animationName": "normal",
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSpriteIndices": [
+        3,
+        4,
+        0,
+        2,
+        1
+      ]
+    }
+  }
+}

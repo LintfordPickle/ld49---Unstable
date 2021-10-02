@@ -1,0 +1,60 @@
+{
+  "outputDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\spritesheets\\spritesheetMobs.json",
+  "outputNameDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\src\\net\\ld\\unstable\\data\\Textures\\MobTextureNames.java",
+  "outputImageFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\textures\\textureMobs.png",
+  "workingDirectory": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs",
+  "spriteSheetName": "SPRITESHEET_MOBS",
+  "textureName": "TEXTURE_MOBS",
+  "exportDataFile": true,
+  "exportTextureFile": true,
+  "exportNamesFile": true,
+  "sortMode": "Area",
+  "borderPadding": 0,
+  "shapeOutlines": false,
+  "crop": false,
+  "trim": false,
+  "allowRotations": false,
+  "spritePadding": 0,
+  "textureWidthMax": 512,
+  "textureWidthActual": 512,
+  "textureHeightMax": 512,
+  "textureHeightActual": 512,
+  "forcePoTTextures": true,
+  "autoSizeTexture": false,
+  "itemFilenames": [
+    "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs\\sub_hull_00\\*.*",
+    "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs\\power core\\*.*",
+    "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs\\propeller\\*.*"
+  ],
+  "animationItems": {
+    "sub_propeller": {
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSprites": [
+        "PROPELLER_00",
+        "PROPELLER_01",
+        "PROPELLER_02",
+        "PROPELLER_03",
+        "PROPELLER_04"
+      ]
+    },
+    "sub_power": {
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSprites": [
+        "POWER_CORE_00",
+        "POWER_CORE_01",
+        "POWER_CORE_02",
+        "POWER_CORE_03",
+        "POWER_CORE_04"
+      ]
+    },
+    "sub": {
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSprites": [
+        "SUB_HULL_00_00"
+      ]
+    }
+  }
+}

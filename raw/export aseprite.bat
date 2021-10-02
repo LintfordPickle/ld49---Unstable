@@ -1,1 +1,1 @@
-aseprite -b --ignore-empty <absolute path to aseprite file> --save-as "D:\dev\java\ludumdare\test\projects\<project name>\raw\spritesheets\{layer}\{tag} 00.png"
+aseprite -b --ignore-empty "D:\dev\java\ludumdare\49\projects\LD49\raw\spritesheets\submarine.aseprite" --save-as "D:\dev\java\ludumdare\49\projects\LD49\raw\spritesheets\mobs\{layer}\{tag} 00.png"
