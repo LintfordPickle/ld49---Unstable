@@ -2,6 +2,8 @@ package net.ld.unstable;
 
 import org.lwjgl.opengl.GL11;
 
+import net.ld.unstable.screens.BackgroundScreen;
+import net.ld.unstable.screens.MainMenuScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.graphics.fonts.BitmapFontManager;
@@ -24,6 +26,8 @@ public class BaseGame extends LintfordCore {
 	// Variables
 	// ---------------------------------------------
 
+	private ScreenManager mScreenManager;
+
 	// ---------------------------------------------
 	// Constructor
 	// ---------------------------------------------
@@ -31,12 +35,58 @@ public class BaseGame extends LintfordCore {
 	public BaseGame(GameInfo pGameInfo, String[] pArgs, boolean pHeadless) {
 		super(pGameInfo, pArgs, pHeadless);
 
+		mScreenManager = new ScreenManager(this);
+
 		mIsFixedTimeStep = true;
 	}
 
 	// ---------------------------------------------
 	// Core-Methods
 	// ---------------------------------------------
+
+	@Override
+	protected void onInitializeApp() {
+		super.onInitializeApp();
+
+		mScreenManager.initialize();
+		mScreenManager.addScreen(new BackgroundScreen(mScreenManager));
+		mScreenManager.addScreen(new MainMenuScreen(mScreenManager));
+	}
+
+	@Override
+	protected void onLoadGLContent() {
+		super.onLoadGLContent();
+		mScreenManager.loadGLContent(mResourceManager);
+	}
+
+	@Override
+	protected void onUnloadGLContent() {
+		super.onUnloadGLContent();
+		mScreenManager.unloadGLContent();
+	}
+
+	@Override
+	protected void onHandleInput() {
+		super.onHandleInput();
+
+		mScreenManager.handleInput(this);
+	}
+
+	@Override
+	protected void onUpdate() {
+		super.onUpdate();
+
+		mScreenManager.update(this);
+	}
+
+	@Override
+	protected void onDraw() {
+		super.onDraw();
+
+		mScreenManager.draw(this);
+	}
+
+	// ------------------------------
 
 	@Override
 	protected void oninitializeGL() {
@@ -56,40 +106,10 @@ public class BaseGame extends LintfordCore {
 	}
 
 	@Override
-	protected void onInitializeApp() {
-		super.onInitializeApp();
-	}
-
-	@Override
-	protected void onLoadGLContent() {
-		super.onLoadGLContent();
-	}
-
-	@Override
-	protected void onHandleInput() {
-		super.onHandleInput();
-
-	}
-
-	@Override
-	protected void onUpdate() {
-		super.onUpdate();
-
-	}
-
-	@Override
-	protected void onDraw() {
-		super.onDraw();
-	}
-
-	// ------------------------------
-
-	@Override
 	protected void onInitializeBitmapFontSources(BitmapFontManager pFontManager) {
 		super.onInitializeBitmapFontSources(pFontManager);
-
-		BitmapFontManager.CoreFonts.AddOrUpdate(BitmapFontManager.SYSTEM_FONT_CORE_TEXT_NAME, "res/fonts/fontCoreText.json");
-		BitmapFontManager.CoreFonts.AddOrUpdate(BitmapFontManager.SYSTEM_FONT_CORE_TITLE_NAME, "res/fonts/fontCoreTitle.json");
+		
+		BitmapFontManager.CoreFonts.AddOrUpdate(ScreenManager.FONT_MENU_ENTRY_NAME, "res/fonts/fontOrangeKid24.json");
 	}
 
 	// -------------------------------
