@@ -3,7 +3,7 @@ package net.ld.unstable.data.waves;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.ld.unstable.data.mobs.SmhupMob;
+import net.ld.unstable.data.mobs.ShmupMob;
 import net.lintford.library.core.entity.instances.PooledBaseData;
 
 public class Wave extends PooledBaseData {
@@ -18,7 +18,7 @@ public class Wave extends PooledBaseData {
 	// Variables
 	// ---------------------------------------------
 
-	public final List<SmhupMob> waveMembers = new ArrayList<>();
+	public final List<ShmupMob> waveMembers = new ArrayList<>();
 	private boolean mWaveCompleted;
 
 	// ---------------------------------------------

@@ -2,6 +2,7 @@ package net.ld.unstable.screens;
 
 import org.lwjgl.glfw.GLFW;
 
+import net.ld.unstable.controllers.GameStateController;
 import net.ld.unstable.controllers.LevelController;
 import net.ld.unstable.controllers.PlayerSubController;
 import net.ld.unstable.controllers.ProjectileController;
@@ -48,6 +49,7 @@ public class GameScreen extends BaseGameScreen {
 	private WaveController mWaveController;
 	private ProjectileController mProjectileController;
 	private ParticleFrameworkController mParticleFrameworkController;
+	private GameStateController mGameStateController;
 
 	// Renderers
 	private MobRenderer mMobRenderer;
@@ -117,6 +119,9 @@ public class GameScreen extends BaseGameScreen {
 		final var lBubbleParticlesSmall = mParticleFrameworkData.particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BUBBLE_SMALL");
 		lBubbleParticlesSmall.addInitializer(new BubbleParticleInitializer());
 		lBubbleParticlesSmall.addModifier(new BubblePhysicsModifier(mLevelController.seaLevel()));
+
+		// Start game after everything has loaded
+		mGameStateController.startGame();
 	}
 
 	@Override
@@ -130,6 +135,32 @@ public class GameScreen extends BaseGameScreen {
 			screenManager.addScreen(new PauseScreen(screenManager));
 			return;
 		}
+	}
+
+	@Override
+	public void update(LintfordCore pCore, boolean pOtherScreenHasFocus, boolean pCoveredByOtherScreen) {
+		super.update(pCore, pOtherScreenHasFocus, pCoveredByOtherScreen);
+
+		if (pOtherScreenHasFocus || pCoveredByOtherScreen)
+			return;
+
+		if (mGameStateController.hasGameStarted() && mGameStateController.hasGameEnded()) {
+			switch (mGameStateController.endConditionMet()) {
+			case GameStateController.END_CONDITION_WON:
+				screenManager.addScreen(new WonScreen(screenManager));
+				return;
+
+			case GameStateController.END_CONDITION_HEALTH:
+				screenManager.addScreen(new LostHealthScreen(screenManager));
+				return;
+
+			case GameStateController.END_CONDITION_COOLANT:
+				screenManager.addScreen(new LostCoolantScreen(screenManager));
+				return;
+			}
+			return;
+		}
+
 	}
 
 	@Override
@@ -149,6 +180,7 @@ public class GameScreen extends BaseGameScreen {
 		mParticleFrameworkController = new ParticleFrameworkController(lControllerManager, mParticleFrameworkData, entityGroupID());
 		mProjectileController = new ProjectileController(lControllerManager, mProjectileSystemManager, entityGroupID());
 		mWaveController = new WaveController(lControllerManager, mWaveManager, entityGroupID());
+		mGameStateController = new GameStateController(lControllerManager, entityGroupID());
 	}
 
 	private void initializeControllers() {
@@ -161,6 +193,7 @@ public class GameScreen extends BaseGameScreen {
 		mParticleFrameworkController.initialize(lCore);
 		mProjectileController.initialize(lCore);
 		mWaveController.initialize(lCore);
+		mGameStateController.initialize(lCore);
 	}
 
 	private void createRenderers(ResourceManager pResourceManager) {

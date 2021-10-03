@@ -1,7 +1,7 @@
 package net.ld.unstable.data.mobs.definitions;
 
 import net.ld.unstable.controllers.MobController;
-import net.ld.unstable.data.mobs.SmhupMob;
+import net.ld.unstable.data.mobs.ShmupMob;
 import net.ld.unstable.data.mobs.attachments.MineAttachment;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 
@@ -22,6 +22,9 @@ public class MobDefEnemyMine extends MobDefinition {
 
 		SpritegraphName = "SPRITEGRAPH_SUBMARINE";
 
+		largeCollisionEntity = false;
+		collisionRadius = 40.f;
+		
 		shootsTorpedoes = true;
 		shootsMissiles = false;
 		shootsBarrels = true;
@@ -34,17 +37,17 @@ public class MobDefEnemyMine extends MobDefinition {
 	// --------------------------------------
 
 	@Override
-	public void AttachMovementPattern(SmhupMob pMobInstance) {
+	public void AttachMovementPattern(ShmupMob pMobInstance) {
 		pMobInstance.movementPattern = MobController.movingDefEnemyMine;
 	}
 
 	@Override
-	public void AttachShootingPattern(SmhupMob pMobInstance) {
+	public void AttachShootingPattern(ShmupMob pMobInstance) {
 
 	}
 
 	@Override
-	public void AttachSpriteGraphStuff(SmhupMob pMobInstance, SpriteGraphInstance pSpriteGraphInstance) {
+	public void AttachSpriteGraphStuff(ShmupMob pMobInstance, SpriteGraphInstance pSpriteGraphInstance) {
 		pSpriteGraphInstance.attachItemToNode(new MineAttachment());
 	}
 

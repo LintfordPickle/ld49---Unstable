@@ -1,8 +1,10 @@
 package net.ld.unstable.renderers;
 
+import net.ld.unstable.ConstantsGame;
 import net.ld.unstable.controllers.ProjectileController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.renderers.BaseRenderer;
@@ -88,15 +90,13 @@ public class ProjectilesRenderer extends BaseRenderer {
 			final float lDstY = lProjectile.worldPositionY - lSrcH * .5f;
 
 			lTextureBatch.begin(pCore.gameCamera());
-			lTextureBatch.drawAroundCenter(
-					mParticlesTexture, 
-					lSrcX, lSrcY, lSrcW, lSrcH, 
-					lDstX - lSrcW * .5f, lDstY - lSrcH * .5f, lSrcW, lSrcH, 
-					-0.02f, lProjectile.rotationInRadians, 0.f, 0.f, 1.f,  ColorConstants.WHITE);
+			lTextureBatch.drawAroundCenter(mParticlesTexture, lSrcX, lSrcY, lSrcW, lSrcH, lDstX - lSrcW * .5f, lDstY - lSrcH * .5f, lSrcW, lSrcH, -0.5f, lProjectile.rotationInRadians, -lSrcW * .5f, -lSrcH * .5f, 1.f,
+					ColorConstants.WHITE);
 			lTextureBatch.end();
 
-			// Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lDstX, lDstY, 10.0f);
-
+			if (ConstantsGame.DEBUG_DRAW_PROJ_COLLIDERS) {
+				Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lDstX, lDstY, 10.0f);
+			}
 		}
 	}
 }

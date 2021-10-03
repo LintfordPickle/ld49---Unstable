@@ -1,12 +1,12 @@
 package net.ld.unstable.data.mobs.movementpatterns;
 
-import net.ld.unstable.data.mobs.SmhupMob;
+import net.ld.unstable.data.mobs.ShmupMob;
 import net.lintford.library.core.LintfordCore;
 
 public class MovingDefCosineMover implements MovingDefBase {
 
 	@Override
-	public void update(LintfordCore pCore, SmhupMob pMob) {
+	public void update(LintfordCore pCore, ShmupMob pMob) {
 		float lDelta = (float) pCore.appTime().elapsedTimeMilli() / 1000f;
 
 		pMob.dx = -100.0f;

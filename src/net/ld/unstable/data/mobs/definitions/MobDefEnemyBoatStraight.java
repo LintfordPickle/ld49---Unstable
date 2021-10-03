@@ -2,7 +2,7 @@ package net.ld.unstable.data.mobs.definitions;
 
 import net.ld.unstable.controllers.MobController;
 import net.ld.unstable.controllers.ProjectileController;
-import net.ld.unstable.data.mobs.SmhupMob;
+import net.ld.unstable.data.mobs.ShmupMob;
 import net.ld.unstable.data.mobs.attachments.BoatAttachment;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 
@@ -35,17 +35,17 @@ public class MobDefEnemyBoatStraight extends MobDefinition {
 	// --------------------------------------
 
 	@Override
-	public void AttachMovementPattern(SmhupMob pSubmarineInstance) {
+	public void AttachMovementPattern(ShmupMob pSubmarineInstance) {
 		pSubmarineInstance.movementPattern = MobController.surfaceMover;
 	}
 
 	@Override
-	public void AttachShootingPattern(SmhupMob pSubmarineInstance) {
+	public void AttachShootingPattern(ShmupMob pSubmarineInstance) {
 		pSubmarineInstance.shootingPattern = ProjectileController.shootingProfileBoat;
 	}
 
 	@Override
-	public void AttachSpriteGraphStuff(SmhupMob pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance) {
+	public void AttachSpriteGraphStuff(ShmupMob pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance) {
 		pSpriteGraphInstance.attachItemToNode(new BoatAttachment());
 	}
 

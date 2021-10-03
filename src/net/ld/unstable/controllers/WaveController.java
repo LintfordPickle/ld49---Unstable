@@ -3,7 +3,7 @@ package net.ld.unstable.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.ld.unstable.data.mobs.SmhupMob;
+import net.ld.unstable.data.mobs.ShmupMob;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyMine;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemySubmarineStraight;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyTurret;
@@ -24,7 +24,7 @@ public class WaveController extends BaseController implements IMobSpawner {
 
 	public static final String CONTROLLER_NAME = "Wave Controller";
 
-	private final int TIME_BEFORE_FIRST_WAVE = 4000;
+	private final int TIME_BEFORE_FIRST_WAVE = 10000;
 	private final int TIME_BETWEEN_WAVES = 1500;
 
 	// --------------------------------------
@@ -36,7 +36,7 @@ public class WaveController extends BaseController implements IMobSpawner {
 	private WaveManager mWaveManager;
 	private float mTimerBetweenWaves;
 	private Wave mCurrentWave;
-	private final List<SmhupMob> mobUpdateList = new ArrayList<>();
+	private final List<ShmupMob> mobUpdateList = new ArrayList<>();
 
 	// --------------------------------------
 	// Properties
@@ -46,6 +46,14 @@ public class WaveController extends BaseController implements IMobSpawner {
 	public boolean isInitialized() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public boolean hasWaveFinished() {
+		return mCurrentWave == null || mCurrentWave.isWaveComplete() && mWaveManager.waveSpawner().isFinishedSpawning();
+	}
+
+	public boolean haveWavesStarted() {
+		return mHasGameStarted;
 	}
 
 	// --------------------------------------
@@ -79,6 +87,9 @@ public class WaveController extends BaseController implements IMobSpawner {
 	@Override
 	public void update(LintfordCore pCore) {
 		super.update(pCore);
+
+		if (mHasGameStarted == false)
+			return;
 
 		final var lWaveSpawner = mWaveManager.waveSpawner();
 		updateWave(pCore);
@@ -130,13 +141,22 @@ public class WaveController extends BaseController implements IMobSpawner {
 
 	// --------------------------------------
 
-	private void createNewWave() {
+	private boolean mHasGameStarted = false;
+
+	public void startNewGame() {
+		mHasGameStarted = true;
+		createLevelWave();
+	}
+
+	private void createLevelWave() {
 		Debug.debugManager().logger().i(getClass().getSimpleName(), "Creating New Wave");
 
 		final float lTimeMod = 2.0f;
 		mCurrentWave = mWaveManager.getFreePooledItem();
 
 		final var lWaveSpawner = mWaveManager.waveSpawner();
+		lWaveSpawner.addSpawnItem(0, 0, TIME_BEFORE_FIRST_WAVE, null);
+
 		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemyTurret.MOB_DEFINITION_NAME);
 
 		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
@@ -146,7 +166,7 @@ public class WaveController extends BaseController implements IMobSpawner {
 		lWaveSpawner.addSpawnItem(700, -150, 0 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
 		lWaveSpawner.addSpawnItem(700, +150, 1000 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
 		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
-		
+
 		lWaveSpawner.addSpawnItem(700, 0, 2500 * lTimeMod, MobDefEnemyTurret.MOB_DEFINITION_NAME);
 		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemyTurret.MOB_DEFINITION_NAME);
 
@@ -156,7 +176,7 @@ public class WaveController extends BaseController implements IMobSpawner {
 		lWaveSpawner.addSpawnItem(700, 200, 2000 * lTimeMod, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
 
 		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemyTurretBoatStop.MOB_DEFINITION_NAME);
-		
+
 		lWaveSpawner.addSpawnItem(700, 0, 2500 * lTimeMod, MobDefEnemyTurret.MOB_DEFINITION_NAME);
 		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemyTurret.MOB_DEFINITION_NAME);
 
@@ -165,11 +185,25 @@ public class WaveController extends BaseController implements IMobSpawner {
 		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
 
 		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemyTurretBoatStop.MOB_DEFINITION_NAME);
-		
+
 		lWaveSpawner.addSpawnItem(700, -100, 2000 * lTimeMod, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
 		lWaveSpawner.addSpawnItem(700, 0, 2000 * lTimeMod, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
 		lWaveSpawner.addSpawnItem(700, 100, 2000 * lTimeMod, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
 		lWaveSpawner.addSpawnItem(700, 200, 2000 * lTimeMod, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
+
+	}
+
+	private void createNewWave() {
+		Debug.debugManager().logger().i(getClass().getSimpleName(), "Creating New Wave");
+
+		final float lTimeMod = 2.0f;
+		mCurrentWave = mWaveManager.getFreePooledItem();
+
+		final var lWaveSpawner = mWaveManager.waveSpawner();
+
+		lWaveSpawner.addSpawnItem(700, -150, 0 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
+		lWaveSpawner.addSpawnItem(700, +150, 5000 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
+		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
 
 	}
 

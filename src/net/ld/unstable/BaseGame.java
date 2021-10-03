@@ -23,7 +23,7 @@ public class BaseGame extends LintfordCore {
 	private static final int WINDOW_WIDTH = 960;
 	private static final int WINDOW_HEIGHT = 540;
 
-	private static boolean DEBUG_SKIP_MENU = true;
+	private static boolean DEBUG_SKIP_MENU = false;
 
 	// ---------------------------------------------
 	// Variables
@@ -117,6 +117,7 @@ public class BaseGame extends LintfordCore {
 		super.onInitializeBitmapFontSources(pFontManager);
 
 		BitmapFontManager.CoreFonts.AddOrUpdate(ScreenManager.FONT_MENU_ENTRY_NAME, "res/fonts/fontOrangeKid24.json");
+		BitmapFontManager.CoreFonts.AddOrUpdate(ScreenManager.FONT_MENU_TITLE_NAME, "res/fonts/fontOrangeKid24.json");
 
 		BitmapFontManager.CoreFonts.AddOrUpdate(RendererManager.UI_FONT_TEXT_NAME, "res/fonts/fontOrangeKid24.json");
 		BitmapFontManager.CoreFonts.AddOrUpdate(RendererManager.UI_FONT_TEXT_BOLD_NAME, "res/fonts/fontOrangeKid24.json");

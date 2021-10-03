@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ld.unstable.data.mobs.MobManager;
-import net.ld.unstable.data.mobs.SmhupMob;
+import net.ld.unstable.data.mobs.ShmupMob;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemyMine;
 import net.ld.unstable.data.mobs.movementpatterns.MovingDefCosineMover;
 import net.ld.unstable.data.mobs.movementpatterns.MovingDefEnemyMine;
 import net.ld.unstable.data.mobs.movementpatterns.MovingDefStraightMover;
@@ -42,7 +43,7 @@ public class MobController extends BaseController {
 	private SpriteGraphController mSpriteGraphController;
 	private LevelController mLevelController;
 	private final MobManager mMobManager;
-	private final List<SmhupMob> mUpdateMobList = new ArrayList<>();
+	private final List<ShmupMob> mUpdateMobList = new ArrayList<>();
 
 	// --------------------------------------
 	// Properties
@@ -103,6 +104,8 @@ public class MobController extends BaseController {
 		final var lMobs = mMobManager.mobs();
 		final int lMobCount = lMobs.size();
 
+		updatePlayerSubmarineCollisions(pCore, mMobManager.playerSubmarine);
+
 		mUpdateMobList.clear();
 		for (int i = 0; i < lMobCount; i++) {
 			mUpdateMobList.add(lMobs.get(i));
@@ -111,8 +114,13 @@ public class MobController extends BaseController {
 		for (int i = 0; i < lMobCount; i++) {
 			final var lMobInstance = mUpdateMobList.get(i);
 
+			updateSubmarine(pCore, lMobInstance);
+
+			if (lMobInstance.isPlayerControlled)
+				continue;
+
 			final float lDespawnTol = 75.f;
-			if (!lMobInstance.isPlayerControlled && lMobInstance.worldPositionX + lDespawnTol < pCore.gameCamera().boundingRectangle().left()) {
+			if (lMobInstance.worldPositionX + lDespawnTol < pCore.gameCamera().boundingRectangle().left()) {
 				Debug.debugManager().logger().i(getClass().getSimpleName(), "Despawn mob");
 
 				lMobInstance.kill();
@@ -135,8 +143,6 @@ public class MobController extends BaseController {
 				continue;
 			}
 
-			updateSubmarine(pCore, lMobInstance);
-
 			if (lMobInstance.isPlayerControlled == false) {
 				if (lMobInstance.movementPattern != null) {
 					lMobInstance.movementPattern.update(pCore, lMobInstance);
@@ -145,10 +151,38 @@ public class MobController extends BaseController {
 		}
 	}
 
-	private void updateSubmarine(LintfordCore pCore, SmhupMob pSubmarine) {
-		final var lSubmarineSpriteGraph = pSubmarine.spriteGraphInstance();
+	private void updatePlayerSubmarineCollisions(LintfordCore pCore, ShmupMob pPlayerSub) {
+		final var lMobs = mMobManager.mobs();
+		final int lMobCount = lMobs.size();
+
+		for (int i = 0; i < lMobCount; i++) {
+			final var lMobB = lMobs.get(i);
+
+			if (lMobB.isAlive == false || lMobB.mobDefinition == null)
+				continue;
+
+			if (lMobB.mobDefinition instanceof MobDefEnemyMine) {
+				if (pPlayerSub.collides(lMobB.worldPositionX, lMobB.worldPositionY, lMobB.mobDefinition.collisionRadius)) {
+
+					// SHAKE
+
+					// EXPLODE
+
+					pPlayerSub.dealDamage(40);
+					lMobB.kill();
+				}
+			}
+		}
+	}
+
+	private void updateSubmarine(LintfordCore pCore, ShmupMob pSubmarine) {
+		if (pSubmarine.isAlive == false)
+			return;
 
 		pSubmarine.timeSinceStart += pCore.gameTime().elapsedTimeMilli();
+
+		if (pSubmarine.coolantTimer > 0.f)
+			pSubmarine.coolantTimer -= pCore.gameTime().elapsedTimeMilli();
 
 		if (pSubmarine.shootTimer > 0.f)
 			pSubmarine.shootTimer -= pCore.gameTime().elapsedTimeMilli();
@@ -171,9 +205,18 @@ public class MobController extends BaseController {
 			pSubmarine.flashOn = false;
 		}
 
+		if (pSubmarine.coolant < pSubmarine.mobDefinition.maxCoolant) {
+			if (pSubmarine.coolantTimer <= 0.f) {
+				pSubmarine.coolant += 5;
+				pSubmarine.coolantTimer = 50.f;
+			}
+		}
+
 		if (pSubmarine.shootingPattern != null) {
 			pSubmarine.shootingPattern.update(pCore, pSubmarine, mProjectileController);
 		}
+
+		final var lSubmarineSpriteGraph = pSubmarine.spriteGraphInstance();
 
 		lSubmarineSpriteGraph.positionX = pSubmarine.worldPositionX;
 		lSubmarineSpriteGraph.positionY = pSubmarine.worldPositionY;
@@ -193,7 +236,7 @@ public class MobController extends BaseController {
 	// Methods
 	// --------------------------------------
 
-	public SmhupMob addNewMob(boolean pPlayerControlled, String pDefinitionName, float pScreenX, float pScreenY) {
+	public ShmupMob addNewMob(boolean pPlayerControlled, String pDefinitionName, float pScreenX, float pScreenY) {
 		final var lNewMobDefinition = mMobManager.mobDefinitionManager().getMobDefinitionByName(pDefinitionName);
 
 		if (lNewMobDefinition == null) {
@@ -222,7 +265,9 @@ public class MobController extends BaseController {
 
 		lSpriteGraphInstance.mFlipHorizontal = lNewMobInstance.isPlayerControlled == false;
 
-		lNewMobInstance.health = lNewMobDefinition.maxHealth;
+		lNewMobInstance.health = (int) lNewMobDefinition.maxHealth;
+		lNewMobInstance.coolant = (int) lNewMobDefinition.maxCoolant;
+
 		lNewMobInstance.isPlayerControlled = false;
 		if (pPlayerControlled) {
 			lNewMobInstance.isPlayerControlled = true;

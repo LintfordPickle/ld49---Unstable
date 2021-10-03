@@ -86,15 +86,15 @@ public class LevelRenderer extends BaseRenderer {
 		final float lWavesHeight = mWaveSpriteInstance.height();
 
 		lSpriteBatch.begin(pCore.gameCamera());
-		
+
 		final var lWaterColor = ColorConstants.getWhiteWithAlpha(0.5f);
 
 		final float lLeftEdge = lCameraRect.left() - lWavesWidth;
 		for (int t = (int) lLeftEdge; t < lLeftEdge + 100 + lCameraRect.w() + lWavesWidth * 2; t += (int) lWavesWidth) {
-			lSpriteBatch.draw(mOceanSpritesheet.texture(), mWaveSpriteInstance.currentSpriteFrame(), t, lSeaLevel - lWavesHeight * .5f, lWavesWidth, lWavesHeight, -0.01f, lWaterColor);
+			lSpriteBatch.draw(mOceanSpritesheet.texture(), mWaveSpriteInstance.currentSpriteFrame(), t, lSeaLevel - lWavesHeight * .5f, lWavesWidth, lWavesHeight, -0.4f, lWaterColor);
 		}
 
-		lSpriteBatch.draw(mOceanSpritesheet, WavesTextureNames.UNDERWATER, lLeftEdge, lSeaLevel + lWavesHeight * .5f, lCameraRect.width() + lWavesWidth * 2, lCameraRect.width(), -0.01f, lWaterColor);
+		lSpriteBatch.draw(mOceanSpritesheet, WavesTextureNames.UNDERWATER, lLeftEdge, lSeaLevel + lWavesHeight * .5f, lCameraRect.width() + lWavesWidth * 2, lCameraRect.width(), -0.4f, lWaterColor);
 
 		lSpriteBatch.end();
 

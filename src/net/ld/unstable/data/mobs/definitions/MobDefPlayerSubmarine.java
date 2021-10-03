@@ -1,6 +1,6 @@
 package net.ld.unstable.data.mobs.definitions;
 
-import net.ld.unstable.data.mobs.SmhupMob;
+import net.ld.unstable.data.mobs.ShmupMob;
 import net.ld.unstable.data.mobs.attachments.PowerCoreAttachment;
 import net.ld.unstable.data.mobs.attachments.PropellerAttachment;
 import net.ld.unstable.data.mobs.attachments.SubAttachment;
@@ -24,6 +24,7 @@ public class MobDefPlayerSubmarine extends MobDefinition {
 		SpritegraphName = "SPRITEGRAPH_SUBMARINE";
 
 		maxHealth = 100;
+		maxCoolant = 100;
 	}
 
 	// --------------------------------------
@@ -31,17 +32,17 @@ public class MobDefPlayerSubmarine extends MobDefinition {
 	// --------------------------------------
 
 	@Override
-	public void AttachMovementPattern(SmhupMob pSubmarineInstance) {
+	public void AttachMovementPattern(ShmupMob pSubmarineInstance) {
 
 	}
 
 	@Override
-	public void AttachShootingPattern(SmhupMob pSubmarineInstance) {
+	public void AttachShootingPattern(ShmupMob pSubmarineInstance) {
 
 	}
 
 	@Override
-	public void AttachSpriteGraphStuff(SmhupMob pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance) {
+	public void AttachSpriteGraphStuff(ShmupMob pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance) {
 		pSpriteGraphInstance.attachItemToNode(new SubAttachment());
 		pSpriteGraphInstance.attachItemToNode(new PropellerAttachment());
 		pSpriteGraphInstance.attachItemToNode(new PowerCoreAttachment());

@@ -2,7 +2,7 @@ package net.ld.unstable.data.mobs.definitions;
 
 import net.ld.unstable.controllers.MobController;
 import net.ld.unstable.controllers.ProjectileController;
-import net.ld.unstable.data.mobs.SmhupMob;
+import net.ld.unstable.data.mobs.ShmupMob;
 import net.ld.unstable.data.mobs.attachments.TurretBoatAttachment;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 
@@ -35,17 +35,17 @@ public class MobDefEnemyTurretBoatStop extends MobDefinition {
 	// --------------------------------------
 
 	@Override
-	public void AttachMovementPattern(SmhupMob pMobInstance) {
+	public void AttachMovementPattern(ShmupMob pMobInstance) {
 		pMobInstance.movementPattern = MobController.surfaceMoveWithStop;
 	}
 
 	@Override
-	public void AttachShootingPattern(SmhupMob pSubmarineInstance) {
+	public void AttachShootingPattern(ShmupMob pSubmarineInstance) {
 		pSubmarineInstance.shootingPattern = ProjectileController.shootingProfileTurretBoat;
 	}
 
 	@Override
-	public void AttachSpriteGraphStuff(SmhupMob pMobInstance, SpriteGraphInstance pSpriteGraphInstance) {
+	public void AttachSpriteGraphStuff(ShmupMob pMobInstance, SpriteGraphInstance pSpriteGraphInstance) {
 		pSpriteGraphInstance.attachItemToNode(new TurretBoatAttachment());
 	}
 

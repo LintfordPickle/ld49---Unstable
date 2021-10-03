@@ -85,7 +85,7 @@ public class MobRenderer extends BaseRenderer {
 		final int lMobCount = lMobs.size();
 		for (int i = 0; i < lMobCount; i++) {
 			final var lMobInstance = lMobs.get(i);
-			if (lMobInstance.isAlive == false || lMobInstance.spriteGraphDirty)
+			if (lMobInstance.isAlive == false || lMobInstance.spriteGraphDirty || lMobInstance.mobDefinition == null)
 				continue;
 
 			final var lSubmarineSpritegraph = lMobInstance.spriteGraphInstance();
@@ -100,9 +100,15 @@ public class MobRenderer extends BaseRenderer {
 
 				if (ConstantsGame.DEBUG_DRAW_MOB_COLLIDERS) {
 					GL11.glLineWidth(2.f);
-					Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX - 25, lMobInstance.worldPositionY, 25.f);
-					Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX + 25, lMobInstance.worldPositionY, 25.f);
-					Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX, lMobInstance.worldPositionY, 52.f);
+
+					if (lMobInstance.mobDefinition.largeCollisionEntity) {
+						final float lColRadius = lMobInstance.mobDefinition.collisionRadius;
+						Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX - lColRadius, lMobInstance.worldPositionY, lColRadius);
+						Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX + lColRadius, lMobInstance.worldPositionY, lColRadius);
+						Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX, lMobInstance.worldPositionY, lColRadius * 2.f);
+					} else {
+						Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX, lMobInstance.worldPositionY, lMobInstance.mobDefinition.collisionRadius);
+					}
 				}
 			}
 		}

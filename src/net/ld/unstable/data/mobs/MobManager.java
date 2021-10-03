@@ -59,14 +59,14 @@ public class MobManager {
 	// --------------------------------------
 
 	private final MobDefinitionManager mMobDefinitionManager = new MobDefinitionManager();
-	public SmhupMob playerSubmarine;
-	private final List<SmhupMob> mMobEntities = new ArrayList<>();
+	public ShmupMob playerSubmarine;
+	private final List<ShmupMob> mMobEntities = new ArrayList<>();
 
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
 
-	public List<SmhupMob> mobs() {
+	public List<ShmupMob> mobs() {
 		return mMobEntities;
 	}
 
@@ -93,7 +93,7 @@ public class MobManager {
 	// Methods
 	// --------------------------------------
 
-	public SmhupMob getMobByIndex(int pIndex) {
+	public ShmupMob getMobByIndex(int pIndex) {
 		if (pIndex < 0 || pIndex >= mMobEntities.size()) {
 			return null;
 		}
@@ -102,8 +102,8 @@ public class MobManager {
 	}
 
 	// FIXME: recycle
-	public SmhupMob addNewMob(MobDefinition pMobDefinition, float pPosX, float pPosY) {
-		final var lNewMob = new SmhupMob();
+	public ShmupMob addNewMob(MobDefinition pMobDefinition, float pPosX, float pPosY) {
+		final var lNewMob = new ShmupMob();
 		lNewMob.worldPositionX = pPosX;
 		lNewMob.worldPositionY = pPosY;
 		lNewMob.baseWorldPositionX = pPosX;

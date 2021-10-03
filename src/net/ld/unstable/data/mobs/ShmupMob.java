@@ -6,9 +6,46 @@ import net.ld.unstable.data.mobs.shootprofiles.ShootingDefBase;
 import net.lintford.library.core.geometry.spritegraph.AnimatedSpriteGraphListener;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 import net.lintford.library.core.graphics.sprites.SpriteDefinition;
+import net.lintford.library.core.maths.Vector2f;
 import net.lintford.library.core.particles.particleemitters.ParticleEmitterInstance;
 
-public class SmhupMob implements AnimatedSpriteGraphListener {
+public class ShmupMob implements AnimatedSpriteGraphListener {
+
+	public boolean collides(float pPointX, float pPointY, float pPointRadius) {
+		if (mobDefinition == null)
+			return false;
+
+		final float lMinMobCol = pPointRadius + minColDistance();
+
+		if (Vector2f.distance2(worldPositionX, worldPositionY, pPointX, pPointY) > lMinMobCol * lMinMobCol)
+			return false;
+
+		if (mobDefinition.largeCollisionEntity == false)
+			return true;
+
+		final float lSubFrontX = worldPositionX + pPointRadius;
+		final float lSubFrontY = worldPositionY;
+		final float lMinMobCol2 = pPointRadius + 25.f;
+
+		final float lSubRearX = worldPositionX - pPointRadius;
+		final float lSubRearY = worldPositionY;
+		final float lMinMobCol3 = pPointRadius + 25.f;
+
+		final boolean lCollisionFront = (Vector2f.distance2(lSubFrontX, lSubFrontY, pPointX, pPointY) < lMinMobCol2 * lMinMobCol2);
+		final boolean lCollisionRear = (Vector2f.distance2(lSubRearX, lSubRearY, pPointX, pPointY) < lMinMobCol3 * lMinMobCol3);
+
+		return lCollisionFront || lCollisionRear;
+
+	}
+
+	public float minColDistance() {
+		if (mobDefinition == null)
+			return 0.f;
+		if (mobDefinition.largeCollisionEntity) {
+			return mobDefinition.collisionRadius * 2.f;
+		}
+		return mobDefinition.collisionRadius;
+	}
 
 	// --------------------------------------
 	// Variables
@@ -30,11 +67,11 @@ public class SmhupMob implements AnimatedSpriteGraphListener {
 	public float baseWorldPositionX;
 	public float baseWorldPositionY;
 
-	public float minCollisionDistance = 52.f; // 25.0 front and back + 25 radius + insecurity
 	public boolean isPlayerControlled;
 
-	public float health;
-	public float coolant;
+	public int health;
+	public int coolant;
+	public float coolantTimer;
 
 	public float invulnerabilityTimer;
 	public float flashTimer;
@@ -68,7 +105,7 @@ public class SmhupMob implements AnimatedSpriteGraphListener {
 	// Constructor
 	// --------------------------------------
 
-	public SmhupMob() {
+	public ShmupMob() {
 		reset();
 	}
 
@@ -80,6 +117,11 @@ public class SmhupMob implements AnimatedSpriteGraphListener {
 		shooterUid = pShooterUid;
 		isAlive = true;
 		mobDefinition = pMobDefinition;
+	}
+
+	public void dealDamage(int pDamage) {
+		health -= pDamage;
+		coolant -= pDamage * 2;
 	}
 
 	public void reset() {

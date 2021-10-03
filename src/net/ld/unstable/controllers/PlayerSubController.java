@@ -131,6 +131,11 @@ public class PlayerSubController extends BaseController {
 		if (lPlayerSubmarine.worldPositionX - lTolerance < lWorldPositionX - pCore.gameCamera().boundingRectangle().w() * .5f) {
 			mAcceleration.x += 0.5f;
 		}
+		
+		final float lBottomOfScreen = pCore.gameCamera().boundingRectangle().bottom();
+		if (lPlayerSubmarine.worldPositionY + lTolerance > lBottomOfScreen) {
+			mAcceleration.y -= 0.5f;
+		}
 
 		mVelocity.x += mAcceleration.x;
 		mVelocity.y += mAcceleration.y;

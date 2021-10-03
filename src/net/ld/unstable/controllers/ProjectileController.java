@@ -3,6 +3,7 @@ package net.ld.unstable.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ld.unstable.ConstantsGame;
 import net.ld.unstable.data.mobs.shootprofiles.ShootingDefEnemyBoat;
 import net.ld.unstable.data.mobs.shootprofiles.ShootingDefEnemySubmarine;
 import net.ld.unstable.data.mobs.shootprofiles.ShootingDefEnemyTurret;
@@ -21,7 +22,6 @@ import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.maths.RandomNumbers;
-import net.lintford.library.core.maths.Vector2f;
 import net.lintford.library.core.particles.particlesystems.ParticleSystemInstance;
 import net.lintford.library.core.particles.particlesystems.modifiers.ParticlePhysicsModifier;
 
@@ -173,7 +173,7 @@ public class ProjectileController extends BaseController {
 	// --------------------------------------
 
 	private void checkCollisionsWithBarrels(LintfordCore pCore) {
-		final float lTorpedoRadius = 10.f;
+		final float lBarrelRadius = 10.f;
 
 		final var lParticles = mBarrels.particles();
 		final int lNumParticles = lParticles.size();
@@ -184,7 +184,7 @@ public class ProjectileController extends BaseController {
 
 			// collisions only count afer .05 second of life
 			if (lProjectile.timeSinceStart > 1500) {
-				if (checkProjectileCollisionsWithSubmarines(-1, lProjectile.worldPositionX, lProjectile.worldPositionY, lTorpedoRadius)) {
+				if (checkProjectileCollisionsWithSubmarines(-1, lProjectile.worldPositionX, lProjectile.worldPositionY, lBarrelRadius, 25)) {
 					lProjectile.reset();
 					// TODO: Minor Explosion
 					continue;
@@ -203,9 +203,12 @@ public class ProjectileController extends BaseController {
 				continue;
 			final var lProjectile = lProjectiles.get(i);
 
+			if (lProjectile.isAssigned() == false)
+				continue;
+
 			// collisions only count afer .05 second of life
 			if (lProjectile.timeSinceStart > 50) {
-				if (checkProjectileCollisionsWithSubmarines(lProjectile.shooterUid, lProjectile.worldPositionX, lProjectile.worldPositionY, lTorpedoRadius)) {
+				if (checkProjectileCollisionsWithSubmarines(lProjectile.shooterUid, lProjectile.worldPositionX, lProjectile.worldPositionY, lTorpedoRadius, 5)) {
 					lProjectile.reset();
 					// TODO: Minor Explosion
 					continue;
@@ -214,35 +217,22 @@ public class ProjectileController extends BaseController {
 		}
 	}
 
-	private boolean checkProjectileCollisionsWithSubmarines(int pProjShooterUid, float pProjX, float pProjY, float pProjRadius) {
+	private boolean checkProjectileCollisionsWithSubmarines(int pProjShooterUid, float pProjX, float pProjY, float pProjRadius, int pDamage) {
 		final var lMobs = mMobController.mobManager().mobs();
 		final var lNumMobs = lMobs.size();
 		for (int j = 0; j < lNumMobs; j++) {
 			final var lMobInstance = lMobs.get(j);
+
 			if (lMobInstance.invulnerabilityTimer > 0.f || lMobInstance.shooterUid == pProjShooterUid)
 				continue;
 
-			final float lMinMobCol = pProjRadius + lMobInstance.minCollisionDistance;
-
-			if (Vector2f.distance2(lMobInstance.worldPositionX, lMobInstance.worldPositionY, pProjX, pProjY) > lMinMobCol * lMinMobCol)
-				continue;
-
-			final float lSubFrontX = lMobInstance.worldPositionX + 25.f;
-			final float lSubFrontY = lMobInstance.worldPositionY;
-			final float lMinMobCol2 = pProjRadius + 25.f;
-
-			final float lSubRearX = lMobInstance.worldPositionX - 25.f;
-			final float lSubRearY = lMobInstance.worldPositionY;
-			final float lMinMobCol3 = pProjRadius + 25.f;
-
-			final boolean lCollisionFront = (Vector2f.distance2(lSubFrontX, lSubFrontY, pProjX, pProjY) < lMinMobCol2 * lMinMobCol2);
-			final boolean lCollisionRear = (Vector2f.distance2(lSubRearX, lSubRearY, pProjX, pProjY) < lMinMobCol3 * lMinMobCol3);
-
-			if (lCollisionFront || lCollisionRear) {
+			if (lMobInstance.collides(pProjX, pProjY, pProjRadius)) {
 				lMobInstance.invulnerabilityTimer = 100.f;
 
-				if (!lMobInstance.isPlayerControlled)
-					lMobInstance.health -= 10.f;
+				if (lMobInstance.isPlayerControlled && ConstantsGame.DEBUG_GOD_MODE)
+					continue;
+
+				lMobInstance.dealDamage(pDamage);
 				return true;
 			}
 		}
