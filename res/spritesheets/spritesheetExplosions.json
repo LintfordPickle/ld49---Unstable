@@ -99,8 +99,8 @@
   "spriteMap": {
     "big": {
       "animationName": "big",
-      "loopAnimation": true,
-      "frameDuration": 150,
+      "loopAnimation": false,
+      "frameDuration": 50,
       "animationSpriteIndices": [
         0,
         1,

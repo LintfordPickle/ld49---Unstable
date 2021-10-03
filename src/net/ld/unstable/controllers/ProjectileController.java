@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ld.unstable.ConstantsGame;
+import net.ld.unstable.data.explosions.ExplosionsController;
 import net.ld.unstable.data.mobs.shootprofiles.ShootingDefEnemyBoat;
 import net.ld.unstable.data.mobs.shootprofiles.ShootingDefEnemySubmarine;
 import net.ld.unstable.data.mobs.shootprofiles.ShootingDefEnemyTurret;
@@ -48,6 +49,7 @@ public class ProjectileController extends BaseController {
 	private MobController mMobController;
 	private ProjectileManager mProjectileManager;
 	private ParticleFrameworkController mParticleFrameworkController;
+	private ExplosionsController mExplosionController;
 
 	private ParticleSystemInstance mBubbleParticleSystem;
 	private ParticleSystemInstance mBarrels;
@@ -93,6 +95,7 @@ public class ProjectileController extends BaseController {
 		final var lControllerManager = pCore.controllerManager();
 		mParticleFrameworkController = (ParticleFrameworkController) lControllerManager.getControllerByNameRequired(ParticleFrameworkController.CONTROLLER_NAME, entityGroupID());
 		mMobController = (MobController) lControllerManager.getControllerByNameRequired(MobController.CONTROLLER_NAME, entityGroupID());
+		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
 
 		mBubbleParticleSystem = mParticleFrameworkController.particleFrameworkData().particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BUBBLE_SMALL");
 		mBarrels = mParticleFrameworkController.particleFrameworkData().particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BARREL");
@@ -185,8 +188,10 @@ public class ProjectileController extends BaseController {
 			// collisions only count afer .05 second of life
 			if (lProjectile.timeSinceStart > 1500) {
 				if (checkProjectileCollisionsWithSubmarines(-1, lProjectile.worldPositionX, lProjectile.worldPositionY, lBarrelRadius, 25)) {
-					lProjectile.reset();
 					// TODO: Minor Explosion
+					mExplosionController.addMinorExplosion(lProjectile.worldPositionX, lProjectile.worldPositionY);
+
+					lProjectile.reset();
 					continue;
 				}
 			}
@@ -230,7 +235,7 @@ public class ProjectileController extends BaseController {
 				lMobInstance.invulnerabilityTimer = 100.f;
 
 				if (lMobInstance.isPlayerControlled && ConstantsGame.DEBUG_GOD_MODE)
-					continue;
+					return true;
 
 				lMobInstance.dealDamage(pDamage);
 				return true;

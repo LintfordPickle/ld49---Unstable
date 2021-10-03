@@ -3,6 +3,7 @@ package net.ld.unstable.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ld.unstable.data.explosions.ExplosionsController;
 import net.ld.unstable.data.mobs.MobManager;
 import net.ld.unstable.data.mobs.ShmupMob;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyMine;
@@ -38,6 +39,7 @@ public class MobController extends BaseController {
 	// Variables
 	// --------------------------------------
 
+	private ExplosionsController mExplosionController;
 	private ProjectileController mProjectileController;
 	private ParticleFrameworkController mParticleFrameworkController;
 	private SpriteGraphController mSpriteGraphController;
@@ -80,6 +82,7 @@ public class MobController extends BaseController {
 		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
 		mProjectileController = (ProjectileController) lControllerManager.getControllerByNameRequired(ProjectileController.CONTROLLER_NAME, entityGroupID());
 		mParticleFrameworkController = (ParticleFrameworkController) lControllerManager.getControllerByNameRequired(ParticleFrameworkController.CONTROLLER_NAME, entityGroupID());
+		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
 
 		final float lFloorLevel = pCore.gameCamera().boundingRectangle().bottom();
 
@@ -167,6 +170,7 @@ public class MobController extends BaseController {
 					// SHAKE
 
 					// EXPLODE
+					mExplosionController.addMajorExplosion(lMobB.worldPositionX, lMobB.worldPositionY);
 
 					pPlayerSub.dealDamage(40);
 					lMobB.kill();
