@@ -59,5 +59,13 @@ public class LevelController extends BaseController {
 	@Override
 	public void update(LintfordCore pCore) {
 		super.update(pCore);
+		
+		final var lGameCamera = pCore.gameCamera();
+		
+		final var lScreenPositionX = lGameCamera.getPosition().x;
+		final var lScreenPositionY = lGameCamera.getPosition().y;
+		
+		lGameCamera.setPosition(lScreenPositionX+0.1f, lScreenPositionY);
+		
 	}
 }

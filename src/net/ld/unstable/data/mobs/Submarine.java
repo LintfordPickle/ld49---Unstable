@@ -1,5 +1,6 @@
 package net.ld.unstable.data.mobs;
 
+import net.ld.unstable.data.mobs.definitions.MobDefinition;
 import net.ld.unstable.data.mobs.patterns.MobMovementPattern;
 import net.lintford.library.core.geometry.spritegraph.AnimatedSpriteGraphListener;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
@@ -46,6 +47,8 @@ public class Submarine implements AnimatedSpriteGraphListener {
 	private transient SpriteGraphInstance mSpriteGraphInstance;
 	public transient ParticleEmitterInstance bubbleEmitter;
 
+	public MobDefinition mobDefinition;
+
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
@@ -66,9 +69,10 @@ public class Submarine implements AnimatedSpriteGraphListener {
 	// Methods
 	// --------------------------------------
 
-	public void init(int pUid) {
+	public void init(int pUid, MobDefinition pMobDefinition) {
 		uid = pUid;
 		isAlive = true;
+		mobDefinition = pMobDefinition;
 	}
 
 	public void reset() {
@@ -84,6 +88,7 @@ public class Submarine implements AnimatedSpriteGraphListener {
 		movementPattern = null;
 		mSpriteGraphInstance = null;
 		spriteGraphDirty = true;
+		mobDefinition = null;
 	}
 
 	public void kill() {

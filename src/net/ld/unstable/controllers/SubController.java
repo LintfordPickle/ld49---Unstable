@@ -5,12 +5,11 @@ import java.util.List;
 
 import net.ld.unstable.data.mobs.MobManager;
 import net.ld.unstable.data.mobs.Submarine;
-import net.ld.unstable.data.mobs.attachments.PowerCoreAttachment;
-import net.ld.unstable.data.mobs.attachments.PropellerAttachment;
-import net.ld.unstable.data.mobs.attachments.SubAttachment;
+import net.ld.unstable.data.mobs.definitions.EnemyBoatStraight;
 import net.ld.unstable.data.mobs.definitions.EnemySubmarineStraight00;
 import net.ld.unstable.data.mobs.patterns.CosMover;
 import net.ld.unstable.data.mobs.patterns.StraightMover;
+import net.ld.unstable.data.mobs.patterns.SurfaceMover;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
@@ -29,6 +28,9 @@ public class SubController extends BaseController {
 
 	public final static StraightMover StraightPattern = new StraightMover();
 	public final static CosMover CosMover = new CosMover();
+	public final static SurfaceMover surfaceMover = new SurfaceMover(-140.f);
+
+	private static int subCounter = 0;
 
 	// --------------------------------------
 	// Variables
@@ -129,9 +131,18 @@ public class SubController extends BaseController {
 		}
 
 		if (lMobCount < 3) {
-			addNewSubmarine(false, EnemySubmarineStraight00.MOB_DEFINITION_NAME, 600, RandomNumbers.random(-10.f, 300.0f));
-		}
+			final var lGameCamera = pCore.gameCamera();
+			final var lScreenBounds = lGameCamera.boundingRectangle();
 
+			switch (RandomNumbers.random(0, 2)) {
+			case 0:
+				addNewSubmarine(false, EnemySubmarineStraight00.MOB_DEFINITION_NAME, lScreenBounds.right() + 50.0f, RandomNumbers.random(-10.f, 300.0f));
+				break;
+			case 1:
+				addNewSubmarine(false, EnemyBoatStraight.MOB_DEFINITION_NAME, lScreenBounds.right() + 50.0f, RandomNumbers.random(-10.f, 300.0f));
+				break;
+			}
+		}
 	}
 
 	private void updateSubmarine(LintfordCore pCore, Submarine pSubmarine) {
@@ -162,10 +173,14 @@ public class SubController extends BaseController {
 
 		// ---
 		if (pSubmarine.isPlayerControlled == false) {
-			if (pSubmarine.shootTimer <= 0.f) {
-				pSubmarine.shootTimer -= pCore.gameTime().elapsedTimeMilli();
-				mProjectileController.shootTorpedo(pSubmarine.uid, pSubmarine.worldPositionX, pSubmarine.worldPositionY, -1, 0);
+			if (pSubmarine.mobDefinition.shootsTorpedoes && pSubmarine.shootTimer <= 0.f) {
+				mProjectileController.shootEnemyBullet(pSubmarine.uid, pSubmarine.worldPositionX, pSubmarine.worldPositionY, -1, 0);
 				pSubmarine.shootTimer = 350.f;
+			}
+
+			if (pSubmarine.mobDefinition.shootsBarrels && pSubmarine.barrelTimer <= 0.f) {
+				mProjectileController.dropBarrel(pSubmarine.uid, pSubmarine.worldPositionX, pSubmarine.worldPositionY);
+				pSubmarine.barrelTimer = 350.f;
 			}
 		}
 		// ---
@@ -188,8 +203,6 @@ public class SubController extends BaseController {
 	// Methods
 	// --------------------------------------
 
-	private static int subCounter = 0;
-
 	public void addNewSubmarine(boolean pPlayerControlled, String pDefinitionName, float pWorldX, float pWorldY) {
 		final var lNewMobDefinition = mMobManager.mobDefinitionManager().getMobDefinitionByName(pDefinitionName);
 
@@ -198,7 +211,7 @@ public class SubController extends BaseController {
 			return;
 		}
 		final var lNewMobInstance = mMobManager.addNewMob(lNewMobDefinition, pWorldX, pWorldY);
-		lNewMobInstance.init(subCounter++);
+		lNewMobInstance.init(subCounter++, lNewMobDefinition);
 
 		final var lSpriteGraphInstance = mSpriteGraphController.getSpriteGraphInstance(lNewMobDefinition.SpritegraphName, entityGroupID());
 
@@ -207,8 +220,9 @@ public class SubController extends BaseController {
 		final var lCurrentAnimationName = "normal";
 		lSpriteGraphInstance.currentAnimation(lCurrentAnimationName);
 
-		lSpriteGraphInstance.attachItemToNode(new SubAttachment());
-		lSpriteGraphInstance.attachItemToNode(new PropellerAttachment());
+		lNewMobDefinition.AttachMovementPattern(lNewMobInstance);
+		lNewMobDefinition.AttachSpriteGraphStuff(lNewMobInstance, lSpriteGraphInstance);
+
 		lSpriteGraphInstance.mFlipHorizontal = lNewMobInstance.isPlayerControlled == false;
 
 		lNewMobInstance.health = lNewMobDefinition.maxHealth;
@@ -216,10 +230,6 @@ public class SubController extends BaseController {
 		if (pPlayerControlled) {
 			lNewMobInstance.isPlayerControlled = true;
 			mMobManager.playerSubmarine = lNewMobInstance;
-			lSpriteGraphInstance.attachItemToNode(new PowerCoreAttachment());
-		} else {
-
-			lNewMobInstance.movementPattern = CosMover;
 		}
 
 		// particles

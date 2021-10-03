@@ -91,6 +91,7 @@ public class GameScreen extends BaseGameScreen {
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetSubmarines.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPropeller.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPowercore.json", entityGroupID());
+		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetBoats.json", entityGroupID());
 
 		initializeControllers();
 		createRenderers(pResourceManager);

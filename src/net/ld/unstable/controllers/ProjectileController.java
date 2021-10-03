@@ -7,9 +7,10 @@ import net.ld.unstable.data.projectiles.Projectile;
 import net.ld.unstable.data.projectiles.ProjectileManager;
 import net.ld.unstable.data.projectiles.modifiers.BarrelPhysicsModifier;
 import net.ld.unstable.data.projectiles.patterns.CosShooter;
+import net.ld.unstable.data.projectiles.patterns.EnemyBulletStraightShooter;
+import net.ld.unstable.data.projectiles.patterns.PlayerTorpedoStraightShooter;
 import net.ld.unstable.data.projectiles.patterns.ProjectilePattern;
 import net.ld.unstable.data.projectiles.patterns.SinShooter;
-import net.ld.unstable.data.projectiles.patterns.StraightShooter;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
@@ -34,10 +35,10 @@ public class ProjectileController extends BaseController {
 	private ParticleSystemInstance mBubbleParticleSystem;
 	private ParticleSystemInstance mBarrels;
 
-	// TODO: Clean
 	private final List<Projectile> projectileUpdateList = new ArrayList<>();
 	private final List<ProjectilePattern> patterns = new ArrayList<>();
-	StraightShooter strightShot = new StraightShooter();
+	PlayerTorpedoStraightShooter strightShot = new PlayerTorpedoStraightShooter(145.0f);
+	EnemyBulletStraightShooter straightShotEnemy = new EnemyBulletStraightShooter();
 	SinShooter sinShot = new SinShooter();
 	CosShooter cosShot = new CosShooter();
 
@@ -84,6 +85,7 @@ public class ProjectileController extends BaseController {
 		patterns.add(strightShot);
 		patterns.add(sinShot);
 		patterns.add(cosShot);
+		patterns.add(straightShotEnemy);
 	}
 
 	@Override
@@ -208,20 +210,18 @@ public class ProjectileController extends BaseController {
 
 		strightShot.addProjectile(lTorpedo);
 
-//		final var lTorpedo2 = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, pVX, pVY, 2000.0f);
-//		lTorpedo2.setupSourceTexture(0, 16, 46, 10);
-//		lTorpedo2.shooterUid = pShooterUid;
-//
-//		sinShot.addProjectile(lTorpedo2);
-//
-//		final var lTorpedo3 = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, pVX, pVY, 2000.0f);
-//		lTorpedo3.setupSourceTexture(0, 16, 46, 10);
-//		lTorpedo3.shooterUid = pShooterUid;
-//
-//		cosShot.addProjectile(lTorpedo3);
 	}
 
-	public void dropBarrel(float pStartX, float pStartY) {
+	public void shootEnemyBullet(int pShooterUid, float pStartX, float pStartY, float pVX, float pVY) {
+		final float lOffsetY = RandomNumbers.random(-4.0f, 4.0f);
+		final var lTorpedo = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, pVX, pVY, 8000.0f);
+		lTorpedo.setupSourceTexture(32, 0, 16, 16);
+		lTorpedo.shooterUid = pShooterUid;
+
+		straightShotEnemy.addProjectile(lTorpedo);
+	}
+
+	public void dropBarrel(int pShooterUid, float pStartX, float pStartY) {
 		final float lOffsetY = RandomNumbers.random(-4.0f, 4.0f);
 
 		final float lSignum = RandomNumbers.randomSign();

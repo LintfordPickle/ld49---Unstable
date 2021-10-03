@@ -3,6 +3,7 @@ package net.ld.unstable.data.mobs;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ld.unstable.data.mobs.definitions.EnemyBoatStraight;
 import net.ld.unstable.data.mobs.definitions.EnemySubmarineStraight00;
 import net.ld.unstable.data.mobs.definitions.MobDefinition;
 import net.ld.unstable.data.mobs.definitions.PlayerSubmarine;
@@ -39,6 +40,7 @@ public class MobManager {
 		public void loadDefintions() {
 			mobDefinitions.add(new PlayerSubmarine());
 			mobDefinitions.add(new EnemySubmarineStraight00());
+			mobDefinitions.add(new EnemyBoatStraight());
 		}
 	}
 
