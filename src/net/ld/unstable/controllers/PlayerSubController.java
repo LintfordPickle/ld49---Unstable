@@ -89,16 +89,23 @@ public class PlayerSubController extends BaseController {
 			mAcceleration.x += lMovementSpeed;
 		}
 
+		if (pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_UP)) {
+			if (lPlayerSub.missileTimer <= 0.f) {
+				mProjectileController.shootMissile(ProjectileController.PLAYER_BULLETS_UID, lPlayerSub.worldPositionX, lPlayerSub.worldPositionY, 0, -1);
+				lPlayerSub.missileTimer = 300;
+
+			}
+		}
 		if (pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_RIGHT)) {
 			if (lPlayerSub.shootTimer <= 0.f) {
-				mProjectileController.shootTorpedo(lPlayerSub.uid, lPlayerSub.worldPositionX, lPlayerSub.worldPositionY, 1, 0);
+				mProjectileController.shootTorpedo(ProjectileController.PLAYER_BULLETS_UID, lPlayerSub.worldPositionX, lPlayerSub.worldPositionY, 1, 0);
 				lPlayerSub.shootTimer = 150;
 
 			}
 		}
 		if (pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_DOWN)) {
 			if (lPlayerSub.barrelTimer <= 0.f) {
-				mProjectileController.dropBarrel(lPlayerSub.uid, lPlayerSub.worldPositionX, lPlayerSub.worldPositionY);
+				mProjectileController.dropBarrel(ProjectileController.PLAYER_BULLETS_UID, lPlayerSub.worldPositionX, lPlayerSub.worldPositionY);
 				lPlayerSub.barrelTimer = 300;
 
 			}
@@ -114,19 +121,16 @@ public class PlayerSubController extends BaseController {
 		if (mMobManager.playerSubmarine == null)
 			return;
 
-//		{
-//			// DEMO / DEBUG
-//			final float lTimeMod = 0.001f;
-//			final float sin = (float) Math.sin(pCore.gameTime().totalTimeMilli() * lTimeMod);
-//			final float cos = (float) Math.cos(pCore.gameTime().totalTimeMilli() * lTimeMod);
-//
-//			mAcceleration.x = cos * .025f;
-//			mAcceleration.y = sin * cos * .025f;
-//
-//		}
-
 		final var lPlayerSubmarine = mMobManager.playerSubmarine;
 		final boolean isUnderWater = lPlayerSubmarine.worldPositionY > mLevelController.seaLevel();
+
+		// Keep the sub on screen
+		final float lWorldPositionX = mLevelController.worldPositionX();
+
+		final float lTolerance = 20.0f;
+		if (lPlayerSubmarine.worldPositionX - lTolerance < lWorldPositionX - pCore.gameCamera().boundingRectangle().w() * .5f) {
+			mAcceleration.x += 0.5f;
+		}
 
 		mVelocity.x += mAcceleration.x;
 		mVelocity.y += mAcceleration.y;
@@ -137,9 +141,6 @@ public class PlayerSubController extends BaseController {
 
 		lPlayerSubmarine.worldPositionX += mVelocity.x;
 		lPlayerSubmarine.worldPositionY += mVelocity.y;
-
-//		mPlayerSubmarine.x = 0;
-//		mPlayerSubmarine.y = 0;
 
 		if (isUnderWater)
 			mVelocity.x *= .958f;

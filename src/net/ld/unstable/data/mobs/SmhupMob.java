@@ -1,20 +1,23 @@
 package net.ld.unstable.data.mobs;
 
 import net.ld.unstable.data.mobs.definitions.MobDefinition;
-import net.ld.unstable.data.mobs.patterns.MobMovementPattern;
+import net.ld.unstable.data.mobs.movementpatterns.MovingDefBase;
+import net.ld.unstable.data.mobs.shootprofiles.ShootingDefBase;
 import net.lintford.library.core.geometry.spritegraph.AnimatedSpriteGraphListener;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 import net.lintford.library.core.graphics.sprites.SpriteDefinition;
 import net.lintford.library.core.particles.particleemitters.ParticleEmitterInstance;
 
-public class Submarine implements AnimatedSpriteGraphListener {
+public class SmhupMob implements AnimatedSpriteGraphListener {
 
 	// --------------------------------------
 	// Variables
 	// --------------------------------------
 
-	public MobMovementPattern movementPattern;
-	public int uid;
+	public MovingDefBase movementPattern;
+	public ShootingDefBase shootingPattern;
+
+	public int shooterUid;
 
 	public boolean isAlive;
 
@@ -41,6 +44,10 @@ public class Submarine implements AnimatedSpriteGraphListener {
 	public float barrelTimer;
 	public float missileTimer;
 
+	public float eventTimer00;
+	public float eventTimer01;
+	public float eventTimer02;
+
 	public float timeSinceStart;
 
 	public boolean spriteGraphDirty;
@@ -61,7 +68,7 @@ public class Submarine implements AnimatedSpriteGraphListener {
 	// Constructor
 	// --------------------------------------
 
-	public Submarine() {
+	public SmhupMob() {
 		reset();
 	}
 
@@ -69,15 +76,15 @@ public class Submarine implements AnimatedSpriteGraphListener {
 	// Methods
 	// --------------------------------------
 
-	public void init(int pUid, MobDefinition pMobDefinition) {
-		uid = pUid;
+	public void init(int pShooterUid, MobDefinition pMobDefinition) {
+		shooterUid = pShooterUid;
 		isAlive = true;
 		mobDefinition = pMobDefinition;
 	}
 
 	public void reset() {
 		isAlive = false;
-		uid = -1;
+		shooterUid = -1;
 		worldPositionX = -500;
 		worldPositionY = -500;
 		worldPositionX = -500;

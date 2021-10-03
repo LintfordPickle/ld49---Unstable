@@ -12,11 +12,14 @@ public class LevelController extends BaseController {
 
 	public static final String CONTROLLER_NAME = "Level Controller";
 
+	public static final float SCROLL_SPEED = 0.4f;
+
 	// --------------------------------------
 	// Variables
 	// --------------------------------------
 
 	private float mSeaLevel = -145.f;
+	private float mWorldPositionX = 0;
 
 	// --------------------------------------
 	// Properties
@@ -24,6 +27,14 @@ public class LevelController extends BaseController {
 
 	public float seaLevel() {
 		return mSeaLevel;
+	}
+
+	public float worldPositionX() {
+		return mWorldPositionX;
+	}
+
+	public float worldPositionY() {
+		return 0.f;
 	}
 
 	@Override
@@ -38,6 +49,7 @@ public class LevelController extends BaseController {
 	public LevelController(ControllerManager pControllerManager, int pEntityGroupID) {
 		super(pControllerManager, CONTROLLER_NAME, pEntityGroupID);
 
+		mWorldPositionX = 0.f;
 	}
 
 	// --------------------------------------
@@ -59,13 +71,14 @@ public class LevelController extends BaseController {
 	@Override
 	public void update(LintfordCore pCore) {
 		super.update(pCore);
-		
+
 		final var lGameCamera = pCore.gameCamera();
-		
-		final var lScreenPositionX = lGameCamera.getPosition().x;
+
+		mWorldPositionX += SCROLL_SPEED;
+
+		final var lScreenPositionX = mWorldPositionX;
 		final var lScreenPositionY = lGameCamera.getPosition().y;
-		
-		lGameCamera.setPosition(lScreenPositionX+0.1f, lScreenPositionY);
-		
+
+		lGameCamera.setPosition(lScreenPositionX, lScreenPositionY);
 	}
 }

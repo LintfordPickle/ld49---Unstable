@@ -1,4 +1,4 @@
-package net.ld.unstable.data.Textures;
+package net.ld.unstable.data.textures;
 
 public class WavesTextureNames {
 

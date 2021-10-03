@@ -2,7 +2,7 @@
   "spriteSheetName": "SPRITESHEET_BOATS",
   "textureName": "TEXTURE_BOATS",
   "frameMapNameArray": [
-    "NORMAL"
+    "NORMAL_00"
   ],
   "frameMapObjectArray": [
     {
@@ -24,7 +24,7 @@
       "loopAnimation": true,
       "frameDuration": 150,
       "animationSpriteIndices": [
-        0
+        -1
       ]
     }
   }

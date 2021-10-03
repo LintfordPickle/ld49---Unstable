@@ -1,6 +1,6 @@
 package net.ld.unstable.data.mobs.definitions;
 
-import net.ld.unstable.data.mobs.Submarine;
+import net.ld.unstable.data.mobs.SmhupMob;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 
 public abstract class MobDefinition {
@@ -30,7 +30,9 @@ public abstract class MobDefinition {
 	// Methods
 	// --------------------------------------
 
-	public abstract void AttachMovementPattern(Submarine pSubmarineInstance);
+	public abstract void AttachMovementPattern(SmhupMob pSubmarineInstance);
 
-	public abstract void AttachSpriteGraphStuff(Submarine pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance);
+	public abstract void AttachShootingPattern(SmhupMob pSubmarineInstance);
+
+	public abstract void AttachSpriteGraphStuff(SmhupMob pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance);
 }

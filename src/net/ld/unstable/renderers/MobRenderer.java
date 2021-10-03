@@ -1,15 +1,19 @@
 package net.ld.unstable.renderers;
 
-import net.ld.unstable.controllers.SubController;
+import org.lwjgl.opengl.GL11;
+
+import net.ld.unstable.ConstantsGame;
+import net.ld.unstable.controllers.MobController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.sprites.spritegraph.SpriteGraphRenderer;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
-public class SubRenderer extends BaseRenderer {
+public class MobRenderer extends BaseRenderer {
 
 	// --------------------------------------
 	// Constants
@@ -21,7 +25,7 @@ public class SubRenderer extends BaseRenderer {
 	// Variables
 	// --------------------------------------
 
-	private SubController mSubController;
+	private MobController mMobController;
 	private SpriteSheetDefinition mMobSpritesheet;
 	private SpriteGraphRenderer mSpriteGraphRenderer;
 
@@ -31,14 +35,14 @@ public class SubRenderer extends BaseRenderer {
 
 	@Override
 	public boolean isInitialized() {
-		return mSubController != null;
+		return mMobController != null;
 	}
 
 	// --------------------------------------
 	// Constructor
 	// --------------------------------------
 
-	public SubRenderer(RendererManager pRendererManager, int pEntityGroupID) {
+	public MobRenderer(RendererManager pRendererManager, int pEntityGroupID) {
 		super(pRendererManager, RENDERER_NAME, pEntityGroupID);
 
 		mSpriteGraphRenderer = new SpriteGraphRenderer();
@@ -52,7 +56,7 @@ public class SubRenderer extends BaseRenderer {
 	public void initialize(LintfordCore pCore) {
 		final var lControllerManager = pCore.controllerManager();
 
-		mSubController = (SubController) lControllerManager.getControllerByNameRequired(SubController.CONTROLLER_NAME, entityGroupID());
+		mMobController = (MobController) lControllerManager.getControllerByNameRequired(MobController.CONTROLLER_NAME, entityGroupID());
 	}
 
 	@Override
@@ -76,7 +80,7 @@ public class SubRenderer extends BaseRenderer {
 		if (!isInitialized())
 			return;
 
-		final var lMobManager = mSubController.mobManager();
+		final var lMobManager = mMobController.mobManager();
 		final var lMobs = lMobManager.mobs();
 		final int lMobCount = lMobs.size();
 		for (int i = 0; i < lMobCount; i++) {
@@ -94,12 +98,19 @@ public class SubRenderer extends BaseRenderer {
 				mSpriteGraphRenderer.drawSpriteGraphList(pCore, lSubmarineSpritegraph, lCrazyWhite);
 				mSpriteGraphRenderer.end();
 
-//				GL11.glLineWidth(2.f);
-//				Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.x - 25, lMobInstance.y, 25.f);
-//				Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.x + 25, lMobInstance.y, 25.f);
-//				
-//				Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.x, lMobInstance.y, 52.f);
+				if (ConstantsGame.DEBUG_DRAW_MOB_COLLIDERS) {
+					GL11.glLineWidth(2.f);
+					Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX - 25, lMobInstance.worldPositionY, 25.f);
+					Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX + 25, lMobInstance.worldPositionY, 25.f);
+					Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lMobInstance.worldPositionX, lMobInstance.worldPositionY, 52.f);
+				}
 			}
+		}
+
+		if (ConstantsGame.DEBUG_OOB_DRAWERS) {
+			final var lPlayerSub = lMobManager.playerSubmarine;
+			final float lPlayerWorldSubPosX = lPlayerSub.worldPositionX;
+			Debug.debugManager().drawers().drawLineImmediate(pCore.gameCamera(), lPlayerWorldSubPosX, -50, lPlayerWorldSubPosX, +50, -0.01f, 1.f, 0.f, 0.f);
 		}
 	}
 }

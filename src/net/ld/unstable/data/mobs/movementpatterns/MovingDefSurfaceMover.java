@@ -1,30 +1,30 @@
-package net.ld.unstable.data.mobs.patterns;
+package net.ld.unstable.data.mobs.movementpatterns;
 
-import net.ld.unstable.data.mobs.Submarine;
+import net.ld.unstable.data.mobs.SmhupMob;
 import net.lintford.library.core.LintfordCore;
 
-public class SurfaceMover implements MobMovementPattern {
+public class MovingDefSurfaceMover implements MovingDefBase {
 
 	private float mSeaLevel;
 
-	public SurfaceMover(float pSeaLevel) {
+	public MovingDefSurfaceMover(float pSeaLevel) {
 		mSeaLevel = pSeaLevel;
 	}
 
 	@Override
-	public void update(LintfordCore pCore, Submarine pSubmarine) {
+	public void update(LintfordCore pCore, SmhupMob pMob) {
 		float lDelta = (float) pCore.appTime().elapsedTimeMilli() / 1000f;
 
-		pSubmarine.dx = -100.0f;
-		pSubmarine.dy = 0.0f;
+		pMob.dx = -100.0f;
+		pMob.dy = 0.0f;
 
 		// Need to move the base position along
-		pSubmarine.baseWorldPositionX += pSubmarine.dx * lDelta;
-		pSubmarine.baseWorldPositionY = mSeaLevel - 20;
+		pMob.baseWorldPositionX += pMob.dx * lDelta;
+		pMob.baseWorldPositionY = mSeaLevel - 20;
 
-		pSubmarine.worldPositionX += pSubmarine.dx * lDelta;
+		pMob.worldPositionX += pMob.dx * lDelta;
 
-		pSubmarine.worldPositionX = pSubmarine.baseWorldPositionX;
-		pSubmarine.worldPositionY = pSubmarine.baseWorldPositionY + (float)Math.cos(pSubmarine.timeSinceStart * .005f) * 5f;
+		pMob.worldPositionX = pMob.baseWorldPositionX;
+		pMob.worldPositionY = pMob.baseWorldPositionY + (float)Math.cos(pMob.timeSinceStart * .005f) * 5f;
 	}
 }

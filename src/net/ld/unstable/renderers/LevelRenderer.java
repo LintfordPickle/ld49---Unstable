@@ -1,9 +1,11 @@
 package net.ld.unstable.renderers;
 
+import net.ld.unstable.ConstantsGame;
 import net.ld.unstable.controllers.LevelController;
-import net.ld.unstable.data.Textures.WavesTextureNames;
+import net.ld.unstable.data.textures.WavesTextureNames;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.sprites.SpriteInstance;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
@@ -84,16 +86,27 @@ public class LevelRenderer extends BaseRenderer {
 		final float lWavesHeight = mWaveSpriteInstance.height();
 
 		lSpriteBatch.begin(pCore.gameCamera());
+		
+		final var lWaterColor = ColorConstants.getWhiteWithAlpha(0.5f);
 
 		final float lLeftEdge = lCameraRect.left() - lWavesWidth;
-		for (int t = (int) lLeftEdge; t < lLeftEdge + lCameraRect.w() + lWavesWidth*2; t += (int) lWavesWidth) {
-			lSpriteBatch.draw(mOceanSpritesheet.texture(), mWaveSpriteInstance.currentSpriteFrame(), t, lSeaLevel - lWavesHeight * .5f, lWavesWidth, lWavesHeight, -0.7f, ColorConstants.WHITE);
+		for (int t = (int) lLeftEdge; t < lLeftEdge + 100 + lCameraRect.w() + lWavesWidth * 2; t += (int) lWavesWidth) {
+			lSpriteBatch.draw(mOceanSpritesheet.texture(), mWaveSpriteInstance.currentSpriteFrame(), t, lSeaLevel - lWavesHeight * .5f, lWavesWidth, lWavesHeight, -0.01f, lWaterColor);
 		}
 
-		lSpriteBatch.draw(mOceanSpritesheet, WavesTextureNames.UNDERWATER, lLeftEdge, lSeaLevel, lCameraRect.width() + lWavesWidth * 2, lCameraRect.width(), -0.7f, ColorConstants.WHITE);
+		lSpriteBatch.draw(mOceanSpritesheet, WavesTextureNames.UNDERWATER, lLeftEdge, lSeaLevel + lWavesHeight * .5f, lCameraRect.width() + lWavesWidth * 2, lCameraRect.width(), -0.01f, lWaterColor);
 
 		lSpriteBatch.end();
 
-		// Debug.debugManager().drawers().drawLineImmediate(pCore.gameCamera(), lCameraRect.left(), lSeaLevel, lCameraRect.w(), lSeaLevel, -0.01f, 1.f, 0.f, 0.f);
+		// Sea level
+		if (ConstantsGame.DEBUG_OOB_DRAWERS) {
+			Debug.debugManager().drawers().drawLineImmediate(pCore.gameCamera(), lCameraRect.left(), lSeaLevel, lCameraRect.w(), lSeaLevel, -0.01f, 1.f, 0.f, 0.f);
+
+			// world position X
+			final float lWorldPositionX = mLevelController.worldPositionX();
+			final float lWorldLeftX = lWorldPositionX - lCameraRect.w() * .5f + 2.0f;
+			Debug.debugManager().drawers().drawLineImmediate(pCore.gameCamera(), lWorldLeftX, lSeaLevel - 50, lWorldLeftX, lSeaLevel + 50, -0.01f, 1.f, 0.f, 0.f);
+			Debug.debugManager().drawers().drawLineImmediate(pCore.gameCamera(), lWorldPositionX, lSeaLevel - 50, lWorldPositionX, lSeaLevel + 50, -0.01f, 1.f, 0.f, 0.f);
+		}
 	}
 }

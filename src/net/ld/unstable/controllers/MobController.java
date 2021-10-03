@@ -4,33 +4,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ld.unstable.data.mobs.MobManager;
-import net.ld.unstable.data.mobs.Submarine;
-import net.ld.unstable.data.mobs.definitions.EnemyBoatStraight;
-import net.ld.unstable.data.mobs.definitions.EnemySubmarineStraight00;
-import net.ld.unstable.data.mobs.patterns.CosMover;
-import net.ld.unstable.data.mobs.patterns.StraightMover;
-import net.ld.unstable.data.mobs.patterns.SurfaceMover;
+import net.ld.unstable.data.mobs.SmhupMob;
+import net.ld.unstable.data.mobs.movementpatterns.MovingDefCosineMover;
+import net.ld.unstable.data.mobs.movementpatterns.MovingDefEnemyMine;
+import net.ld.unstable.data.mobs.movementpatterns.MovingDefStraightMover;
+import net.ld.unstable.data.mobs.movementpatterns.MovingDefSurfaceMover;
+import net.ld.unstable.data.mobs.movementpatterns.MovingDefSurfaceMoverWithStop;
+import net.ld.unstable.data.mobs.movementpatterns.MovingDefTurret;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
 import net.lintford.library.controllers.geometry.SpriteGraphController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.debug.Debug;
-import net.lintford.library.core.maths.RandomNumbers;
 
-public class SubController extends BaseController {
+public class MobController extends BaseController {
 
 	// --------------------------------------
 	// Constants
 	// --------------------------------------
 
-	public static final String CONTROLLER_NAME = "Submarine Controller";
+	public static final String CONTROLLER_NAME = "Mobs Controller";
 
-	public final static StraightMover StraightPattern = new StraightMover();
-	public final static CosMover CosMover = new CosMover();
-	public final static SurfaceMover surfaceMover = new SurfaceMover(-140.f);
-
-	private static int subCounter = 0;
+	public static MovingDefTurret turretMovementDef;
+	public static MovingDefStraightMover StraightPattern;
+	public static MovingDefCosineMover CosMover;
+	public static MovingDefSurfaceMover surfaceMover;
+	public static MovingDefSurfaceMoverWithStop surfaceMoveWithStop;
+	public static MovingDefEnemyMine movingDefEnemyMine;
 
 	// --------------------------------------
 	// Variables
@@ -39,9 +40,9 @@ public class SubController extends BaseController {
 	private ProjectileController mProjectileController;
 	private ParticleFrameworkController mParticleFrameworkController;
 	private SpriteGraphController mSpriteGraphController;
+	private LevelController mLevelController;
 	private final MobManager mMobManager;
-
-	private List<Submarine> mUpdateMobList = new ArrayList<>();
+	private final List<SmhupMob> mUpdateMobList = new ArrayList<>();
 
 	// --------------------------------------
 	// Properties
@@ -61,7 +62,7 @@ public class SubController extends BaseController {
 	// Constructor
 	// --------------------------------------
 
-	public SubController(ControllerManager pControllerManager, MobManager pMobManager, int pEntityGroupID) {
+	public MobController(ControllerManager pControllerManager, MobManager pMobManager, int pEntityGroupID) {
 		super(pControllerManager, CONTROLLER_NAME, pEntityGroupID);
 
 		mMobManager = pMobManager;
@@ -75,8 +76,18 @@ public class SubController extends BaseController {
 	public void initialize(LintfordCore pCore) {
 		final var lControllerManager = pCore.controllerManager();
 		mSpriteGraphController = (SpriteGraphController) lControllerManager.getControllerByNameRequired(SpriteGraphController.CONTROLLER_NAME, entityGroupID());
+		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
 		mProjectileController = (ProjectileController) lControllerManager.getControllerByNameRequired(ProjectileController.CONTROLLER_NAME, entityGroupID());
 		mParticleFrameworkController = (ParticleFrameworkController) lControllerManager.getControllerByNameRequired(ParticleFrameworkController.CONTROLLER_NAME, entityGroupID());
+
+		final float lFloorLevel = pCore.gameCamera().boundingRectangle().bottom();
+
+		turretMovementDef = new MovingDefTurret(lFloorLevel);
+		StraightPattern = new MovingDefStraightMover();
+		CosMover = new MovingDefCosineMover();
+		surfaceMover = new MovingDefSurfaceMover(mLevelController.seaLevel());
+		surfaceMoveWithStop = new MovingDefSurfaceMoverWithStop(mLevelController.seaLevel());
+		movingDefEnemyMine = new MovingDefEnemyMine();
 	}
 
 	@Override
@@ -100,7 +111,10 @@ public class SubController extends BaseController {
 		for (int i = 0; i < lMobCount; i++) {
 			final var lMobInstance = mUpdateMobList.get(i);
 
-			if (lMobInstance.worldPositionX + 200.0f < pCore.gameCamera().boundingRectangle().left()) {
+			final float lDespawnTol = 75.f;
+			if (!lMobInstance.isPlayerControlled && lMobInstance.worldPositionX + lDespawnTol < pCore.gameCamera().boundingRectangle().left()) {
+				Debug.debugManager().logger().i(getClass().getSimpleName(), "Despawn mob");
+
 				lMobInstance.kill();
 				lMobs.remove(lMobInstance);
 
@@ -129,23 +143,9 @@ public class SubController extends BaseController {
 				}
 			}
 		}
-
-		if (lMobCount < 3) {
-			final var lGameCamera = pCore.gameCamera();
-			final var lScreenBounds = lGameCamera.boundingRectangle();
-
-			switch (RandomNumbers.random(0, 2)) {
-			case 0:
-				addNewSubmarine(false, EnemySubmarineStraight00.MOB_DEFINITION_NAME, lScreenBounds.right() + 50.0f, RandomNumbers.random(-10.f, 300.0f));
-				break;
-			case 1:
-				addNewSubmarine(false, EnemyBoatStraight.MOB_DEFINITION_NAME, lScreenBounds.right() + 50.0f, RandomNumbers.random(-10.f, 300.0f));
-				break;
-			}
-		}
 	}
 
-	private void updateSubmarine(LintfordCore pCore, Submarine pSubmarine) {
+	private void updateSubmarine(LintfordCore pCore, SmhupMob pSubmarine) {
 		final var lSubmarineSpriteGraph = pSubmarine.spriteGraphInstance();
 
 		pSubmarine.timeSinceStart += pCore.gameTime().elapsedTimeMilli();
@@ -171,19 +171,9 @@ public class SubController extends BaseController {
 			pSubmarine.flashOn = false;
 		}
 
-		// ---
-		if (pSubmarine.isPlayerControlled == false) {
-			if (pSubmarine.mobDefinition.shootsTorpedoes && pSubmarine.shootTimer <= 0.f) {
-				mProjectileController.shootEnemyBullet(pSubmarine.uid, pSubmarine.worldPositionX, pSubmarine.worldPositionY, -1, 0);
-				pSubmarine.shootTimer = 350.f;
-			}
-
-			if (pSubmarine.mobDefinition.shootsBarrels && pSubmarine.barrelTimer <= 0.f) {
-				mProjectileController.dropBarrel(pSubmarine.uid, pSubmarine.worldPositionX, pSubmarine.worldPositionY);
-				pSubmarine.barrelTimer = 350.f;
-			}
+		if (pSubmarine.shootingPattern != null) {
+			pSubmarine.shootingPattern.update(pCore, pSubmarine, mProjectileController);
 		}
-		// ---
 
 		lSubmarineSpriteGraph.positionX = pSubmarine.worldPositionX;
 		lSubmarineSpriteGraph.positionY = pSubmarine.worldPositionY;
@@ -203,15 +193,21 @@ public class SubController extends BaseController {
 	// Methods
 	// --------------------------------------
 
-	public void addNewSubmarine(boolean pPlayerControlled, String pDefinitionName, float pWorldX, float pWorldY) {
+	public SmhupMob addNewMob(boolean pPlayerControlled, String pDefinitionName, float pScreenX, float pScreenY) {
 		final var lNewMobDefinition = mMobManager.mobDefinitionManager().getMobDefinitionByName(pDefinitionName);
 
 		if (lNewMobDefinition == null) {
 			Debug.debugManager().logger().e(getClass().getSimpleName(), "Couldn't find mob definition with name : " + pDefinitionName);
-			return;
+			return null;
 		}
-		final var lNewMobInstance = mMobManager.addNewMob(lNewMobDefinition, pWorldX, pWorldY);
-		lNewMobInstance.init(subCounter++, lNewMobDefinition);
+
+		final float lWorldPositionX = mLevelController.worldPositionX();
+		final float lWorldPositionY = mLevelController.worldPositionY();
+
+		final var lNewMobInstance = mMobManager.addNewMob(lNewMobDefinition, pScreenX + lWorldPositionX, pScreenY + lWorldPositionY);
+
+		final int lShooterUid = pPlayerControlled ? ProjectileController.PLAYER_BULLETS_UID : ProjectileController.ENEMY_BULLETS_UID;
+		lNewMobInstance.init(lShooterUid, lNewMobDefinition);
 
 		final var lSpriteGraphInstance = mSpriteGraphController.getSpriteGraphInstance(lNewMobDefinition.SpritegraphName, entityGroupID());
 
@@ -221,6 +217,7 @@ public class SubController extends BaseController {
 		lSpriteGraphInstance.currentAnimation(lCurrentAnimationName);
 
 		lNewMobDefinition.AttachMovementPattern(lNewMobInstance);
+		lNewMobDefinition.AttachShootingPattern(lNewMobInstance);
 		lNewMobDefinition.AttachSpriteGraphStuff(lNewMobInstance, lSpriteGraphInstance);
 
 		lSpriteGraphInstance.mFlipHorizontal = lNewMobInstance.isPlayerControlled == false;
@@ -232,10 +229,11 @@ public class SubController extends BaseController {
 			mMobManager.playerSubmarine = lNewMobInstance;
 		}
 
-		// particles
 		{
 			final var lBubbleEmitter = mParticleFrameworkController.particleFrameworkData().emitterManager().getNewParticleEmitterInstanceByDefName("EMITTER_BUBBLE");
 			lNewMobInstance.bubbleEmitter = lBubbleEmitter;
 		}
+
+		return lNewMobInstance;
 	}
 }

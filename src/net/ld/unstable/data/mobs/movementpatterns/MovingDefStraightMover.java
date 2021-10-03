@@ -1,24 +1,24 @@
-package net.ld.unstable.data.mobs.patterns;
+package net.ld.unstable.data.mobs.movementpatterns;
 
-import net.ld.unstable.data.mobs.Submarine;
+import net.ld.unstable.data.mobs.SmhupMob;
 import net.lintford.library.core.LintfordCore;
 
-public class StraightMover implements MobMovementPattern {
+public class MovingDefStraightMover implements MovingDefBase {
 
 	@Override
-	public void update(LintfordCore pCore, Submarine pSubmarine) {
+	public void update(LintfordCore pCore, SmhupMob pMob) {
 		float lDelta = (float) pCore.appTime().elapsedTimeMilli() / 1000f;
 
-		pSubmarine.dx = -100.0f;
-		pSubmarine.dy = 0.0f;
+		pMob.dx = -100.0f;
+		pMob.dy = 0.0f;
 
-		pSubmarine.worldPositionX += pSubmarine.dx * lDelta;
+		pMob.worldPositionX += pMob.dx * lDelta;
 
-		pSubmarine.worldPositionX = pSubmarine.baseWorldPositionX;
-		pSubmarine.worldPositionY = pSubmarine.baseWorldPositionY;
+		pMob.worldPositionX = pMob.baseWorldPositionX;
+		pMob.worldPositionY = pMob.baseWorldPositionY;
 
 		// Need to move the base position along
-		pSubmarine.baseWorldPositionX += pSubmarine.dx * lDelta;
-		pSubmarine.baseWorldPositionY += pSubmarine.dy * lDelta;
+		pMob.baseWorldPositionX += pMob.dx * lDelta;
+		pMob.baseWorldPositionY += pMob.dy * lDelta;
 	}
 }

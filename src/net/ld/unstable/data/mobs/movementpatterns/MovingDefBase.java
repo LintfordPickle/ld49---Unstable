@@ -1,9 +1,9 @@
-package net.ld.unstable.data.mobs.patterns;
+package net.ld.unstable.data.mobs.movementpatterns;
 
-import net.ld.unstable.data.mobs.Submarine;
+import net.ld.unstable.data.mobs.SmhupMob;
 import net.lintford.library.core.LintfordCore;
 
-public abstract interface MobMovementPattern {
+public abstract interface MovingDefBase {
 
-	public abstract void update(LintfordCore pCore, Submarine pSubmarine);
+	public abstract void update(LintfordCore pCore, SmhupMob pMob);
 }

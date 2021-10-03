@@ -3,10 +3,14 @@ package net.ld.unstable.data.mobs;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.ld.unstable.data.mobs.definitions.EnemyBoatStraight;
-import net.ld.unstable.data.mobs.definitions.EnemySubmarineStraight00;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemyBoatStop;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemyBoatStraight;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemyMine;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemySubmarineStraight;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemyTurret;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemyTurretBoatStop;
 import net.ld.unstable.data.mobs.definitions.MobDefinition;
-import net.ld.unstable.data.mobs.definitions.PlayerSubmarine;
+import net.ld.unstable.data.mobs.definitions.MobDefPlayerSubmarine;
 
 public class MobManager {
 
@@ -38,9 +42,15 @@ public class MobManager {
 		}
 
 		public void loadDefintions() {
-			mobDefinitions.add(new PlayerSubmarine());
-			mobDefinitions.add(new EnemySubmarineStraight00());
-			mobDefinitions.add(new EnemyBoatStraight());
+			mobDefinitions.add(new MobDefPlayerSubmarine());
+			mobDefinitions.add(new MobDefEnemySubmarineStraight());
+			
+			mobDefinitions.add(new MobDefEnemyBoatStraight());
+			mobDefinitions.add(new MobDefEnemyBoatStop());
+			
+			mobDefinitions.add(new MobDefEnemyTurretBoatStop());
+			mobDefinitions.add(new MobDefEnemyMine());
+			mobDefinitions.add(new MobDefEnemyTurret());
 		}
 	}
 
@@ -48,17 +58,15 @@ public class MobManager {
 	// Variables
 	// --------------------------------------
 
-	private int shooterUidCounter;
-
 	private final MobDefinitionManager mMobDefinitionManager = new MobDefinitionManager();
-	public Submarine playerSubmarine;
-	private final List<Submarine> mMobEntities = new ArrayList<>();
+	public SmhupMob playerSubmarine;
+	private final List<SmhupMob> mMobEntities = new ArrayList<>();
 
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
 
-	public List<Submarine> mobs() {
+	public List<SmhupMob> mobs() {
 		return mMobEntities;
 	}
 
@@ -71,7 +79,6 @@ public class MobManager {
 	// --------------------------------------
 
 	public MobManager() {
-		shooterUidCounter = 0;
 	}
 
 	// --------------------------------------
@@ -86,7 +93,7 @@ public class MobManager {
 	// Methods
 	// --------------------------------------
 
-	public Submarine getMobByIndex(int pIndex) {
+	public SmhupMob getMobByIndex(int pIndex) {
 		if (pIndex < 0 || pIndex >= mMobEntities.size()) {
 			return null;
 		}
@@ -95,8 +102,8 @@ public class MobManager {
 	}
 
 	// FIXME: recycle
-	public Submarine addNewMob(MobDefinition pMobDefinition, float pPosX, float pPosY) {
-		final var lNewMob = new Submarine();
+	public SmhupMob addNewMob(MobDefinition pMobDefinition, float pPosX, float pPosY) {
+		final var lNewMob = new SmhupMob();
 		lNewMob.worldPositionX = pPosX;
 		lNewMob.worldPositionY = pPosY;
 		lNewMob.baseWorldPositionX = pPosX;

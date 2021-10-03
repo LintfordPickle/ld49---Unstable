@@ -1,7 +1,5 @@
 package net.ld.unstable.data.mobs.attachments;
 
-import net.ld.unstable.data.mobs.MobSpriteGraphAttachmentDefinition;
-
 public class SubAttachment extends MobSpriteGraphAttachmentDefinition {
 
 	// --------------------------------------

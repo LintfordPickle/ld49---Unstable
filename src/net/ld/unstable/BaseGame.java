@@ -8,6 +8,7 @@ import net.ld.unstable.screens.MainMenuScreen;
 import net.lintford.library.GameInfo;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.graphics.fonts.BitmapFontManager;
+import net.lintford.library.renderers.RendererManager;
 import net.lintford.library.screenmanager.ScreenManager;
 
 public class BaseGame extends LintfordCore {
@@ -116,6 +117,9 @@ public class BaseGame extends LintfordCore {
 		super.onInitializeBitmapFontSources(pFontManager);
 
 		BitmapFontManager.CoreFonts.AddOrUpdate(ScreenManager.FONT_MENU_ENTRY_NAME, "res/fonts/fontOrangeKid24.json");
+
+		BitmapFontManager.CoreFonts.AddOrUpdate(RendererManager.UI_FONT_TEXT_NAME, "res/fonts/fontOrangeKid24.json");
+		BitmapFontManager.CoreFonts.AddOrUpdate(RendererManager.UI_FONT_TEXT_BOLD_NAME, "res/fonts/fontOrangeKid24.json");
 	}
 
 	// -------------------------------
@@ -158,12 +162,12 @@ public class BaseGame extends LintfordCore {
 
 			@Override
 			public boolean stretchGameResolution() {
-				return false;
+				return true;
 			}
 
 			@Override
 			public boolean windowResizeable() {
-				return false;
+				return true;
 			}
 
 		};

@@ -1,23 +1,24 @@
 package net.ld.unstable.data.mobs.definitions;
 
-import net.ld.unstable.controllers.SubController;
-import net.ld.unstable.data.mobs.Submarine;
+import net.ld.unstable.controllers.MobController;
+import net.ld.unstable.controllers.ProjectileController;
+import net.ld.unstable.data.mobs.SmhupMob;
 import net.ld.unstable.data.mobs.attachments.BoatAttachment;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 
-public class EnemyBoatStraight extends MobDefinition {
+public class MobDefEnemyBoatStraight extends MobDefinition {
 
 	// --------------------------------------
 	// Constants
 	// --------------------------------------
 
-	public static final String MOB_DEFINITION_NAME = "BOAT";
+	public static final String MOB_DEFINITION_NAME = "BOAT_STRAIGHT";
 
 	// --------------------------------------
 	// Constructor
 	// --------------------------------------
 
-	public EnemyBoatStraight() {
+	public MobDefEnemyBoatStraight() {
 		super(MOB_DEFINITION_NAME);
 
 		SpritegraphName = "SPRITEGRAPH_SUBMARINE";
@@ -34,12 +35,17 @@ public class EnemyBoatStraight extends MobDefinition {
 	// --------------------------------------
 
 	@Override
-	public void AttachMovementPattern(Submarine pSubmarineInstance) {
-		pSubmarineInstance.movementPattern = SubController.surfaceMover;
+	public void AttachMovementPattern(SmhupMob pSubmarineInstance) {
+		pSubmarineInstance.movementPattern = MobController.surfaceMover;
 	}
 
 	@Override
-	public void AttachSpriteGraphStuff(Submarine pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance) {
+	public void AttachShootingPattern(SmhupMob pSubmarineInstance) {
+		pSubmarineInstance.shootingPattern = ProjectileController.shootingProfileBoat;
+	}
+
+	@Override
+	public void AttachSpriteGraphStuff(SmhupMob pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance) {
 		pSpriteGraphInstance.attachItemToNode(new BoatAttachment());
 	}
 

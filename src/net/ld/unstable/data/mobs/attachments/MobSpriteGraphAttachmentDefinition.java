@@ -1,4 +1,4 @@
-package net.ld.unstable.data.mobs;
+package net.ld.unstable.data.mobs.attachments;
 
 import net.lintford.library.core.geometry.spritegraph.attachment.ISpriteGraphNodeAttachment;
 import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;

@@ -1,0 +1,115 @@
+{
+  "spriteSheetName": "SPRITESHEET_EXPLOSIONS",
+  "textureName": "TEXTURE_EXPLOSIONS",
+  "frameMapNameArray": [
+    "EXPLOSION_00",
+    "EXPLOSION_01",
+    "EXPLOSION_02",
+    "EXPLOSION_03",
+    "EXPLOSION_04",
+    "EXPLOSION_05",
+    "EXPLOSION_06"
+  ],
+  "frameMapObjectArray": [
+    {
+      "name": null,
+      "x": 0,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 128,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 384,
+      "y": 0,
+      "w": 128,
+      "h": 128,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 0,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 128,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 128,
+      "w": 128,
+      "h": 128,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    }
+  ],
+  "spriteMap": {
+    "big": {
+      "animationName": "big",
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSpriteIndices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ]
+    }
+  }
+}

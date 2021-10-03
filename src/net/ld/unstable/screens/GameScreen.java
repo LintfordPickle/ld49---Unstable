@@ -5,15 +5,18 @@ import org.lwjgl.glfw.GLFW;
 import net.ld.unstable.controllers.LevelController;
 import net.ld.unstable.controllers.PlayerSubController;
 import net.ld.unstable.controllers.ProjectileController;
-import net.ld.unstable.controllers.SubController;
+import net.ld.unstable.controllers.MobController;
+import net.ld.unstable.controllers.WaveController;
 import net.ld.unstable.data.mobs.MobManager;
-import net.ld.unstable.data.mobs.definitions.PlayerSubmarine;
+import net.ld.unstable.data.mobs.definitions.MobDefPlayerSubmarine;
 import net.ld.unstable.data.projectiles.ProjectileManager;
 import net.ld.unstable.data.projectiles.initializers.BubbleParticleInitializer;
 import net.ld.unstable.data.projectiles.modifiers.BubblePhysicsModifier;
+import net.ld.unstable.data.waves.WaveManager;
+import net.ld.unstable.renderers.HudRenderer;
 import net.ld.unstable.renderers.LevelRenderer;
 import net.ld.unstable.renderers.ProjectilesRenderer;
-import net.ld.unstable.renderers.SubRenderer;
+import net.ld.unstable.renderers.MobRenderer;
 import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
 import net.lintford.library.controllers.geometry.SpriteGraphController;
 import net.lintford.library.core.LintfordCore;
@@ -34,22 +37,24 @@ public class GameScreen extends BaseGameScreen {
 	private SpriteGraphManager mSpriteGraphManager;
 	private MobManager mMobManager;
 	private ParticleFrameworkData mParticleFrameworkData;
-
+	private WaveManager mWaveManager;
 	private ProjectileManager mProjectileSystemManager;
 
 	// Controllers
 	private SpriteGraphController mSpriteGraphController;
-	private SubController mSubController;
+	private MobController mMobController;
 	private PlayerSubController mPlayerSubController;
 	private LevelController mLevelController;
+	private WaveController mWaveController;
 	private ProjectileController mProjectileController;
 	private ParticleFrameworkController mParticleFrameworkController;
 
 	// Renderers
-	private SubRenderer mSubRenderer;
+	private MobRenderer mMobRenderer;
 	private LevelRenderer mLevelRenderer;
 	private ParticleFrameworkRenderer mParticleFrameworkRenderer;
 	private ProjectilesRenderer mProjectilesRenderer;
+	private HudRenderer mHudRenderer;
 
 	// --------------------------------------
 	// Constructor
@@ -61,7 +66,7 @@ public class GameScreen extends BaseGameScreen {
 		mShowBackgroundScreens = true;
 
 		mSpriteGraphManager = new SpriteGraphManager();
-
+		mWaveManager = new WaveManager();
 		mMobManager = new MobManager();
 		mParticleFrameworkData = new ParticleFrameworkData();
 		mProjectileSystemManager = new ProjectileManager(1000);
@@ -88,16 +93,20 @@ public class GameScreen extends BaseGameScreen {
 		pResourceManager.spriteGraphRepository().loadSpriteGraphsFromMeta("res/spritegraphs/_meta.json", entityGroupID());
 		pResourceManager.textureManager().loadTexturesFromMetafile("res/textures/_meta.json", entityGroupID());
 
+		// TODO: Clean this mess
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetSubmarines.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPropeller.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPowercore.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetBoats.json", entityGroupID());
+		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetExplosions.json", entityGroupID());
+		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetBoatTurret.json", entityGroupID());
+		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetMines.json", entityGroupID());
+		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetTurrets.json", entityGroupID());
 
 		initializeControllers();
 		createRenderers(pResourceManager);
 
-		mSubController.addNewSubmarine(true, PlayerSubmarine.MOB_DEFINITION_NAME, 0, 0);
-		mSubController.addNewSubmarine(false, PlayerSubmarine.MOB_DEFINITION_NAME, 100, 0);
+		mMobController.addNewMob(true, MobDefPlayerSubmarine.MOB_DEFINITION_NAME, 0, 0);
 
 		//
 
@@ -135,19 +144,23 @@ public class GameScreen extends BaseGameScreen {
 
 		mSpriteGraphController = new SpriteGraphController(lControllerManager, mSpriteGraphManager, entityGroupID());
 		mLevelController = new LevelController(lControllerManager, entityGroupID());
-		mSubController = new SubController(lControllerManager, mMobManager, entityGroupID());
+		mMobController = new MobController(lControllerManager, mMobManager, entityGroupID());
 		mPlayerSubController = new PlayerSubController(lControllerManager, mMobManager, entityGroupID());
 		mParticleFrameworkController = new ParticleFrameworkController(lControllerManager, mParticleFrameworkData, entityGroupID());
 		mProjectileController = new ProjectileController(lControllerManager, mProjectileSystemManager, entityGroupID());
+		mWaveController = new WaveController(lControllerManager, mWaveManager, entityGroupID());
 	}
 
 	private void initializeControllers() {
-		mSpriteGraphController.initialize(screenManager.core());
-		mLevelController.initialize(screenManager.core());
-		mSubController.initialize(screenManager.core());
-		mPlayerSubController.initialize(screenManager.core());
-		mParticleFrameworkController.initialize(screenManager.core());
-		mProjectileController.initialize(screenManager.core());
+		final var lCore = screenManager.core();
+
+		mSpriteGraphController.initialize(lCore);
+		mLevelController.initialize(lCore);
+		mMobController.initialize(lCore);
+		mPlayerSubController.initialize(lCore);
+		mParticleFrameworkController.initialize(lCore);
+		mProjectileController.initialize(lCore);
+		mWaveController.initialize(lCore);
 	}
 
 	private void createRenderers(ResourceManager pResourceManager) {
@@ -155,13 +168,9 @@ public class GameScreen extends BaseGameScreen {
 
 		final var lCore = screenManager.core();
 
-		mLevelRenderer = new LevelRenderer(rendererManager, entityGroupID());
-		mLevelRenderer.initialize(lCore);
-		mLevelRenderer.loadGLContent(pResourceManager);
-
-		mSubRenderer = new SubRenderer(rendererManager, entityGroupID());
-		mSubRenderer.initialize(lCore);
-		mSubRenderer.loadGLContent(pResourceManager);
+		mMobRenderer = new MobRenderer(rendererManager, entityGroupID());
+		mMobRenderer.initialize(lCore);
+		mMobRenderer.loadGLContent(pResourceManager);
 
 		mProjectilesRenderer = new ProjectilesRenderer(rendererManager, entityGroupID());
 		mProjectilesRenderer.initialize(lCore);
@@ -170,6 +179,14 @@ public class GameScreen extends BaseGameScreen {
 		mParticleFrameworkRenderer = new ParticleFrameworkRenderer(rendererManager, entityGroupID());
 		mParticleFrameworkRenderer.initialize(lCore);
 		mParticleFrameworkRenderer.loadGLContent(pResourceManager);
+
+		mLevelRenderer = new LevelRenderer(rendererManager, entityGroupID());
+		mLevelRenderer.initialize(lCore);
+		mLevelRenderer.loadGLContent(pResourceManager);
+
+		mHudRenderer = new HudRenderer(rendererManager, entityGroupID());
+		mHudRenderer.initialize(lCore);
+		mHudRenderer.loadGLContent(pResourceManager);
 
 	}
 }

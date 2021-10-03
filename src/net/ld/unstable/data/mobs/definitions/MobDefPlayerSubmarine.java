@@ -1,24 +1,24 @@
 package net.ld.unstable.data.mobs.definitions;
 
-import net.ld.unstable.data.mobs.Submarine;
+import net.ld.unstable.data.mobs.SmhupMob;
 import net.ld.unstable.data.mobs.attachments.PowerCoreAttachment;
 import net.ld.unstable.data.mobs.attachments.PropellerAttachment;
 import net.ld.unstable.data.mobs.attachments.SubAttachment;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 
-public class PlayerSubmarine extends MobDefinition {
+public class MobDefPlayerSubmarine extends MobDefinition {
 
 	// --------------------------------------
 	// Constants
 	// --------------------------------------
 
-	public static final String MOB_DEFINITION_NAME = "Player Submarine";
+	public static final String MOB_DEFINITION_NAME = "PLAYER_SUBMARINE";
 
 	// --------------------------------------
 	// Constructor
 	// --------------------------------------
 
-	public PlayerSubmarine() {
+	public MobDefPlayerSubmarine() {
 		super(MOB_DEFINITION_NAME);
 
 		SpritegraphName = "SPRITEGRAPH_SUBMARINE";
@@ -31,12 +31,17 @@ public class PlayerSubmarine extends MobDefinition {
 	// --------------------------------------
 
 	@Override
-	public void AttachMovementPattern(Submarine pSubmarineInstance) {
+	public void AttachMovementPattern(SmhupMob pSubmarineInstance) {
 
 	}
 
 	@Override
-	public void AttachSpriteGraphStuff(Submarine pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance) {
+	public void AttachShootingPattern(SmhupMob pSubmarineInstance) {
+
+	}
+
+	@Override
+	public void AttachSpriteGraphStuff(SmhupMob pSubmarineInstance, SpriteGraphInstance pSpriteGraphInstance) {
 		pSpriteGraphInstance.attachItemToNode(new SubAttachment());
 		pSpriteGraphInstance.attachItemToNode(new PropellerAttachment());
 		pSpriteGraphInstance.attachItemToNode(new PowerCoreAttachment());

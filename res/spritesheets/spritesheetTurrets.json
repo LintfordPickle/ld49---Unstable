@@ -1,0 +1,31 @@
+{
+  "spriteSheetName": "SPRITESHEET_TURRETS",
+  "textureName": "TEXTURE_TURRETS",
+  "frameMapNameArray": [
+    "NORMAL_00"
+  ],
+  "frameMapObjectArray": [
+    {
+      "name": null,
+      "x": 0,
+      "y": 0,
+      "w": 42,
+      "h": 40,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    }
+  ],
+  "spriteMap": {
+    "normal": {
+      "animationName": "normal",
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSpriteIndices": [
+        0
+      ]
+    }
+  }
+}
