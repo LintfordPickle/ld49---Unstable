@@ -12,11 +12,13 @@ public class ExplosionsController extends BaseController {
 	public static final String CONTROLLER_NAME = "Explosion Controller";
 
 	public class Explosion {
-		public Explosion(float pWorldX, float pWorldY) {
+		public Explosion(float pWorldX, float pWorldY, String pAnimName) {
 			worldX = pWorldX;
 			worldY = pWorldY;
+			animName = pAnimName;
 		}
 
+		public String animName;
 		public float worldX;
 		public float worldY;
 
@@ -56,11 +58,10 @@ public class ExplosionsController extends BaseController {
 	}
 
 	public void addMinorExplosion(float pWorldX, float pWorldY) {
-		explosions.add(new Explosion(pWorldX, pWorldY));
+		explosions.add(new Explosion(pWorldX, pWorldY, "smoke"));
 	}
 
 	public void addMajorExplosion(float pWorldX, float pWorldY) {
-		// TODO
-		explosions.add(new Explosion(pWorldX, pWorldY));
+		explosions.add(new Explosion(pWorldX, pWorldY, "big"));
 	}
 }

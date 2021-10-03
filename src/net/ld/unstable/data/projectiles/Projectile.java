@@ -35,6 +35,7 @@ public class Projectile extends PreAllocatedInstanceData {
 	public final Color color = new Color();
 	public float scale;
 
+	public boolean emitSmokeTrail;
 	public float baseWorldPositionX;
 	public float baseWorldPositionY;
 

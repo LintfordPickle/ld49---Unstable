@@ -41,16 +41,16 @@ public class BackgroundScreen extends Screen {
 		super.draw(pCore);
 
 		final var lUiStructureController = screenManager.UiStructureController();
-		final var lHeaderRect = lUiStructureController.menuTitleRectangle();
+		final var lHeaderRect = pCore.HUD().boundingRectangle();
 
-		final float lWidth = 571;
-		final float lHeight = 151;
+		final float lWidth = 960;
+		final float lHeight = 540;
 
 		final var ltextureBatch = rendererManager.uiTextureBatch();
 		final var lLogoColor = ColorConstants.getWhiteWithAlpha(1.f);
 
 		ltextureBatch.begin(pCore.HUD());
-		ltextureBatch.draw(mLogoTexture, 0, 0, lWidth, lHeight, -lWidth * .5f, lHeaderRect.top(), lWidth, lHeight, -0.01f, lLogoColor);
+		ltextureBatch.draw(mLogoTexture, 0, 0, lWidth, lHeight, -lWidth * .5f, lHeaderRect.top(), lWidth, lHeight, -0.9f, lLogoColor);
 		ltextureBatch.end();
 	}
 

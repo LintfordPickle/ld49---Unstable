@@ -1,13 +1,13 @@
 {
   "outputDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\spritesheets\\spritesheetExplosions.json",
-  "outputNameDataFilename": null,
+  "outputNameDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\src\\net\\ld\\unstable\\data\\textures\\ExplosionsTextureNames.java",
   "outputImageFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\textures\\textureExplosions.png",
   "workingDirectory": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\explosions",
   "spriteSheetName": "SPRITESHEET_",
   "textureName": "TEXTURE_",
   "exportDataFile": true,
   "exportTextureFile": true,
-  "exportNamesFile": false,
+  "exportNamesFile": true,
   "sortMode": "Area",
   "borderPadding": 0,
   "shapeOutlines": false,
@@ -27,7 +27,7 @@
   "animationItems": {
     "big": {
       "loopAnimation": true,
-      "frameDuration": 150,
+      "frameDuration": 100,
       "animationSprites": [
         "EXPLOSION_00",
         "EXPLOSION_01",
@@ -36,6 +36,19 @@
         "EXPLOSION_04",
         "EXPLOSION_05",
         "EXPLOSION_06"
+      ]
+    },
+    "smoke": {
+      "loopAnimation": true,
+      "frameDuration": 100,
+      "animationSprites": [
+        "SMOKE_00",
+        "SMOKE_01",
+        "SMOKE_02",
+        "SMOKE_03",
+        "SMOKE_04",
+        "SMOKE_05",
+        "SMOKE_06"
       ]
     }
   }

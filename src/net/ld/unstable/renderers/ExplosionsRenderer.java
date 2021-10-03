@@ -82,7 +82,9 @@ public class ExplosionsRenderer extends BaseRenderer implements AnimatedSpriteLi
 		boolean moreExplosions = mExplosionsController.hasUnprocessedExplosions();
 		while (moreExplosions && counter < 4) {
 			final var lExplosion = mExplosionsController.getExplosionToProcess();
-			final var lNewExplosion = mExplosionsSpritesheet.getSpriteInstance("big");
+			if(lExplosion.animName == null) continue;
+			final var lNewExplosion = mExplosionsSpritesheet.getSpriteInstance(lExplosion.animName);
+			
 			lNewExplosion.animatedSpriteListender(this);
 			lNewExplosion.x(lExplosion.worldX);
 			lNewExplosion.y(lExplosion.worldY);

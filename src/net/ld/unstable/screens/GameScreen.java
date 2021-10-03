@@ -17,6 +17,7 @@ import net.ld.unstable.data.projectiles.modifiers.BubblePhysicsModifier;
 import net.ld.unstable.data.waves.WaveManager;
 import net.ld.unstable.renderers.ExplosionsRenderer;
 import net.ld.unstable.renderers.HudRenderer;
+import net.ld.unstable.renderers.LevelBackgroundRenderer;
 import net.ld.unstable.renderers.LevelRenderer;
 import net.ld.unstable.renderers.MobRenderer;
 import net.ld.unstable.renderers.ProjectilesRenderer;
@@ -57,6 +58,7 @@ public class GameScreen extends BaseGameScreen {
 	// Renderers
 	private MobRenderer mMobRenderer;
 	private LevelRenderer mLevelRenderer;
+	private LevelBackgroundRenderer mLevelBackgroundRenderer;
 	private ParticleFrameworkRenderer mParticleFrameworkRenderer;
 	private ProjectilesRenderer mProjectilesRenderer;
 	private HudRenderer mHudRenderer;
@@ -206,6 +208,10 @@ public class GameScreen extends BaseGameScreen {
 		// FIXME: the call order is messed up here because of the way the SpriteGraphs depend on SpriteSheets etc.
 
 		final var lCore = screenManager.core();
+
+		mLevelBackgroundRenderer = new LevelBackgroundRenderer(rendererManager, entityGroupID());
+		mLevelBackgroundRenderer.initialize(lCore);
+		mLevelBackgroundRenderer.loadGLContent(pResourceManager);
 
 		mMobRenderer = new MobRenderer(rendererManager, entityGroupID());
 		mMobRenderer.initialize(lCore);

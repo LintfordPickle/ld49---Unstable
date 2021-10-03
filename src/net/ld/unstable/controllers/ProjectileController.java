@@ -153,6 +153,10 @@ public class ProjectileController extends BaseController {
 			if (lProjectile.isAssigned() == false)
 				continue;
 
+			if (lProjectile.emitSmokeTrail && (lProjectile.timeSinceStart % 3) == 0) {
+				mExplosionController.addMinorExplosion(lProjectile.baseWorldPositionX, lProjectile.baseWorldPositionY);
+			}
+
 			lProjectile.timeSinceStart += pCore.gameTime().elapsedTimeMilli();
 			if (lProjectile.timeSinceStart > lProjectile.lifeTime()) {
 				lProjectile.reset();
@@ -188,8 +192,7 @@ public class ProjectileController extends BaseController {
 			// collisions only count afer .05 second of life
 			if (lProjectile.timeSinceStart > 1500) {
 				if (checkProjectileCollisionsWithSubmarines(-1, lProjectile.worldPositionX, lProjectile.worldPositionY, lBarrelRadius, 25)) {
-					// TODO: Minor Explosion
-					mExplosionController.addMinorExplosion(lProjectile.worldPositionX, lProjectile.worldPositionY);
+					mExplosionController.addMajorExplosion(lProjectile.worldPositionX, lProjectile.worldPositionY);
 
 					lProjectile.reset();
 					continue;
@@ -254,7 +257,8 @@ public class ProjectileController extends BaseController {
 		final var lMissile = mProjectileManager.spawnParticle(pStartX + 25.f, pStartY + lOffsetY - 30.f, pVX, pVY, 2000.0f);
 		lMissile.setupSourceTexture(48, 16, 46, 10);
 		lMissile.shooterUid = pShooterUid;
-
+		lMissile.emitSmokeTrail = false;
+		mExplosionController.addMinorExplosion(pStartX + 25.f, pStartY + lOffsetY - 30.f);
 		missileShot.addProjectile(lMissile);
 	}
 
@@ -263,6 +267,8 @@ public class ProjectileController extends BaseController {
 		final var lTorpedo = mProjectileManager.spawnParticle(pStartX + 25.f, pStartY + lOffsetY + 30.f, pVX, pVY, 2000.0f);
 		lTorpedo.setupSourceTexture(0, 16, 46, 10);
 		lTorpedo.shooterUid = pShooterUid;
+		lTorpedo.emitSmokeTrail = true;
+		mExplosionController.addMinorExplosion(pStartX, pStartY + lOffsetY);
 
 		strightShot.addProjectile(lTorpedo);
 	}
@@ -272,7 +278,7 @@ public class ProjectileController extends BaseController {
 		final var lTorpedo = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, pVX, pVY, 8000.0f);
 		lTorpedo.setupSourceTexture(32, 0, 16, 16);
 		lTorpedo.shooterUid = pShooterUid;
-
+		lTorpedo.emitSmokeTrail = false;
 		straightShotEnemy.addProjectile(lTorpedo);
 	}
 

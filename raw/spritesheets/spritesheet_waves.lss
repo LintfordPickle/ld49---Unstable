@@ -1,6 +1,6 @@
 {
   "outputDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\spritesheets\\spritesheetOcean.json",
-  "outputNameDataFilename": null,
+  "outputNameDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\src\\net\\ld\\unstable\\data\\textures\\WavesTextureNames.java",
   "outputImageFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\textures\\textureOcean.png",
   "workingDirectory": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\waves",
   "spriteSheetName": "SPRITESHEET_OCEAN",
@@ -25,7 +25,7 @@
     "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\waves\\*.*"
   ],
   "animationItems": {
-    "waves": {
+    "waves_big": {
       "loopAnimation": true,
       "frameDuration": 150,
       "animationSprites": [
@@ -37,6 +37,20 @@
         "WAVES_05",
         "WAVES_06",
         "WAVES_07"
+      ]
+    },
+    "waves_small": {
+      "loopAnimation": true,
+      "frameDuration": 300,
+      "animationSprites": [
+        "WAVES_SMAL_00",
+        "WAVES_SMAL_01",
+        "WAVES_SMAL_02",
+        "WAVES_SMAL_03",
+        "WAVES_SMAL_04",
+        "WAVES_SMAL_05",
+        "WAVES_SMAL_06",
+        "WAVES_SMAL_07"
       ]
     }
   }

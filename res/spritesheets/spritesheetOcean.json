@@ -10,6 +10,14 @@
     "WAVES_05",
     "WAVES_06",
     "WAVES_07",
+    "WAVES_SMAL_00",
+    "WAVES_SMAL_01",
+    "WAVES_SMAL_02",
+    "WAVES_SMAL_03",
+    "WAVES_SMAL_04",
+    "WAVES_SMAL_05",
+    "WAVES_SMAL_06",
+    "WAVES_SMAL_07",
     "UNDERWATER"
   ],
   "frameMapObjectArray": [
@@ -112,6 +120,102 @@
     {
       "name": null,
       "x": 0,
+      "y": 288,
+      "w": 256,
+      "h": 48,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 288,
+      "w": 256,
+      "h": 48,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 0,
+      "y": 336,
+      "w": 256,
+      "h": 48,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 336,
+      "w": 256,
+      "h": 48,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 0,
+      "y": 384,
+      "w": 256,
+      "h": 48,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 384,
+      "w": 256,
+      "h": 48,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 0,
+      "y": 432,
+      "w": 256,
+      "h": 48,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 256,
+      "y": 432,
+      "w": 256,
+      "h": 48,
+      "pivotX": 0,
+      "pivotY": 0,
+      "scaleX": 1.0,
+      "scaleY": 1.0,
+      "anchorPoints": []
+    },
+    {
+      "name": null,
+      "x": 0,
       "y": 0,
       "w": 32,
       "h": 32,
@@ -123,10 +227,10 @@
     }
   ],
   "spriteMap": {
-    "waves": {
-      "animationName": "waves",
+    "waves_big": {
+      "animationName": "waves_big",
       "loopAnimation": true,
-      "frameDuration": 150,
+      "frameDuration": 100,
       "animationSpriteIndices": [
         0,
         1,
@@ -136,6 +240,21 @@
         5,
         6,
         7
+      ]
+    },
+    "waves_small": {
+      "animationName": "waves_small",
+      "loopAnimation": true,
+      "frameDuration": 150,
+      "animationSpriteIndices": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
       ]
     }
   }
