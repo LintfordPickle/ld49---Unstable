@@ -1,10 +1,10 @@
 {
-  "outputDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\spritesheets\\spritesheetBoats.json",
+  "outputDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\spritesheets\\spritesheetTurrets.json",
   "outputNameDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\src\\net\\ld\\unstable\\data\\Textures\\MobTextureNames.java",
-  "outputImageFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\textures\\textureBoats.png",
+  "outputImageFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\textures\\textureTurrets.png",
   "workingDirectory": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs",
-  "spriteSheetName": "SPRITESHEET_BOATS",
-  "textureName": "TEXTURE_BOATS",
+  "spriteSheetName": "SPRITESHEET_TURRETS",
+  "textureName": "TEXTURE_TURRETS",
   "exportDataFile": true,
   "exportTextureFile": true,
   "exportNamesFile": true,
@@ -15,21 +15,21 @@
   "trim": false,
   "allowRotations": false,
   "spritePadding": 0,
-  "textureWidthMax": 256,
-  "textureWidthActual": 255,
-  "textureHeightMax": 256,
-  "textureHeightActual": 256,
+  "textureWidthMax": 128,
+  "textureWidthActual": 128,
+  "textureHeightMax": 128,
+  "textureHeightActual": 128,
   "forcePoTTextures": true,
   "autoSizeTexture": false,
   "itemFilenames": [
-    "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs\\boat\\*.*"
+    "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs\\turret\\*.*"
   ],
   "animationItems": {
     "normal": {
       "loopAnimation": true,
       "frameDuration": 150,
       "animationSprites": [
-        "NORMAL"
+        "NORMAL_00"
       ]
     }
   }
