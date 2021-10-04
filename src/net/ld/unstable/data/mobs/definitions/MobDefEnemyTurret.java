@@ -27,7 +27,9 @@ public class MobDefEnemyTurret extends MobDefinition {
 		shootsMissiles = false;
 		shootsBarrels = true;
 
-		maxHealth = 20;
+		emitsBubbles = false;
+		
+		maxHealth = 30;
 	}
 
 	// --------------------------------------

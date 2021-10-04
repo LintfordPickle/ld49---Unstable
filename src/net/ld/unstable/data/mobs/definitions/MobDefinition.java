@@ -18,6 +18,9 @@ public abstract class MobDefinition {
 	public boolean shootsTorpedoes;
 	public boolean shootsMissiles;
 	public boolean shootsBarrels;
+	
+	public boolean emitsBubbles;
+	public boolean underwaterCraft;
 
 	public int maxCoolant;
 	public int maxHealth;
@@ -29,6 +32,7 @@ public abstract class MobDefinition {
 	public MobDefinition(String pMobDefinitionName) {
 		mobDefinitionName = pMobDefinitionName;
 		
+		underwaterCraft = true;
 		largeCollisionEntity = true;
 		collisionRadius = 25.f;
 	}

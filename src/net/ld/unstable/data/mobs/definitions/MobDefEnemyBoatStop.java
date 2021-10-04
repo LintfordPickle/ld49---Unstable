@@ -26,8 +26,12 @@ public class MobDefEnemyBoatStop extends MobDefinition {
 		shootsTorpedoes = false;
 		shootsMissiles = false;
 		shootsBarrels = true;
-
-		maxHealth = 20;
+		
+		underwaterCraft = false;
+		
+		emitsBubbles = false;
+		
+		maxHealth = 10;
 	}
 
 	// --------------------------------------

@@ -129,19 +129,28 @@ public class MobController extends BaseController {
 				lMobInstance.kill();
 				lMobs.remove(lMobInstance);
 
-				mParticleFrameworkController.particleFrameworkData().emitterManager().returnPooledItem(lMobInstance.bubbleEmitter);
-				lMobInstance.bubbleEmitter = null;
+				if (lMobInstance.bubbleEmitter != null) {
+					mParticleFrameworkController.particleFrameworkData().emitterManager().returnPooledItem(lMobInstance.bubbleEmitter);
+					lMobInstance.bubbleEmitter = null;
+				}
 				continue;
+
 			}
 
 			if (lMobInstance.health < 0.f) {
+				if (lMobInstance.bubbleEmitter != null) {
+					mParticleFrameworkController.particleFrameworkData().emitterManager().returnPooledItem(lMobInstance.bubbleEmitter);
+					lMobInstance.bubbleEmitter = null;
+				}
+
+				if (lMobInstance.mobDefinition.underwaterCraft) {
+					mExplosionController.addWaterExplosion(lMobInstance.baseWorldPositionX, lMobInstance.baseWorldPositionY);
+				} else {
+					mExplosionController.addMajorExplosion(lMobInstance.baseWorldPositionX, lMobInstance.baseWorldPositionY);
+				}
+
 				lMobInstance.kill();
 				lMobs.remove(lMobInstance);
-
-				mParticleFrameworkController.particleFrameworkData().emitterManager().returnPooledItem(lMobInstance.bubbleEmitter);
-				lMobInstance.bubbleEmitter = null;
-
-				// TODO: explosions
 
 				continue;
 			}
@@ -279,8 +288,10 @@ public class MobController extends BaseController {
 		}
 
 		{
-			final var lBubbleEmitter = mParticleFrameworkController.particleFrameworkData().emitterManager().getNewParticleEmitterInstanceByDefName("EMITTER_BUBBLE");
-			lNewMobInstance.bubbleEmitter = lBubbleEmitter;
+			if (lNewMobDefinition.emitsBubbles) {
+				final var lBubbleEmitter = mParticleFrameworkController.particleFrameworkData().emitterManager().getNewParticleEmitterInstanceByDefName("EMITTER_BUBBLE");
+				lNewMobInstance.bubbleEmitter = lBubbleEmitter;
+			}
 		}
 
 		return lNewMobInstance;

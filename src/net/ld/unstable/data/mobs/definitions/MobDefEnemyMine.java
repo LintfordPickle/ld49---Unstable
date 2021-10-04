@@ -28,6 +28,8 @@ public class MobDefEnemyMine extends MobDefinition {
 		shootsTorpedoes = true;
 		shootsMissiles = false;
 		shootsBarrels = true;
+		
+		emitsBubbles = false;
 
 		maxHealth = 20;
 	}

@@ -89,6 +89,7 @@ public class ShmupMob implements AnimatedSpriteGraphListener {
 
 	public boolean spriteGraphDirty;
 	private transient SpriteGraphInstance mSpriteGraphInstance;
+
 	public transient ParticleEmitterInstance bubbleEmitter;
 
 	public MobDefinition mobDefinition;

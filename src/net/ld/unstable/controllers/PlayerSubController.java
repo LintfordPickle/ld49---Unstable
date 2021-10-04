@@ -136,6 +136,15 @@ public class PlayerSubController extends BaseController {
 		if (lPlayerSubmarine.worldPositionY + lTolerance > lBottomOfScreen) {
 			mAcceleration.y -= 0.5f;
 		}
+		
+		// TEST
+		final float cos = (float)Math.cos(lPlayerSubmarine.timeSinceStart * 0.001f);
+		final float sin = (float)Math.sin(lPlayerSubmarine.timeSinceStart * 0.001f);
+		
+		mAcceleration.x += cos * .02f;
+		mAcceleration.y += sin * .02f;
+		
+		// TEST
 
 		mVelocity.x += mAcceleration.x;
 		mVelocity.y += mAcceleration.y;

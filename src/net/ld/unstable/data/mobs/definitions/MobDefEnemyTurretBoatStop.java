@@ -26,7 +26,9 @@ public class MobDefEnemyTurretBoatStop extends MobDefinition {
 		shootsTorpedoes = true;
 		shootsMissiles = false;
 		shootsBarrels = true;
-
+		
+		underwaterCraft = false;
+		
 		maxHealth = 20;
 	}
 

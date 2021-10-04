@@ -23,6 +23,8 @@ public class MobDefPlayerSubmarine extends MobDefinition {
 
 		SpritegraphName = "SPRITEGRAPH_SUBMARINE";
 
+		emitsBubbles = true;
+		
 		maxHealth = 100;
 		maxCoolant = 100;
 	}

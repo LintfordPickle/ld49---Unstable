@@ -12,19 +12,19 @@ If the --coolant-- reaches cricital levels, you'll almost certinaly die. So don'
 In extreme emergencies, you can unleash a wave of energy to clear a path, but this will cause the reactor to go critical.
 
 ## TODOS
-
+ * Actually make a long level
  * Levels
-    * Scripted spawns
-    * scrolling background
- * Win / Lose Conditions
- * Hud
-    * HP
-    * Coolant
+    * ~~Scripted spawns~~
+    * ~~scrolling background~~
+ * ~~Win / Lose Conditions~~
+ * ~~Hud~~
+    * ~~HP~~
+    * ~~Coolant~~
  * Title Screen
- * Add explosions
+ * ~~Add explosions~~
  * Add screenshake
- * Add 'water' explosions and trails
- * Bubbles only when *moving* through water
+ * ~~Add 'water' explosions and trails~~
+ * ~~Bubbles only when *moving* through water~~
  * Score
  * ~~Setup a player submarine (AABB)~~
  * ~~Get player movement working~~

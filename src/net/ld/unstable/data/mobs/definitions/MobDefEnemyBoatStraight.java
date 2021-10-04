@@ -27,7 +27,11 @@ public class MobDefEnemyBoatStraight extends MobDefinition {
 		shootsMissiles = false;
 		shootsBarrels = true;
 
-		maxHealth = 20;
+		underwaterCraft = false;
+
+		emitsBubbles = false;
+
+		maxHealth = 10;
 	}
 
 	// --------------------------------------

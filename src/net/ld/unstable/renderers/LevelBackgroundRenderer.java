@@ -90,12 +90,12 @@ public class LevelBackgroundRenderer extends BaseRenderer {
 		final float lSeaLevel = mLevelController.seaLevel();
 		mWaveSpriteInstance.update(pCore);
 
-		final float lWavesWidth = mWaveSpriteInstance.width();
-		final float lWavesHeight = mWaveSpriteInstance.height();
+		final float lWavesWidth = mWaveSpriteInstance.width() * 1.5f;
+		final float lWavesHeight = mWaveSpriteInstance.height() * 1.5f;
 
 		lSpriteBatch.begin(pCore.gameCamera());
 
-		final var lWaterColor = ColorConstants.getWhiteWithAlpha(.3f);
+		final var lWaterColor = ColorConstants.getWhiteWithAlpha(1f);
 
 		final float lLeftEdge = lCameraRect.left() - lWavesWidth;
 		for (int t = (int) lLeftEdge; t < lLeftEdge + 100 + lCameraRect.w() + lWavesWidth * 2; t += (int) lWavesWidth) {

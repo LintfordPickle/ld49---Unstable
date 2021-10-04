@@ -24,7 +24,6 @@ import net.lintford.library.controllers.core.particles.ParticleFrameworkControll
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.core.particles.particlesystems.ParticleSystemInstance;
-import net.lintford.library.core.particles.particlesystems.modifiers.ParticlePhysicsModifier;
 
 public class ProjectileController extends BaseController {
 
@@ -46,12 +45,12 @@ public class ProjectileController extends BaseController {
 	// Variables
 	// --------------------------------------
 
+	private LevelController mLevelController;
 	private MobController mMobController;
 	private ProjectileManager mProjectileManager;
 	private ParticleFrameworkController mParticleFrameworkController;
 	private ExplosionsController mExplosionController;
 
-	private ParticleSystemInstance mBubbleParticleSystem;
 	private ParticleSystemInstance mBarrels;
 
 	private final List<Projectile> projectileUpdateList = new ArrayList<>();
@@ -62,6 +61,8 @@ public class ProjectileController extends BaseController {
 	EnemyBulletStraightShooter straightShotEnemy;
 	SinShooter sinShot;
 	CosShooter cosShot;
+
+	private float mSeaLevel;
 
 	// --------------------------------------
 	// Properties
@@ -96,11 +97,10 @@ public class ProjectileController extends BaseController {
 		mParticleFrameworkController = (ParticleFrameworkController) lControllerManager.getControllerByNameRequired(ParticleFrameworkController.CONTROLLER_NAME, entityGroupID());
 		mMobController = (MobController) lControllerManager.getControllerByNameRequired(MobController.CONTROLLER_NAME, entityGroupID());
 		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
+		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
+		mSeaLevel = mLevelController.seaLevel();
 
-		mBubbleParticleSystem = mParticleFrameworkController.particleFrameworkData().particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BUBBLE_SMALL");
 		mBarrels = mParticleFrameworkController.particleFrameworkData().particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BARREL");
-
-		mBubbleParticleSystem.addModifier(new ParticlePhysicsModifier());
 		mBarrels.addModifier(new BarrelPhysicsModifier());
 
 		var lLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
@@ -153,6 +153,13 @@ public class ProjectileController extends BaseController {
 			if (lProjectile.isAssigned() == false)
 				continue;
 
+			boolean tempFlag = lProjectile.underWater;
+			lProjectile.underWater = lProjectile.baseWorldPositionY > mSeaLevel;
+
+			if (tempFlag != lProjectile.underWater) {
+				mExplosionController.addSurfaceExplosion(lProjectile.baseWorldPositionX, lProjectile.baseWorldPositionY);
+			}
+
 			if (lProjectile.emitSmokeTrail && (lProjectile.timeSinceStart % 3) == 0) {
 				mExplosionController.addMinorExplosion(lProjectile.baseWorldPositionX, lProjectile.baseWorldPositionY);
 			}
@@ -161,10 +168,6 @@ public class ProjectileController extends BaseController {
 			if (lProjectile.timeSinceStart > lProjectile.lifeTime()) {
 				lProjectile.reset();
 				continue;
-			}
-
-			if (RandomNumbers.getRandomChance(25f)) {
-				mBubbleParticleSystem.spawnParticle(lProjectile.worldPositionX, lProjectile.worldPositionY, 0.f, 0.f);
 			}
 		}
 	}
@@ -241,6 +244,7 @@ public class ProjectileController extends BaseController {
 					return true;
 
 				lMobInstance.dealDamage(pDamage);
+
 				return true;
 			}
 		}
@@ -258,6 +262,7 @@ public class ProjectileController extends BaseController {
 		lMissile.setupSourceTexture(48, 16, 46, 10);
 		lMissile.shooterUid = pShooterUid;
 		lMissile.emitSmokeTrail = false;
+		lMissile.underWater = true;
 		mExplosionController.addMinorExplosion(pStartX + 25.f, pStartY + lOffsetY - 30.f);
 		missileShot.addProjectile(lMissile);
 	}
@@ -269,7 +274,7 @@ public class ProjectileController extends BaseController {
 		lTorpedo.shooterUid = pShooterUid;
 		lTorpedo.emitSmokeTrail = true;
 		mExplosionController.addMinorExplosion(pStartX, pStartY + lOffsetY);
-
+		lTorpedo.underWater = true;
 		strightShot.addProjectile(lTorpedo);
 	}
 
@@ -279,6 +284,7 @@ public class ProjectileController extends BaseController {
 		lTorpedo.setupSourceTexture(32, 0, 16, 16);
 		lTorpedo.shooterUid = pShooterUid;
 		lTorpedo.emitSmokeTrail = false;
+		lTorpedo.underWater = true;
 		straightShotEnemy.addProjectile(lTorpedo);
 	}
 

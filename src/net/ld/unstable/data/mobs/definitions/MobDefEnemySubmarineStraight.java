@@ -26,8 +26,10 @@ public class MobDefEnemySubmarineStraight extends MobDefinition {
 
 		shootsTorpedoes = true;
 		shootsBarrels = false;
+		
+		emitsBubbles = true;
 
-		maxHealth = 20;
+		maxHealth = 10;
 	}
 
 	// --------------------------------------
