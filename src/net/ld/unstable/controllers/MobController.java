@@ -15,7 +15,6 @@ import net.ld.unstable.data.mobs.movementpatterns.MovingDefSurfaceMoverWithStop;
 import net.ld.unstable.data.mobs.movementpatterns.MovingDefTurret;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
-import net.lintford.library.controllers.core.particles.ParticleFrameworkController;
 import net.lintford.library.controllers.geometry.SpriteGraphController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.debug.Debug;
@@ -41,7 +40,6 @@ public class MobController extends BaseController {
 
 	private ExplosionsController mExplosionController;
 	private ProjectileController mProjectileController;
-	private ParticleFrameworkController mParticleFrameworkController;
 	private SpriteGraphController mSpriteGraphController;
 	private LevelController mLevelController;
 	private final MobManager mMobManager;
@@ -81,7 +79,6 @@ public class MobController extends BaseController {
 		mSpriteGraphController = (SpriteGraphController) lControllerManager.getControllerByNameRequired(SpriteGraphController.CONTROLLER_NAME, entityGroupID());
 		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
 		mProjectileController = (ProjectileController) lControllerManager.getControllerByNameRequired(ProjectileController.CONTROLLER_NAME, entityGroupID());
-		mParticleFrameworkController = (ParticleFrameworkController) lControllerManager.getControllerByNameRequired(ParticleFrameworkController.CONTROLLER_NAME, entityGroupID());
 		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
 
 		final float lFloorLevel = pCore.gameCamera().boundingRectangle().bottom();
@@ -128,21 +125,11 @@ public class MobController extends BaseController {
 
 				lMobInstance.kill();
 				lMobs.remove(lMobInstance);
-
-				if (lMobInstance.bubbleEmitter != null) {
-					mParticleFrameworkController.particleFrameworkData().emitterManager().returnPooledItem(lMobInstance.bubbleEmitter);
-					lMobInstance.bubbleEmitter = null;
-				}
 				continue;
 
 			}
 
 			if (lMobInstance.health < 0.f) {
-				if (lMobInstance.bubbleEmitter != null) {
-					mParticleFrameworkController.particleFrameworkData().emitterManager().returnPooledItem(lMobInstance.bubbleEmitter);
-					lMobInstance.bubbleEmitter = null;
-				}
-
 				if (lMobInstance.mobDefinition.underwaterCraft) {
 					mExplosionController.addWaterExplosion(lMobInstance.baseWorldPositionX, lMobInstance.baseWorldPositionY);
 				} else {
@@ -237,12 +224,6 @@ public class MobController extends BaseController {
 		lSubmarineSpriteGraph.mFlipHorizontal = pSubmarine.isPlayerControlled == false;
 		lSubmarineSpriteGraph.update(pCore);
 		pSubmarine.spriteGraphDirty = false;
-
-		final var lEmitter = pSubmarine.bubbleEmitter;
-		if (lEmitter != null) {
-			lEmitter.worldPositionX = pSubmarine.worldPositionX - 50.f;
-			lEmitter.worldPositionY = pSubmarine.worldPositionY;
-		}
 	}
 
 	// --------------------------------------
@@ -285,13 +266,6 @@ public class MobController extends BaseController {
 		if (pPlayerControlled) {
 			lNewMobInstance.isPlayerControlled = true;
 			mMobManager.playerSubmarine = lNewMobInstance;
-		}
-
-		{
-			if (lNewMobDefinition.emitsBubbles) {
-				final var lBubbleEmitter = mParticleFrameworkController.particleFrameworkData().emitterManager().getNewParticleEmitterInstanceByDefName("EMITTER_BUBBLE");
-				lNewMobInstance.bubbleEmitter = lBubbleEmitter;
-			}
 		}
 
 		return lNewMobInstance;

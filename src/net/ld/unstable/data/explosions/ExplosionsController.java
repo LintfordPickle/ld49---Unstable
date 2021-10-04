@@ -61,7 +61,11 @@ public class ExplosionsController extends BaseController {
 		explosions.add(new Explosion(pWorldX - 64.f, pWorldY - 64.f, "surface"));
 	}
 
-	public void addMinorExplosion(float pWorldX, float pWorldY) {
+	public void addSmallSmokeParticles(float pWorldX, float pWorldY) {
+		explosions.add(new Explosion(pWorldX, pWorldY, "smoke_small"));
+	}
+	
+	public void addSmokeParticles(float pWorldX, float pWorldY) {
 		explosions.add(new Explosion(pWorldX, pWorldY, "smoke"));
 	}
 

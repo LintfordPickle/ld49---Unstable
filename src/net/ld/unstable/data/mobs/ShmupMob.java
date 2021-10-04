@@ -7,7 +7,6 @@ import net.lintford.library.core.geometry.spritegraph.AnimatedSpriteGraphListene
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 import net.lintford.library.core.graphics.sprites.SpriteDefinition;
 import net.lintford.library.core.maths.Vector2f;
-import net.lintford.library.core.particles.particleemitters.ParticleEmitterInstance;
 
 public class ShmupMob implements AnimatedSpriteGraphListener {
 
@@ -89,8 +88,6 @@ public class ShmupMob implements AnimatedSpriteGraphListener {
 
 	public boolean spriteGraphDirty;
 	private transient SpriteGraphInstance mSpriteGraphInstance;
-
-	public transient ParticleEmitterInstance bubbleEmitter;
 
 	public MobDefinition mobDefinition;
 

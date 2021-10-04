@@ -95,7 +95,7 @@ public class ProjectilesRenderer extends BaseRenderer {
 			lTextureBatch.end();
 
 			if (ConstantsGame.DEBUG_DRAW_PROJ_COLLIDERS) {
-				Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lDstX, lDstY, 10.0f);
+				Debug.debugManager().drawers().drawCircleImmediate(pCore.gameCamera(), lDstX, lDstY, lProjectile.colRadius);
 			}
 		}
 	}

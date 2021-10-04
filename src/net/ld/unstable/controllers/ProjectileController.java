@@ -161,7 +161,10 @@ public class ProjectileController extends BaseController {
 			}
 
 			if (lProjectile.emitSmokeTrail && (lProjectile.timeSinceStart % 3) == 0) {
-				mExplosionController.addMinorExplosion(lProjectile.baseWorldPositionX, lProjectile.baseWorldPositionY);
+				if (RandomNumbers.getRandomChance(75))
+					mExplosionController.addSmallSmokeParticles(lProjectile.baseWorldPositionX - 25, lProjectile.baseWorldPositionY - 15);
+				else
+					mExplosionController.addSmokeParticles(lProjectile.baseWorldPositionX - 25, lProjectile.baseWorldPositionY - 15);
 			}
 
 			lProjectile.timeSinceStart += pCore.gameTime().elapsedTimeMilli();
@@ -205,8 +208,6 @@ public class ProjectileController extends BaseController {
 	}
 
 	private void checkCollisionsWithProjectiles(LintfordCore pCore) {
-		final float lTorpedoRadius = 10.f;
-
 		final var lProjectiles = mProjectileManager.projectiles();
 		final int lNumProjectiles = lProjectiles.size();
 		for (int i = 0; i < lNumProjectiles; i++) {
@@ -214,14 +215,16 @@ public class ProjectileController extends BaseController {
 				continue;
 			final var lProjectile = lProjectiles.get(i);
 
-			if (lProjectile.isAssigned() == false)
+			if (lProjectile.isAssigned() == false || lProjectile.colRadius <= 0.f)
 				continue;
 
 			// collisions only count afer .05 second of life
 			if (lProjectile.timeSinceStart > 50) {
-				if (checkProjectileCollisionsWithSubmarines(lProjectile.shooterUid, lProjectile.worldPositionX, lProjectile.worldPositionY, lTorpedoRadius, 5)) {
+				if (checkProjectileCollisionsWithSubmarines(lProjectile.shooterUid, lProjectile.worldPositionX, lProjectile.worldPositionY, lProjectile.colRadius, 5)) {
 					lProjectile.reset();
-					// TODO: Minor Explosion
+
+					mExplosionController.addSmokeParticles(lProjectile.baseWorldPositionX, lProjectile.baseWorldPositionY);
+
 					continue;
 				}
 			}
@@ -244,7 +247,6 @@ public class ProjectileController extends BaseController {
 					return true;
 
 				lMobInstance.dealDamage(pDamage);
-
 				return true;
 			}
 		}
@@ -263,29 +265,32 @@ public class ProjectileController extends BaseController {
 		lMissile.shooterUid = pShooterUid;
 		lMissile.emitSmokeTrail = false;
 		lMissile.underWater = true;
-		mExplosionController.addMinorExplosion(pStartX + 25.f, pStartY + lOffsetY - 30.f);
+		lMissile.colRadius = 15.f;
+		mExplosionController.addSmokeParticles(pStartX + 25.f, pStartY + lOffsetY - 30.f);
 		missileShot.addProjectile(lMissile);
 	}
 
 	public void shootTorpedo(int pShooterUid, float pStartX, float pStartY, float pVX, float pVY) {
 		final float lOffsetY = RandomNumbers.random(-4.0f, 4.0f);
 		final var lTorpedo = mProjectileManager.spawnParticle(pStartX + 25.f, pStartY + lOffsetY + 30.f, pVX, pVY, 2000.0f);
-		lTorpedo.setupSourceTexture(0, 16, 46, 10);
+		lTorpedo.setupSourceTexture(0, 59, 50, 18);
 		lTorpedo.shooterUid = pShooterUid;
 		lTorpedo.emitSmokeTrail = true;
-		mExplosionController.addMinorExplosion(pStartX, pStartY + lOffsetY);
+		mExplosionController.addSmokeParticles(pStartX, pStartY + lOffsetY);
 		lTorpedo.underWater = true;
+		lTorpedo.colRadius = 15.f;
 		strightShot.addProjectile(lTorpedo);
 	}
 
 	public void shootEnemyBullet(int pShooterUid, float pStartX, float pStartY, float pVX, float pVY) {
 		final float lOffsetY = RandomNumbers.random(-4.0f, 4.0f);
-		final var lTorpedo = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, pVX, pVY, 8000.0f);
-		lTorpedo.setupSourceTexture(32, 0, 16, 16);
-		lTorpedo.shooterUid = pShooterUid;
-		lTorpedo.emitSmokeTrail = false;
-		lTorpedo.underWater = true;
-		straightShotEnemy.addProjectile(lTorpedo);
+		final var lBullet = mProjectileManager.spawnParticle(pStartX, pStartY + lOffsetY, pVX, pVY, 8000.0f);
+		lBullet.setupSourceTexture(32, 0, 16, 16);
+		lBullet.shooterUid = pShooterUid;
+		lBullet.emitSmokeTrail = false;
+		lBullet.underWater = true;
+		lBullet.colRadius = 6;
+		straightShotEnemy.addProjectile(lBullet);
 	}
 
 	public void dropBarrel(int pShooterUid, float pStartX, float pStartY) {

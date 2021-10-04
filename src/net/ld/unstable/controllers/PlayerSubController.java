@@ -2,10 +2,12 @@ package net.ld.unstable.controllers;
 
 import org.lwjgl.glfw.GLFW;
 
+import net.ld.unstable.data.explosions.ExplosionsController;
 import net.ld.unstable.data.mobs.MobManager;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
+import net.lintford.library.core.maths.RandomNumbers;
 import net.lintford.library.core.maths.Vector2f;
 
 public class PlayerSubController extends BaseController {
@@ -20,6 +22,7 @@ public class PlayerSubController extends BaseController {
 	// Variables
 	// --------------------------------------
 
+	private ExplosionsController mExplosionController;
 	private ProjectileController mProjectileController;
 	private LevelController mLevelController;
 	private final MobManager mMobManager;
@@ -56,6 +59,7 @@ public class PlayerSubController extends BaseController {
 
 		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
 		mProjectileController = (ProjectileController) lControllerManager.getControllerByNameRequired(ProjectileController.CONTROLLER_NAME, entityGroupID());
+		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
 	}
 
 	@Override
@@ -131,20 +135,26 @@ public class PlayerSubController extends BaseController {
 		if (lPlayerSubmarine.worldPositionX - lTolerance < lWorldPositionX - pCore.gameCamera().boundingRectangle().w() * .5f) {
 			mAcceleration.x += 0.5f;
 		}
-		
+
 		final float lBottomOfScreen = pCore.gameCamera().boundingRectangle().bottom();
 		if (lPlayerSubmarine.worldPositionY + lTolerance > lBottomOfScreen) {
 			mAcceleration.y -= 0.5f;
 		}
-		
-		// TEST
-		final float cos = (float)Math.cos(lPlayerSubmarine.timeSinceStart * 0.001f);
-		final float sin = (float)Math.sin(lPlayerSubmarine.timeSinceStart * 0.001f);
-		
+
+		// Water bob
+		final float cos = (float) Math.cos(lPlayerSubmarine.timeSinceStart * 0.001f);
+		final float sin = (float) Math.sin(lPlayerSubmarine.timeSinceStart * 0.001f);
+
+		// smoke emitter
+		if (mAcceleration.x > 0 || mAcceleration.y > 0 && RandomNumbers.getRandomChance(5)) {
+			final float lOffsetX = RandomNumbers.random(0, 10.f);
+			final float lOffsetY = RandomNumbers.random(-10.f, 10.f);
+			
+			mExplosionController.addSmallSmokeParticles(lPlayerSubmarine.worldPositionX - 80 + lOffsetX, lPlayerSubmarine.worldPositionY + lOffsetY);
+		}
+
 		mAcceleration.x += cos * .02f;
 		mAcceleration.y += sin * .02f;
-		
-		// TEST
 
 		mVelocity.x += mAcceleration.x;
 		mVelocity.y += mAcceleration.y;

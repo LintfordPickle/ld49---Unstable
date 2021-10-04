@@ -23,6 +23,7 @@ public class Projectile extends PreAllocatedInstanceData {
 	private float mLifeTime;
 	public int shooterUid;
 
+	public float colRadius;
 	public float width;
 	public float height;
 	public float sx, sy, sw, sh; // The src tex rect
@@ -113,7 +114,7 @@ public class Projectile extends PreAllocatedInstanceData {
 		baseWorldPositionY = 0;
 		worldPositionX = 0;
 		worldPositionY = 0;
-
+		colRadius = 0;
 		odx = 0f;
 		ody = 0f;
 		dx = 0f;

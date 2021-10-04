@@ -112,8 +112,9 @@ public class ExplosionsRenderer extends BaseRenderer implements AnimatedSpriteLi
 		for (int i = 0; i < lNumAnimations; i++) {
 			final var lAnimInstance = animationsToUpdate2.get(i);
 
-			final float lDstW = lAnimInstance.width();
-			final float lDstH = lAnimInstance.height();
+			// Hack
+			final float lDstW = lAnimInstance.width() * 2.f;
+			final float lDstH = lAnimInstance.height() * 2.f;
 			final float lDstX = lAnimInstance.x() - lDstW * .5f;
 			final float lDstY = lAnimInstance.y() - lDstH * .5f;
 
