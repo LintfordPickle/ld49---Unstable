@@ -6,6 +6,7 @@ import net.ld.unstable.screens.BackgroundScreen;
 import net.ld.unstable.screens.GameScreen;
 import net.ld.unstable.screens.MainMenuScreen;
 import net.lintford.library.GameInfo;
+import net.lintford.library.controllers.core.MouseCursorController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.graphics.fonts.BitmapFontManager;
 import net.lintford.library.renderers.RendererManager;
@@ -60,6 +61,13 @@ public class BaseGame extends LintfordCore {
 	@Override
 	protected void onLoadGLContent() {
 		super.onLoadGLContent();
+		
+		var lMouseController = new MouseCursorController(mControllerManager, CORE_ENTITY_GROUP_ID);
+		lMouseController.initialize(this);
+		lMouseController.loadCursorFromFile("default", "res//cursors//cursorDefault.png", 0, 0);
+		lMouseController.setCursor("default");
+		
+		
 		mScreenManager.loadGLContent(mResourceManager);
 	}
 
