@@ -49,8 +49,8 @@ public class BackgroundScreen extends Screen {
 		final var lLogoColor = ColorConstants.getWhiteWithAlpha(1.f);
 
 		ltextureBatch.begin(pCore.HUD());
-		ltextureBatch.draw(mBackgroundTexture, 0, 0, mBackgroundTexture.getTextureWidth(), mBackgroundTexture.getTextureHeight(), -mBackgroundTexture.getTextureWidth() * .5f, -mBackgroundTexture.getTextureHeight() * .5f,
-				mBackgroundTexture.getTextureWidth(), mBackgroundTexture.getTextureHeight(), -0.9f, lLogoColor);
+		ltextureBatch.draw(mBackgroundTexture, 0, 0, mBackgroundTexture.getTextureWidth(), mBackgroundTexture.getTextureHeight(), -lHeaderRect.w() * .5f, -lHeaderRect.h() * .5f, lHeaderRect.w(), lHeaderRect.h(), -0.9f,
+				lLogoColor);
 		ltextureBatch.draw(mLogoTexture, 0, 0, lWidth, lHeight, -lWidth * .5f, lHeaderRect.top() + 15, lWidth, lHeight, -0.9f, lLogoColor);
 		ltextureBatch.end();
 

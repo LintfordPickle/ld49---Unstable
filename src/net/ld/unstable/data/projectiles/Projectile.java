@@ -24,6 +24,7 @@ public class Projectile extends PreAllocatedInstanceData {
 	public int shooterUid;
 
 	public float colRadius;
+	public int damage;
 	public float width;
 	public float height;
 	public float sx, sy, sw, sh; // The src tex rect
@@ -38,6 +39,8 @@ public class Projectile extends PreAllocatedInstanceData {
 	public boolean underWater;
 
 	public boolean emitSmokeTrail;
+	public boolean emitSurfacingParticles;
+
 	public float baseWorldPositionX;
 	public float baseWorldPositionY;
 
@@ -65,7 +68,6 @@ public class Projectile extends PreAllocatedInstanceData {
 
 	public Projectile() {
 		reset();
-
 	}
 
 	// --------------------------------------
@@ -106,6 +108,8 @@ public class Projectile extends PreAllocatedInstanceData {
 
 	public void reset() {
 		mIsFree = true;
+		emitSmokeTrail = false;
+		emitSurfacingParticles = false;
 		mLifeTime = 0;
 		timeSinceStart = 0;
 		scale = 1f;
@@ -119,5 +123,6 @@ public class Projectile extends PreAllocatedInstanceData {
 		ody = 0f;
 		dx = 0f;
 		dy = 0f;
+		damage = 0;
 	}
 }

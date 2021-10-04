@@ -3,6 +3,7 @@ package net.ld.unstable.data.explosions;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ld.unstable.controllers.SoundFxController;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
@@ -10,6 +11,8 @@ import net.lintford.library.core.LintfordCore;
 public class ExplosionsController extends BaseController {
 
 	public static final String CONTROLLER_NAME = "Explosion Controller";
+
+	private SoundFxController mSoundFxController;
 
 	public class Explosion {
 		public Explosion(float pWorldX, float pWorldY, String pAnimName) {
@@ -47,8 +50,9 @@ public class ExplosionsController extends BaseController {
 
 	@Override
 	public void initialize(LintfordCore pCore) {
-		// TODO Auto-generated method stub
+		final var lControllerManager = pCore.controllerManager();
 
+		mSoundFxController = (SoundFxController) lControllerManager.getControllerByNameRequired(SoundFxController.CONTROLLER_NAME, LintfordCore.CORE_ENTITY_GROUP_ID);
 	}
 
 	@Override
@@ -64,12 +68,13 @@ public class ExplosionsController extends BaseController {
 	public void addSmallSmokeParticles(float pWorldX, float pWorldY) {
 		explosions.add(new Explosion(pWorldX, pWorldY, "smoke_small"));
 	}
-	
+
 	public void addSmokeParticles(float pWorldX, float pWorldY) {
 		explosions.add(new Explosion(pWorldX, pWorldY, "smoke"));
 	}
 
 	public void addMajorExplosion(float pWorldX, float pWorldY) {
+		mSoundFxController.playExplosionSound();
 		explosions.add(new Explosion(pWorldX, pWorldY, "big"));
 	}
 

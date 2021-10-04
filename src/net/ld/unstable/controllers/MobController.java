@@ -89,7 +89,7 @@ public class MobController extends BaseController {
 		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
 
-		final float lFloorLevel = pCore.gameCamera().boundingRectangle().bottom();
+		final float lFloorLevel = pCore.gameCamera().getPosition().y + ConstantsGame.WINDOW_HEIGHT * .5f;
 
 		turretMovementDef = new MovingDefTurret(lFloorLevel);
 		StraightPattern = new MovingDefStraightMover();

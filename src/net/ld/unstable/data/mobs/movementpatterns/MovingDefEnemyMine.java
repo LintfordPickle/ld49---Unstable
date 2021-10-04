@@ -19,6 +19,8 @@ public class MovingDefEnemyMine implements MovingDefBase {
 		if (pMob.worldPositionY < mSeaLevel) {
 			pMob.baseWorldPositionY = mSeaLevel;
 		}
+		
+		pMob.baseWorldPositionX -= 0.5f;
 
 		pMob.worldPositionX = pMob.baseWorldPositionX + ((float) Math.cos(pMob.timeSinceStart * lTimeMod)) * lMagnitude * .5f;
 		pMob.worldPositionY = pMob.baseWorldPositionY + ((float) Math.sin(pMob.timeSinceStart * lTimeMod)) * lMagnitude;

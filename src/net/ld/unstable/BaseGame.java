@@ -2,6 +2,7 @@ package net.ld.unstable;
 
 import org.lwjgl.opengl.GL11;
 
+import net.ld.unstable.controllers.SoundFxController;
 import net.ld.unstable.screens.BackgroundScreen;
 import net.ld.unstable.screens.GameScreen;
 import net.ld.unstable.screens.MainMenuScreen;
@@ -64,9 +65,14 @@ public class BaseGame extends LintfordCore {
 		
 		var lMouseController = new MouseCursorController(mControllerManager, CORE_ENTITY_GROUP_ID);
 		lMouseController.initialize(this);
-		lMouseController.loadCursorFromFile("default", "res//cursors//cursorDefault.png", 0, 0);
+		lMouseController.loadCursorFromFile("default", "res/cursors/cursorDefault.png", 0, 0);
 		lMouseController.setCursor("default");
 		
+		final var lAudioManager = mResourceManager.audioManager();
+		lAudioManager.loadAudioFilesFromMetafile("res/audio/_meta.json");
+		
+		var lSoundFxController = new SoundFxController(mControllerManager, mResourceManager.audioManager(), CORE_ENTITY_GROUP_ID);
+		lSoundFxController.initialize(this);
 		
 		mScreenManager.loadGLContent(mResourceManager);
 	}

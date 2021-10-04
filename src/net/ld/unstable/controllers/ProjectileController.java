@@ -45,6 +45,7 @@ public class ProjectileController extends BaseController {
 	// Variables
 	// --------------------------------------
 
+	private SoundFxController mSoundFxController;
 	private LevelController mLevelController;
 	private MobController mMobController;
 	private ProjectileManager mProjectileManager;
@@ -100,6 +101,7 @@ public class ProjectileController extends BaseController {
 		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
 		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
 		mScreenShakeController = (ScreenShakeController) lControllerManager.getControllerByNameRequired(ScreenShakeController.CONTROLLER_NAME, entityGroupID());
+		mSoundFxController = (SoundFxController) lControllerManager.getControllerByNameRequired(SoundFxController.CONTROLLER_NAME, LintfordCore.CORE_ENTITY_GROUP_ID);
 
 		mSeaLevel = mLevelController.seaLevel();
 
@@ -159,7 +161,8 @@ public class ProjectileController extends BaseController {
 			boolean tempFlag = lProjectile.underWater;
 			lProjectile.underWater = lProjectile.baseWorldPositionY > mSeaLevel;
 
-			if (tempFlag != lProjectile.underWater) {
+			if (tempFlag != lProjectile.underWater && lProjectile.emitSurfacingParticles) {
+				mSoundFxController.playSurfacingSound();
 				mExplosionController.addSurfaceExplosion(lProjectile.baseWorldPositionX + lProjectile.colRadius, lProjectile.baseWorldPositionY);
 			}
 
@@ -223,7 +226,7 @@ public class ProjectileController extends BaseController {
 
 			// collisions only count afer .05 second of life
 			if (lProjectile.timeSinceStart > 50) {
-				if (checkProjectileCollisionsWithSubmarines(lProjectile.shooterUid, lProjectile.worldPositionX, lProjectile.worldPositionY, lProjectile.colRadius, 5)) {
+				if (checkProjectileCollisionsWithSubmarines(lProjectile.shooterUid, lProjectile.worldPositionX, lProjectile.worldPositionY, lProjectile.colRadius, lProjectile.damage)) {
 					mExplosionController.addMajorExplosion(lProjectile.baseWorldPositionX, lProjectile.baseWorldPositionY);
 
 					lProjectile.reset();
@@ -267,13 +270,16 @@ public class ProjectileController extends BaseController {
 	public void shootMissile(int pShooterUid, float pStartX, float pStartY, float pVX, float pVY) {
 		final float lOffsetY = RandomNumbers.random(-4.0f, 4.0f);
 		final var lMissile = mProjectileManager.spawnParticle(pStartX + 25.f, pStartY + lOffsetY - 30.f, pVX, pVY, 2000.0f);
-		lMissile.setupSourceTexture(52,14,46,14);
+		lMissile.setupSourceTexture(52, 14, 46, 14);
 		lMissile.shooterUid = pShooterUid;
 		lMissile.emitSmokeTrail = true;
 		lMissile.underWater = true;
 		lMissile.colRadius = 15.f;
+		lMissile.damage = 10;
+		lMissile.emitSurfacingParticles = true;
 		mExplosionController.addSmokeParticles(pStartX + 25.f, pStartY + lOffsetY - 30.f);
 		missileShot.addProjectile(lMissile);
+		mSoundFxController.playShootingSound();
 	}
 
 	public void shootTorpedo(int pShooterUid, float pStartX, float pStartY, float pVX, float pVY) {
@@ -282,10 +288,13 @@ public class ProjectileController extends BaseController {
 		lTorpedo.setupSourceTexture(0, 59, 50, 18);
 		lTorpedo.shooterUid = pShooterUid;
 		lTorpedo.emitSmokeTrail = true;
-		mExplosionController.addSmokeParticles(pStartX, pStartY + lOffsetY);
 		lTorpedo.underWater = true;
 		lTorpedo.colRadius = 15.f;
+		lTorpedo.damage = 10;
+		lTorpedo.emitSurfacingParticles = true;
+		mExplosionController.addSmokeParticles(pStartX, pStartY + lOffsetY);
 		strightShot.addProjectile(lTorpedo);
+		mSoundFxController.playShootingSound();
 	}
 
 	public void shootEnemyBullet(int pShooterUid, float pStartX, float pStartY, float pVX, float pVY) {
@@ -296,12 +305,13 @@ public class ProjectileController extends BaseController {
 		lBullet.emitSmokeTrail = false;
 		lBullet.underWater = true;
 		lBullet.colRadius = 6;
+		lBullet.damage = 10;
+		lBullet.emitSurfacingParticles = false;
 		straightShotEnemy.addProjectile(lBullet);
 	}
 
 	public void dropBarrel(int pShooterUid, float pStartX, float pStartY) {
 		final float lOffsetY = RandomNumbers.random(-4.0f, 4.0f);
-
 		final float lSignum = RandomNumbers.randomSign();
 		final float lStr = RandomNumbers.random(-1.f, 1.f);
 		mBarrels.spawnParticle(pStartX, pStartY + lOffsetY, 50.f * lSignum + lStr, 60.f);

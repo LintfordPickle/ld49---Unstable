@@ -2,9 +2,32 @@
 	"AudioMetaDefinitions" : [
 	
 		{
-			"soundname":"",
-			"filepath":""
+			"soundname":"AUDIO_EXPLOSION_00",
+			"filepath":"res/audio/audioExplosion01.wav"
+		},
+		{
+			"soundname":"AUDIO_EXPLOSION_01",
+			"filepath":"res/audio/audioExplosion02.wav"
+		},
+		{
+			"soundname":"AUDIO_EXPLOSION_02",
+			"filepath":"res/audio/audioExplosion03.wav"
+		},
+		{
+			"soundname":"AUDIO_SURFACE_00",
+			"filepath":"res/audio/audioSurface00.wav"
+		},
+		{
+			"soundname":"AUDIO_SURFACE_01",
+			"filepath":"res/audio/audioSurface01.wav"
+		},
+		{
+			"soundname":"AUDIO_SHOOT_00",
+			"filepath":"res/audio/audioShoot00.wav"
+		},
+		{
+			"soundname":"AUDIO_SHOOT_01",
+			"filepath":"res/audio/audioShoot01.wav"
 		}
-		
 	]
 }
