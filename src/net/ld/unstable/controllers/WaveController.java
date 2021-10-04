@@ -5,9 +5,11 @@ import java.util.List;
 
 import net.ld.unstable.data.mobs.ShmupMob;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyMine;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemySubmarineStop;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemySubmarineStraight;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyTurret;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyTurretBoatStop;
+import net.ld.unstable.data.mobs.movementpatterns.MovingDefEnemySubStop;
 import net.ld.unstable.data.waves.IMobSpawner;
 import net.ld.unstable.data.waves.Wave;
 import net.ld.unstable.data.waves.WaveManager;
@@ -145,7 +147,18 @@ public class WaveController extends BaseController implements IMobSpawner {
 
 	public void startNewGame() {
 		mHasGameStarted = true;
-		createLevelWave();
+		
+		
+		final float lTimeMod = 2.0f;
+		mCurrentWave = mWaveManager.getFreePooledItem();
+		final var lWaveSpawner = mWaveManager.waveSpawner();
+		lWaveSpawner.addSpawnItem(0, 0, TIME_BEFORE_FIRST_WAVE, null);
+		
+		lWaveSpawner.addSpawnItem(700, -50, 200 * lTimeMod, MobDefEnemySubmarineStop.MOB_DEFINITION_NAME);
+		lWaveSpawner.addSpawnItem(700, 200, 200 * lTimeMod, MobDefEnemySubmarineStop.MOB_DEFINITION_NAME);
+		
+		
+		//createLevelWave();
 	}
 
 	private void createLevelWave() {

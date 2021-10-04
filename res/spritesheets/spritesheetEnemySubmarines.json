@@ -1,6 +1,6 @@
 {
-  "spriteSheetName": "SPRITESHEET_SUBMARINES",
-  "textureName": "TEXTURE_SUBMARINES",
+  "spriteSheetName": "SPRITESHEET_ENEMYSUBMARINES",
+  "textureName": "TEXTURE_ENEMYSUBMARINES",
   "frameMapNameArray": [
     "NORMAL_00"
   ],
@@ -9,7 +9,7 @@
       "name": null,
       "x": 0,
       "y": 0,
-      "w": 136,
+      "w": 142,
       "h": 78,
       "pivotX": 0,
       "pivotY": 0,
@@ -17,14 +17,8 @@
       "scaleY": 1.0,
       "anchorPoints": [
         {
-          "anchorName": "NODE_POWERCORE",
-          "x": -18,
-          "y": -3,
-          "r": 0.0
-        },
-        {
           "anchorName": "NODE_PROPELLER",
-          "x": -62,
+          "x": -66,
           "y": 9,
           "r": 0.0
         }

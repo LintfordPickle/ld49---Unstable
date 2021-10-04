@@ -72,6 +72,14 @@ public class LevelRenderer extends BaseRenderer {
 	}
 
 	@Override
+	public void update(LintfordCore pCore) {
+		super.update(pCore);
+		
+		if(mWaveSpriteInstance != null)
+			mWaveSpriteInstance.update(pCore);
+	}
+	
+	@Override
 	public void draw(LintfordCore pCore) {
 		if (!isInitialized())
 			return;
@@ -80,7 +88,7 @@ public class LevelRenderer extends BaseRenderer {
 		final var lCameraRect = pCore.gameCamera().boundingRectangle();
 
 		final float lSeaLevel = mLevelController.seaLevel();
-		mWaveSpriteInstance.update(pCore);
+		
 
 		final float lWavesWidth = mWaveSpriteInstance.width();
 		final float lWavesHeight = mWaveSpriteInstance.height();

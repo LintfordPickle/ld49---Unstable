@@ -7,19 +7,19 @@ import net.ld.unstable.data.mobs.attachments.EnemySubAttachment;
 import net.ld.unstable.data.mobs.attachments.PropellerAttachment;
 import net.lintford.library.core.geometry.spritegraph.instance.SpriteGraphInstance;
 
-public class MobDefEnemySubmarineStraight extends MobDefinition {
+public class MobDefEnemySubmarineStop extends MobDefinition {
 
 	// --------------------------------------
 	// Constants
 	// --------------------------------------
 
-	public static final String MOB_DEFINITION_NAME = "ENEMY_SUBMARINE";
+	public static final String MOB_DEFINITION_NAME = "ENEMY_SUBMARINE_STOP";
 
 	// --------------------------------------
 	// Constructor
 	// --------------------------------------
 
-	public MobDefEnemySubmarineStraight() {
+	public MobDefEnemySubmarineStop() {
 		super(MOB_DEFINITION_NAME);
 
 		SpritegraphName = "SPRITEGRAPH_SUBMARINE";
@@ -29,7 +29,7 @@ public class MobDefEnemySubmarineStraight extends MobDefinition {
 		
 		emitsBubbles = true;
 
-		maxHealth = 4;
+		maxHealth = 30;
 	}
 
 	// --------------------------------------
@@ -38,7 +38,7 @@ public class MobDefEnemySubmarineStraight extends MobDefinition {
 
 	@Override
 	public void AttachMovementPattern(ShmupMob pSubmarineInstance) {
-		pSubmarineInstance.movementPattern = MobController.CosMover;
+		pSubmarineInstance.movementPattern = MobController.movingDefEnemySubStop;
 	}
 
 	@Override

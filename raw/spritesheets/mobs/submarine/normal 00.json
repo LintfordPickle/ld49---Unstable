@@ -1,0 +1,31 @@
+{
+  "SpriteName": "NORMAL_00",
+  "PivotPointX": 0,
+  "PivotPointY": 0,
+  "ScaleX": 1.0,
+  "ScaleY": 1.0,
+  "EditorMetaData": {
+    "EditorZoomFactor": 5,
+    "EditorCanvasPositionX": -399,
+    "EditorCanvasPositionY": -275,
+    "EditorReferenceSpriteEnabled": false,
+    "EditorReferenceFrameX": 0,
+    "EditorReferenceFrameY": 0,
+    "EditorReferenceFrameW": 0,
+    "EditorReferenceFrameH": 0
+  },
+  "anchorPoints": [
+    {
+      "anchorName": "NODE_POWERCORE",
+      "x": -18,
+      "y": -3,
+      "r": 0.0
+    },
+    {
+      "anchorName": "NODE_PROPELLER",
+      "x": -62,
+      "y": 9,
+      "r": 0.0
+    }
+  ]
+}

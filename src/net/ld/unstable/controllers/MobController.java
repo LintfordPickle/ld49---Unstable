@@ -9,6 +9,7 @@ import net.ld.unstable.data.mobs.ShmupMob;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyMine;
 import net.ld.unstable.data.mobs.movementpatterns.MovingDefCosineMover;
 import net.ld.unstable.data.mobs.movementpatterns.MovingDefEnemyMine;
+import net.ld.unstable.data.mobs.movementpatterns.MovingDefEnemySubStop;
 import net.ld.unstable.data.mobs.movementpatterns.MovingDefStraightMover;
 import net.ld.unstable.data.mobs.movementpatterns.MovingDefSurfaceMover;
 import net.ld.unstable.data.mobs.movementpatterns.MovingDefSurfaceMoverWithStop;
@@ -33,6 +34,7 @@ public class MobController extends BaseController {
 	public static MovingDefSurfaceMover surfaceMover;
 	public static MovingDefSurfaceMoverWithStop surfaceMoveWithStop;
 	public static MovingDefEnemyMine movingDefEnemyMine;
+	public static MovingDefEnemySubStop movingDefEnemySubStop;
 
 	// --------------------------------------
 	// Variables
@@ -89,6 +91,7 @@ public class MobController extends BaseController {
 		surfaceMover = new MovingDefSurfaceMover(mLevelController.seaLevel());
 		surfaceMoveWithStop = new MovingDefSurfaceMoverWithStop(mLevelController.seaLevel());
 		movingDefEnemyMine = new MovingDefEnemyMine();
+		movingDefEnemySubStop = new MovingDefEnemySubStop(mLevelController.seaLevel());
 	}
 
 	@Override

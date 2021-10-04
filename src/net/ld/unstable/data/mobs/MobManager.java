@@ -6,6 +6,7 @@ import java.util.List;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyBoatStop;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyBoatStraight;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyMine;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemySubmarineStop;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemySubmarineStraight;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyTurret;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyTurretBoatStop;
@@ -44,6 +45,7 @@ public class MobManager {
 		public void loadDefintions() {
 			mobDefinitions.add(new MobDefPlayerSubmarine());
 			mobDefinitions.add(new MobDefEnemySubmarineStraight());
+			mobDefinitions.add(new MobDefEnemySubmarineStop());
 			
 			mobDefinitions.add(new MobDefEnemyBoatStraight());
 			mobDefinitions.add(new MobDefEnemyBoatStop());

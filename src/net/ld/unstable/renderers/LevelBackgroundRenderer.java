@@ -79,7 +79,7 @@ public class LevelBackgroundRenderer extends BaseRenderer {
 
 		mLevelBackground = pResourceManager.textureManager().getTexture("TEXTURE_GAME_BACKGROUND", entityGroupID());
 		mUnderwaterBackground = pResourceManager.textureManager().getTexture("TEXTURE_UNDERWATER_BACKGROUND", entityGroupID());
-		
+
 		mOceanSpritesheet = pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetOcean.json", entityGroupID());
 		mWaveSpriteInstance = mOceanSpritesheet.getSpriteInstance("waves_small");
 
@@ -100,6 +100,14 @@ public class LevelBackgroundRenderer extends BaseRenderer {
 	}
 
 	@Override
+	public void update(LintfordCore pCore) {
+		super.update(pCore);
+
+		if (mWaveSpriteInstance != null)
+			mWaveSpriteInstance.update(pCore);
+	}
+
+	@Override
 	public void draw(LintfordCore pCore) {
 		if (!isInitialized())
 			return;
@@ -109,19 +117,17 @@ public class LevelBackgroundRenderer extends BaseRenderer {
 		if (pCore.input().keyboard().isKeyDown(GLFW.GLFW_KEY_U)) {
 			mUnderwaterShader.recompile();
 		}
-		
+
 		drawUnderwaterEffect(pCore);
-		
+
 		final var lTextureBatch = rendererManager().uiTextureBatch();
 		lTextureBatch.begin(pCore.gameCamera());
 		lTextureBatch.draw(mLevelBackground, 0, 0, 960, 540, lCameraRect, -0.9f, ColorConstants.WHITE);
 		lTextureBatch.end();
 
-
 		final var lSpriteBatch = rendererManager().uiSpriteBatch();
 
 		final float lSeaLevel = mLevelController.seaLevel();
-		mWaveSpriteInstance.update(pCore);
 
 		final float lWavesWidth = mWaveSpriteInstance.width() * 1.5f;
 		final float lWavesHeight = mWaveSpriteInstance.height() * 1.5f;
@@ -157,7 +163,7 @@ public class LevelBackgroundRenderer extends BaseRenderer {
 
 		final float lCamPosX = pCore.gameCamera().getPosition().x * 0.001f;
 		final float lCamPosY = -pCore.gameCamera().getPosition().y * 0.001f;
-		
+
 		GL20.glUniform2f(GL20.glGetUniformLocation(mUnderwaterShader.shaderID(), "screenDimensions"), lScreenWidth, lScreenHeight);
 		GL20.glUniform2f(GL20.glGetUniformLocation(mUnderwaterShader.shaderID(), "cameraPosition"), lCamPosX, lCamPosY);
 		GL20.glUniform1f(GL20.glGetUniformLocation(mUnderwaterShader.shaderID(), "time"), lTimeAcc);

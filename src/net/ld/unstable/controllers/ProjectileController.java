@@ -50,6 +50,7 @@ public class ProjectileController extends BaseController {
 	private ProjectileManager mProjectileManager;
 	private ParticleFrameworkController mParticleFrameworkController;
 	private ExplosionsController mExplosionController;
+	private ScreenShakeController mScreenShakeController;
 
 	private ParticleSystemInstance mBarrels;
 
@@ -98,6 +99,8 @@ public class ProjectileController extends BaseController {
 		mMobController = (MobController) lControllerManager.getControllerByNameRequired(MobController.CONTROLLER_NAME, entityGroupID());
 		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
 		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
+		mScreenShakeController = (ScreenShakeController) lControllerManager.getControllerByNameRequired(ScreenShakeController.CONTROLLER_NAME, entityGroupID());
+
 		mSeaLevel = mLevelController.seaLevel();
 
 		mBarrels = mParticleFrameworkController.particleFrameworkData().particleSystemManager().getParticleSystemByName("PARTICLESYSTEM_BARREL");
@@ -243,8 +246,12 @@ public class ProjectileController extends BaseController {
 			if (lMobInstance.collides(pProjX, pProjY, pProjRadius)) {
 				lMobInstance.invulnerabilityTimer = 100.f;
 
-				if (lMobInstance.isPlayerControlled && ConstantsGame.DEBUG_GOD_MODE)
-					return true;
+				if (lMobInstance.isPlayerControlled) {
+					mScreenShakeController.shakeCamera(10.f, 10.f);
+
+					if (ConstantsGame.DEBUG_GOD_MODE)
+						return true;
+				}
 
 				lMobInstance.dealDamage(pDamage);
 				return true;

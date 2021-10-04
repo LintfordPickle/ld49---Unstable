@@ -1,10 +1,10 @@
 {
-  "outputDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\spritesheets\\spritesheetSubmarines.json",
+  "outputDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\spritesheets\\spritesheetEnemySubmarines.json",
   "outputNameDataFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\src\\net\\ld\\unstable\\data\\Textures\\MobTextureNames.java",
-  "outputImageFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\textures\\textureSubmarines.png",
+  "outputImageFilename": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\res\\textures\\textureEnemySubmarines.png",
   "workingDirectory": "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs",
-  "spriteSheetName": "SPRITESHEET_SUBMARINES",
-  "textureName": "TEXTURE_SUBMARINES",
+  "spriteSheetName": "SPRITESHEET_ENEMYSUBMARINES",
+  "textureName": "TEXTURE_ENEMYSUBMARINES",
   "exportDataFile": true,
   "exportTextureFile": true,
   "exportNamesFile": true,
@@ -22,7 +22,7 @@
   "forcePoTTextures": true,
   "autoSizeTexture": false,
   "itemFilenames": [
-    "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs\\submarine\\*.*"
+    "D:\\dev\\java\\ludumdare\\49\\projects\\LD49\\raw\\spritesheets\\mobs\\enemy submarine\\*.*"
   ],
   "animationItems": {
     "normal": {

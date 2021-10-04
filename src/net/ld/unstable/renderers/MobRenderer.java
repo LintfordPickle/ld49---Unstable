@@ -9,7 +9,6 @@ import net.lintford.library.core.ResourceManager;
 import net.lintford.library.core.debug.Debug;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.sprites.spritegraph.SpriteGraphRenderer;
-import net.lintford.library.core.graphics.sprites.spritesheet.SpriteSheetDefinition;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
@@ -26,7 +25,6 @@ public class MobRenderer extends BaseRenderer {
 	// --------------------------------------
 
 	private MobController mMobController;
-	private SpriteSheetDefinition mMobSpritesheet;
 	private SpriteGraphRenderer mSpriteGraphRenderer;
 
 	// --------------------------------------
@@ -64,7 +62,6 @@ public class MobRenderer extends BaseRenderer {
 		super.loadGLContent(pResourceManager);
 
 		mSpriteGraphRenderer.loadGLContent(pResourceManager);
-		mMobSpritesheet = pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetSubmarines.json", entityGroupID());
 	}
 
 	@Override
@@ -72,7 +69,26 @@ public class MobRenderer extends BaseRenderer {
 		super.unloadGLContent();
 
 		mSpriteGraphRenderer.unloadGLContent();
-		mMobSpritesheet = null;
+	}
+
+	@Override
+	public void update(LintfordCore pCore) {
+		super.update(pCore);
+
+		final var lMobManager = mMobController.mobManager();
+		final var lMobs = lMobManager.mobs();
+		final int lMobCount = lMobs.size();
+		for (int i = 0; i < lMobCount; i++) {
+			final var lMobInstance = lMobs.get(i);
+			if (lMobInstance.isAlive == false || lMobInstance.spriteGraphDirty)
+				continue;
+
+			final var lSubmarineSpritegraph = lMobInstance.spriteGraphInstance();
+			if (lSubmarineSpritegraph != null) {
+				lMobInstance.spriteGraphInstance().update(pCore);
+			}
+		}
+
 	}
 
 	@Override
@@ -90,7 +106,6 @@ public class MobRenderer extends BaseRenderer {
 
 			final var lSubmarineSpritegraph = lMobInstance.spriteGraphInstance();
 			if (lSubmarineSpritegraph != null) {
-				lMobInstance.spriteGraphInstance().update(pCore);
 
 				final var lCrazyWhite = lMobInstance.flashOn ? ColorConstants.getColor(1000.f, 1000.0f, 1000.f) : ColorConstants.WHITE;
 

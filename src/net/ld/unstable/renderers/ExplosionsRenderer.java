@@ -28,6 +28,9 @@ public class ExplosionsRenderer extends BaseRenderer implements AnimatedSpriteLi
 	private SpriteSheetDefinition mExplosionsSpritesheet;
 	private ExplosionsController mExplosionsController;
 
+	private final List<SpriteInstance> fireAndForgetAnimations = new ArrayList<>();
+	private final List<SpriteInstance> animationUpdateList = new ArrayList<>();
+
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
@@ -71,6 +74,20 @@ public class ExplosionsRenderer extends BaseRenderer implements AnimatedSpriteLi
 	}
 
 	@Override
+	public void update(LintfordCore pCore) {
+		super.update(pCore);
+
+		animationUpdateList.clear();
+		animationUpdateList.addAll(fireAndForgetAnimations);
+		final int lNumAnimations = animationUpdateList.size();
+		for (int i = 0; i < lNumAnimations; i++) {
+			final var lAnimInstance = animationUpdateList.get(i);
+			lAnimInstance.update(pCore);
+		}
+
+	}
+
+	@Override
 	public void draw(LintfordCore pCore) {
 		if (!isInitialized())
 			return;
@@ -82,35 +99,27 @@ public class ExplosionsRenderer extends BaseRenderer implements AnimatedSpriteLi
 		boolean moreExplosions = mExplosionsController.hasUnprocessedExplosions();
 		while (moreExplosions && counter < 4) {
 			final var lExplosion = mExplosionsController.getExplosionToProcess();
-			if(lExplosion.animName == null) continue;
+			if (lExplosion.animName == null)
+				continue;
 			final var lNewExplosion = mExplosionsSpritesheet.getSpriteInstance(lExplosion.animName);
-			
+
 			lNewExplosion.animatedSpriteListender(this);
 			lNewExplosion.x(lExplosion.worldX);
 			lNewExplosion.y(lExplosion.worldY);
 			lNewExplosion.setFrame(0);
 
-			animationsToUpdate.add(lNewExplosion);
+			fireAndForgetAnimations.add(lNewExplosion);
 
 			// FIXME: Recycle explosions too
 			moreExplosions = mExplosionsController.hasUnprocessedExplosions();
 			counter++;
 		}
 
-		animationsToUpdate2.clear();
-		animationsToUpdate2.addAll(animationsToUpdate);
-
+		final int lNumAnimations = animationUpdateList.size();
 		final var lSpriteBatch = rendererManager().uiSpriteBatch();
-
-		final int lNumAnimations = animationsToUpdate2.size();
-		for (int i = 0; i < lNumAnimations; i++) {
-			final var lAnimInstance = animationsToUpdate2.get(i);
-			lAnimInstance.update(pCore);
-		}
-
 		lSpriteBatch.begin(pCore.gameCamera());
 		for (int i = 0; i < lNumAnimations; i++) {
-			final var lAnimInstance = animationsToUpdate2.get(i);
+			final var lAnimInstance = animationUpdateList.get(i);
 
 			// Hack
 			final float lDstW = lAnimInstance.width() * 2.f;
@@ -123,9 +132,6 @@ public class ExplosionsRenderer extends BaseRenderer implements AnimatedSpriteLi
 
 		lSpriteBatch.end();
 	}
-
-	private List<SpriteInstance> animationsToUpdate = new ArrayList<>();
-	private List<SpriteInstance> animationsToUpdate2 = new ArrayList<>();
 
 	// --------------------------------------
 	// Interface Methods
@@ -144,7 +150,7 @@ public class ExplosionsRenderer extends BaseRenderer implements AnimatedSpriteLi
 
 	@Override
 	public void onStopped(SpriteInstance pSender) {
-		animationsToUpdate.remove(pSender);
+		fireAndForgetAnimations.remove(pSender);
 		mExplosionsSpritesheet.releaseInstance(pSender);
 	}
 }

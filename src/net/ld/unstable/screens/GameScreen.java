@@ -7,6 +7,7 @@ import net.ld.unstable.controllers.LevelController;
 import net.ld.unstable.controllers.MobController;
 import net.ld.unstable.controllers.PlayerSubController;
 import net.ld.unstable.controllers.ProjectileController;
+import net.ld.unstable.controllers.ScreenShakeController;
 import net.ld.unstable.controllers.WaveController;
 import net.ld.unstable.data.explosions.ExplosionsController;
 import net.ld.unstable.data.mobs.MobManager;
@@ -25,6 +26,7 @@ import net.lintford.library.controllers.core.particles.ParticleFrameworkControll
 import net.lintford.library.controllers.geometry.SpriteGraphController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
+import net.lintford.library.core.camera.Camera;
 import net.lintford.library.core.geometry.spritegraph.SpriteGraphManager;
 import net.lintford.library.core.particles.ParticleFrameworkData;
 import net.lintford.library.renderers.particles.ParticleFrameworkRenderer;
@@ -54,6 +56,7 @@ public class GameScreen extends BaseGameScreen {
 	private ParticleFrameworkController mParticleFrameworkController;
 	private GameStateController mGameStateController;
 	private ExplosionsController mExplosionsController;
+	private ScreenShakeController mScreenShakeController;
 
 	// Renderers
 	private MobRenderer mMobRenderer;
@@ -103,6 +106,7 @@ public class GameScreen extends BaseGameScreen {
 
 		// TODO: Clean this mess
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetSubmarines.json", entityGroupID());
+		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetEnemySubmarines.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPropeller.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetPowercore.json", entityGroupID());
 		pResourceManager.spriteSheetManager().loadSpriteSheet("res/spritesheets/spritesheetBoats.json", entityGroupID());
@@ -188,6 +192,7 @@ public class GameScreen extends BaseGameScreen {
 		mWaveController = new WaveController(lControllerManager, mWaveManager, entityGroupID());
 		mGameStateController = new GameStateController(lControllerManager, entityGroupID());
 		mExplosionsController = new ExplosionsController(lControllerManager, entityGroupID());
+		mScreenShakeController = new ScreenShakeController(lControllerManager, entityGroupID());
 	}
 
 	private void initializeControllers() {
@@ -202,6 +207,8 @@ public class GameScreen extends BaseGameScreen {
 		mWaveController.initialize(lCore);
 		mGameStateController.initialize(lCore);
 		mExplosionsController.initialize(lCore);
+		mScreenShakeController.setCamera((Camera) mGameCamera);
+		mScreenShakeController.initialize(lCore);
 	}
 
 	private void createRenderers(ResourceManager pResourceManager) {
