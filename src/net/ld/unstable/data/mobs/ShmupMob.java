@@ -119,7 +119,7 @@ public class ShmupMob implements AnimatedSpriteGraphListener {
 
 	public void dealDamage(int pDamage) {
 		health -= pDamage;
-		coolant -= pDamage * 2;
+		coolant -= pDamage * 5;
 	}
 
 	public void reset() {

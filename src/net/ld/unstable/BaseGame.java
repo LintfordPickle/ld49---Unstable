@@ -19,8 +19,8 @@ public class BaseGame extends LintfordCore {
 	// Constants
 	// ---------------------------------------------
 
-	private static final String WINDOW_TITLE = "Unstable";
-	private static final String APPLICATION_NAME = "Unstable";
+	private static final String WINDOW_TITLE = "Strontium Submergence";
+	private static final String APPLICATION_NAME = "Strontium Submergence";
 
 	private static boolean DEBUG_SKIP_MENU = false;
 
