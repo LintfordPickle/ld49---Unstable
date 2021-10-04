@@ -73,7 +73,6 @@ public class ScreenShakeController extends BaseController {
 			return;
 
 		if (mShakeTimer > 0.f) {
-			mNeedsCleanup = true;
 			mShakeTimer -= pCore.appTime().elapsedTimeMilli();
 
 			// normal time
@@ -86,14 +85,12 @@ public class ScreenShakeController extends BaseController {
 
 			mGameCamera.setCameraOffset(mOffsetPosition.x, mOffsetPosition.y);
 
-		} else if (mNeedsCleanup) {
-			mNeedsCleanup = false;
+		} else {
 			mOffsetPosition.x = 0.f;
 			mOffsetPosition.y = 0.f;
 
 			mGameCamera.setCameraOffset(mOffsetPosition.x, mOffsetPosition.y);
 		}
-
 	}
 
 	// ---------------------------------------------
@@ -111,7 +108,5 @@ public class ScreenShakeController extends BaseController {
 		mShakeDur = Math.max(pDuration, mShakeDur);
 
 		mShakeTimer = pDuration;
-
 	}
-
 }

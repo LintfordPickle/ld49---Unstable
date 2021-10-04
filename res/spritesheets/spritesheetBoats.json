@@ -24,7 +24,7 @@
       "loopAnimation": true,
       "frameDuration": 150,
       "animationSpriteIndices": [
-        -1
+        0
       ]
     }
   }

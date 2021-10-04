@@ -20,7 +20,7 @@ public class MovingDefTurret implements MovingDefBase {
 
 		// Need to move the base position along
 		pMob.baseWorldPositionX += pMob.dx * lDelta;
-		pMob.baseWorldPositionY = mFloorLevel - 20;
+		pMob.baseWorldPositionY = mFloorLevel - 60;
 
 		pMob.worldPositionX += pMob.dx * lDelta;
 

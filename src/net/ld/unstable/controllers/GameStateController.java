@@ -3,6 +3,7 @@ package net.ld.unstable.controllers;
 import net.lintford.library.controllers.BaseController;
 import net.lintford.library.controllers.core.ControllerManager;
 import net.lintford.library.core.LintfordCore;
+import net.lintford.library.core.debug.Debug;
 
 public class GameStateController extends BaseController {
 
@@ -20,7 +21,6 @@ public class GameStateController extends BaseController {
 	// Variables
 	// --------------------------------------
 
-	private LevelController mLevelController;
 	private MobController mMobController;
 	private WaveController mWaveController;
 
@@ -28,9 +28,20 @@ public class GameStateController extends BaseController {
 	private boolean mHasGameEnded;
 	private int mGameEndCondition;
 
+	private boolean mWaveFinishedSpawning;
+	private int mCurrentWaveNumber;
+
 	// --------------------------------------
 	// Properties
 	// --------------------------------------
+
+	public int currentWaveNumber() {
+		return mCurrentWaveNumber;
+	}
+
+	public boolean currentWaveHasStarted() {
+		return mWaveFinishedSpawning;
+	}
 
 	public boolean hasGameStarted() {
 		return mHasGameStarted && mWaveController.haveWavesStarted();
@@ -66,7 +77,6 @@ public class GameStateController extends BaseController {
 	public void initialize(LintfordCore pCore) {
 		final var lControllerManager = pCore.controllerManager();
 
-		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
 		mMobController = (MobController) lControllerManager.getControllerByNameRequired(MobController.CONTROLLER_NAME, entityGroupID());
 		mWaveController = (WaveController) lControllerManager.getControllerByNameRequired(WaveController.CONTROLLER_NAME, entityGroupID());
 	}
@@ -87,7 +97,7 @@ public class GameStateController extends BaseController {
 		final var lPlayerSub = mMobController.mobManager().playerSubmarine;
 
 		// check for a win condition
-		if (mWaveController.hasWaveFinished()) {
+		if (mWaveController.haveWavesFinished()) {
 			mHasGameEnded = true;
 			mGameEndCondition = END_CONDITION_WON;
 			return;
@@ -110,10 +120,32 @@ public class GameStateController extends BaseController {
 	// --------------------------------------
 
 	public void startGame() {
+		Debug.debugManager().logger().i(getClass().getSimpleName(), "Starting Game");
+
 		mHasGameStarted = true;
 		mHasGameEnded = false;
 
-		mWaveController.startNewGame();
+		mWaveFinishedSpawning = false;
+		mCurrentWaveNumber = 0;
 
+		mWaveController.startNewGame();
+		mMobController.startNewGame();
+	}
+
+	public void setWaveHasFinishedSpawning() {
+		mWaveFinishedSpawning = true;
+	}
+
+	public boolean hasWaveFinishedSpawning() {
+		return mWaveFinishedSpawning;
+	}
+
+	public void waveComplete() {
+		if (mWaveFinishedSpawning == false)
+			return;
+
+		Debug.debugManager().logger().i(getClass().getSimpleName(), "Wave #" + mCurrentWaveNumber + " complete");
+		mCurrentWaveNumber++;
+		mWaveFinishedSpawning = false;
 	}
 }

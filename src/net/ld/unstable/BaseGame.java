@@ -20,9 +20,6 @@ public class BaseGame extends LintfordCore {
 	private static final String WINDOW_TITLE = "Unstable";
 	private static final String APPLICATION_NAME = "Unstable";
 
-	private static final int WINDOW_WIDTH = 960;
-	private static final int WINDOW_HEIGHT = 540;
-
 	private static boolean DEBUG_SKIP_MENU = false;
 
 	// ---------------------------------------------
@@ -59,7 +56,7 @@ public class BaseGame extends LintfordCore {
 			mScreenManager.addScreen(new GameScreen(mScreenManager));
 		}
 	}
-	
+
 	@Override
 	protected void onLoadGLContent() {
 		super.onLoadGLContent();
@@ -143,22 +140,22 @@ public class BaseGame extends LintfordCore {
 
 			@Override
 			public int minimumWindowWidth() {
-				return WINDOW_WIDTH;
+				return ConstantsGame.WINDOW_WIDTH;
 			}
 
 			@Override
 			public int minimumWindowHeight() {
-				return WINDOW_HEIGHT;
+				return ConstantsGame.WINDOW_HEIGHT;
 			}
 
 			@Override
 			public int baseGameResolutionWidth() {
-				return WINDOW_WIDTH;
+				return ConstantsGame.WINDOW_WIDTH;
 			}
 
 			@Override
 			public int baseGameResolutionHeight() {
-				return WINDOW_HEIGHT;
+				return ConstantsGame.WINDOW_HEIGHT;
 			}
 
 			@Override

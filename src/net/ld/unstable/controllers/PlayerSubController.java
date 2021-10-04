@@ -2,6 +2,7 @@ package net.ld.unstable.controllers;
 
 import org.lwjgl.glfw.GLFW;
 
+import net.ld.unstable.ConstantsGame;
 import net.ld.unstable.data.explosions.ExplosionsController;
 import net.ld.unstable.data.mobs.MobManager;
 import net.lintford.library.controllers.BaseController;
@@ -128,15 +129,13 @@ public class PlayerSubController extends BaseController {
 		final var lPlayerSubmarine = mMobManager.playerSubmarine;
 		final boolean isUnderWater = lPlayerSubmarine.worldPositionY > mLevelController.seaLevel();
 
-		// Keep the sub on screen
-		final float lWorldPositionX = mLevelController.worldPositionX();
-
 		final float lTolerance = 20.0f;
-		if (lPlayerSubmarine.worldPositionX - lTolerance < lWorldPositionX - pCore.gameCamera().boundingRectangle().w() * .5f) {
+		final float lLeftOfScreen = pCore.gameCamera().getPosition().x - ConstantsGame.WINDOW_WIDTH * .5f;
+		if (lPlayerSubmarine.worldPositionX - lTolerance < lLeftOfScreen) {
 			mAcceleration.x += 0.5f;
 		}
 
-		final float lBottomOfScreen = pCore.gameCamera().boundingRectangle().bottom();
+		final float lBottomOfScreen = pCore.gameCamera().getPosition().y + ConstantsGame.WINDOW_HEIGHT * .5f;
 		if (lPlayerSubmarine.worldPositionY + lTolerance > lBottomOfScreen) {
 			mAcceleration.y -= 0.5f;
 		}
@@ -149,7 +148,7 @@ public class PlayerSubController extends BaseController {
 		if (mAcceleration.x > 0 || mAcceleration.y > 0 && RandomNumbers.getRandomChance(5)) {
 			final float lOffsetX = RandomNumbers.random(0, 10.f);
 			final float lOffsetY = RandomNumbers.random(-10.f, 10.f);
-			
+
 			mExplosionController.addSmallSmokeParticles(lPlayerSubmarine.worldPositionX - 80 + lOffsetX, lPlayerSubmarine.worldPositionY + lOffsetY);
 		}
 

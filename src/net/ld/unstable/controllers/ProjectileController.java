@@ -160,7 +160,7 @@ public class ProjectileController extends BaseController {
 			lProjectile.underWater = lProjectile.baseWorldPositionY > mSeaLevel;
 
 			if (tempFlag != lProjectile.underWater) {
-				mExplosionController.addSurfaceExplosion(lProjectile.baseWorldPositionX, lProjectile.baseWorldPositionY);
+				mExplosionController.addSurfaceExplosion(lProjectile.baseWorldPositionX + lProjectile.colRadius, lProjectile.baseWorldPositionY);
 			}
 
 			if (lProjectile.emitSmokeTrail && (lProjectile.timeSinceStart % 3) == 0) {
@@ -224,10 +224,9 @@ public class ProjectileController extends BaseController {
 			// collisions only count afer .05 second of life
 			if (lProjectile.timeSinceStart > 50) {
 				if (checkProjectileCollisionsWithSubmarines(lProjectile.shooterUid, lProjectile.worldPositionX, lProjectile.worldPositionY, lProjectile.colRadius, 5)) {
+					mExplosionController.addMajorExplosion(lProjectile.baseWorldPositionX, lProjectile.baseWorldPositionY);
+
 					lProjectile.reset();
-
-					mExplosionController.addSmokeParticles(lProjectile.baseWorldPositionX, lProjectile.baseWorldPositionY);
-
 					continue;
 				}
 			}
@@ -247,7 +246,7 @@ public class ProjectileController extends BaseController {
 				lMobInstance.invulnerabilityTimer = 100.f;
 
 				if (lMobInstance.isPlayerControlled) {
-					mScreenShakeController.shakeCamera(10.f, 10.f);
+					mScreenShakeController.shakeCamera(250.f, 10.f);
 
 					if (ConstantsGame.DEBUG_GOD_MODE)
 						return true;
@@ -268,9 +267,9 @@ public class ProjectileController extends BaseController {
 	public void shootMissile(int pShooterUid, float pStartX, float pStartY, float pVX, float pVY) {
 		final float lOffsetY = RandomNumbers.random(-4.0f, 4.0f);
 		final var lMissile = mProjectileManager.spawnParticle(pStartX + 25.f, pStartY + lOffsetY - 30.f, pVX, pVY, 2000.0f);
-		lMissile.setupSourceTexture(48, 16, 46, 10);
+		lMissile.setupSourceTexture(52,14,46,14);
 		lMissile.shooterUid = pShooterUid;
-		lMissile.emitSmokeTrail = false;
+		lMissile.emitSmokeTrail = true;
 		lMissile.underWater = true;
 		lMissile.colRadius = 15.f;
 		mExplosionController.addSmokeParticles(pStartX + 25.f, pStartY + lOffsetY - 30.f);

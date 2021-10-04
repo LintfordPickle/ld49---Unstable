@@ -5,6 +5,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 
+import net.ld.unstable.ConstantsGame;
 import net.ld.unstable.controllers.LevelController;
 import net.lintford.library.core.LintfordCore;
 import net.lintford.library.core.ResourceManager;
@@ -122,7 +123,11 @@ public class LevelBackgroundRenderer extends BaseRenderer {
 
 		final var lTextureBatch = rendererManager().uiTextureBatch();
 		lTextureBatch.begin(pCore.gameCamera());
-		lTextureBatch.draw(mLevelBackground, 0, 0, 960, 540, lCameraRect, -0.9f, ColorConstants.WHITE);
+
+		final float lW = ConstantsGame.WINDOW_WIDTH;
+		final float lH = ConstantsGame.WINDOW_HEIGHT;
+
+		lTextureBatch.draw(mLevelBackground, 0, 0, 960, 540, pCore.gameCamera().getPosition().x + -lW * .5f, pCore.gameCamera().getPosition().y + -lH * .5f, lW, lH, -0.9f, ColorConstants.WHITE);
 		lTextureBatch.end();
 
 		final var lSpriteBatch = rendererManager().uiSpriteBatch();

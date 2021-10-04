@@ -23,7 +23,8 @@ public class WaveSpawner {
 		public float y;
 		public String mobDefName;
 		public float spawnTimerInc; // inc. spawn timer (ms)
-
+		
+		
 		public void reset() {
 			x = 0;
 			y = 0;

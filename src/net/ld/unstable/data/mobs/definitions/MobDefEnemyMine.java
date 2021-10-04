@@ -23,12 +23,12 @@ public class MobDefEnemyMine extends MobDefinition {
 		SpritegraphName = "SPRITEGRAPH_SUBMARINE";
 
 		largeCollisionEntity = false;
-		collisionRadius = 40.f;
-		
+		collisionRadius = 30.f;
+
 		shootsTorpedoes = true;
 		shootsMissiles = false;
 		shootsBarrels = true;
-		
+
 		emitsBubbles = false;
 
 		maxHealth = 20;

@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.ld.unstable.data.mobs.ShmupMob;
+import net.ld.unstable.data.mobs.definitions.MobDefEnemyBoatStraight;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyMine;
-import net.ld.unstable.data.mobs.definitions.MobDefEnemySubmarineStop;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemySubmarineStraight;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyTurret;
 import net.ld.unstable.data.mobs.definitions.MobDefEnemyTurretBoatStop;
-import net.ld.unstable.data.mobs.movementpatterns.MovingDefEnemySubStop;
 import net.ld.unstable.data.waves.IMobSpawner;
 import net.ld.unstable.data.waves.Wave;
 import net.ld.unstable.data.waves.WaveManager;
@@ -26,7 +25,7 @@ public class WaveController extends BaseController implements IMobSpawner {
 
 	public static final String CONTROLLER_NAME = "Wave Controller";
 
-	private final int TIME_BEFORE_FIRST_WAVE = 10000;
+	private final int TIME_BEFORE_FIRST_WAVE = 6000;
 	private final int TIME_BETWEEN_WAVES = 1500;
 
 	// --------------------------------------
@@ -34,11 +33,15 @@ public class WaveController extends BaseController implements IMobSpawner {
 	// --------------------------------------
 
 	private MobController mMobController;
+	private GameStateController mGameStateController;
 
 	private WaveManager mWaveManager;
 	private float mTimerBetweenWaves;
 	private Wave mCurrentWave;
 	private final List<ShmupMob> mobUpdateList = new ArrayList<>();
+
+	private boolean mHaveAllWavesFinished;
+	private int mCurrentWaveNumber;
 
 	// --------------------------------------
 	// Properties
@@ -50,8 +53,8 @@ public class WaveController extends BaseController implements IMobSpawner {
 		return false;
 	}
 
-	public boolean hasWaveFinished() {
-		return mCurrentWave == null || mCurrentWave.isWaveComplete() && mWaveManager.waveSpawner().isFinishedSpawning();
+	public boolean haveWavesFinished() {
+		return mHaveAllWavesFinished;
 	}
 
 	public boolean haveWavesStarted() {
@@ -68,6 +71,7 @@ public class WaveController extends BaseController implements IMobSpawner {
 		mWaveManager = pWaveManager;
 		mWaveManager.waveSpawner().mMobSpawner = this;
 		mTimerBetweenWaves = TIME_BEFORE_FIRST_WAVE;
+		mCurrentWaveNumber = 0;
 	}
 
 	// --------------------------------------
@@ -79,6 +83,7 @@ public class WaveController extends BaseController implements IMobSpawner {
 		final var lControllerManager = pCore.controllerManager();
 
 		mMobController = (MobController) lControllerManager.getControllerByNameRequired(MobController.CONTROLLER_NAME, entityGroupID());
+		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
 	}
 
 	@Override
@@ -96,21 +101,26 @@ public class WaveController extends BaseController implements IMobSpawner {
 		final var lWaveSpawner = mWaveManager.waveSpawner();
 		updateWave(pCore);
 
-		if (mCurrentWave == null) {
+		if (mCurrentWave == null && mCurrentWaveNumber < mGameStateController.currentWaveNumber()) {
+
 			mTimerBetweenWaves -= pCore.gameTime().elapsedTimeMilli();
 
 			if (mTimerBetweenWaves <= 0) {
-				createNewWave();
+				mCurrentWaveNumber = mGameStateController.currentWaveNumber();
+				createNextWave();
 			}
 		} else {
 			if (lWaveSpawner.isFinishedSpawning() == false) {
 				lWaveSpawner.update(pCore);
 			}
 
-			if (lWaveSpawner.isFinishedSpawning() && mCurrentWave.isWaveComplete()) {
-				mCurrentWave = null;
-				mTimerBetweenWaves = TIME_BETWEEN_WAVES;
-				Debug.debugManager().logger().i(getClass().getSimpleName(), "Wave Completed");
+			if (lWaveSpawner.isFinishedSpawning()) {
+				mGameStateController.setWaveHasFinishedSpawning();
+
+				if (mCurrentWave != null && mCurrentWave.isWaveComplete()) {
+					mCurrentWave = null;
+					mTimerBetweenWaves = TIME_BETWEEN_WAVES;
+				}
 			}
 		}
 	}
@@ -147,23 +157,62 @@ public class WaveController extends BaseController implements IMobSpawner {
 
 	public void startNewGame() {
 		mHasGameStarted = true;
-		
-		
-		final float lTimeMod = 2.0f;
-		mCurrentWave = mWaveManager.getFreePooledItem();
-		final var lWaveSpawner = mWaveManager.waveSpawner();
-		lWaveSpawner.addSpawnItem(0, 0, TIME_BEFORE_FIRST_WAVE, null);
-		
-		lWaveSpawner.addSpawnItem(700, -50, 200 * lTimeMod, MobDefEnemySubmarineStop.MOB_DEFINITION_NAME);
-		lWaveSpawner.addSpawnItem(700, 200, 200 * lTimeMod, MobDefEnemySubmarineStop.MOB_DEFINITION_NAME);
-		
-		
-		//createLevelWave();
+		mCurrentWaveNumber = mGameStateController.currentWaveNumber();
+
+		createNextWave();
 	}
 
-	private void createLevelWave() {
-		Debug.debugManager().logger().i(getClass().getSimpleName(), "Creating New Wave");
+	private void createNextWave() {
+		Debug.debugManager().logger().i(getClass().getSimpleName(), "Creating Wave #" + mCurrentWaveNumber);
+		switch (mCurrentWaveNumber) {
+		case 0:
+			createNewWave00();
+			return;
+		case 1:
+			createTurretVolley();
+			return;
 
+		case 2:
+			createTurretVolley();
+			return;
+			
+		case 3:
+			createNewWave00();
+			return;
+			
+		case 4:
+			createNewWave02();
+			return;
+			
+		default:
+			mHaveAllWavesFinished = true;
+		}
+	}
+
+	private void createNewWave00() {
+		mCurrentWave = mWaveManager.getFreePooledItem();
+
+		final var lWaveSpawner = mWaveManager.waveSpawner();
+
+		lWaveSpawner.addSpawnItem(700, -200, 0, MobDefEnemyMine.MOB_DEFINITION_NAME);
+		lWaveSpawner.addSpawnItem(700, 200, 4000, MobDefEnemyMine.MOB_DEFINITION_NAME);
+		lWaveSpawner.addSpawnItem(700, 0, 0, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
+
+	}
+
+	private void createTurretVolley() {
+		mCurrentWave = mWaveManager.getFreePooledItem();
+
+		final var lWaveSpawner = mWaveManager.waveSpawner();
+
+		lWaveSpawner.addSpawnItem(700, 0, 1000, MobDefEnemyTurret.MOB_DEFINITION_NAME);
+		lWaveSpawner.addSpawnItem(700, 0, 0, MobDefEnemyTurret.MOB_DEFINITION_NAME);
+		lWaveSpawner.addSpawnItem(700, 0, 1000, MobDefEnemyBoatStraight.MOB_DEFINITION_NAME);
+		lWaveSpawner.addSpawnItem(700, 0, 4000, MobDefEnemyTurret.MOB_DEFINITION_NAME);
+		lWaveSpawner.addSpawnItem(700, 0, 1000, MobDefEnemyBoatStraight.MOB_DEFINITION_NAME);
+	}
+
+	private void createNewWave02() {
 		final float lTimeMod = 2.0f;
 		mCurrentWave = mWaveManager.getFreePooledItem();
 
@@ -203,20 +252,6 @@ public class WaveController extends BaseController implements IMobSpawner {
 		lWaveSpawner.addSpawnItem(700, 0, 2000 * lTimeMod, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
 		lWaveSpawner.addSpawnItem(700, 100, 2000 * lTimeMod, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
 		lWaveSpawner.addSpawnItem(700, 200, 2000 * lTimeMod, MobDefEnemySubmarineStraight.MOB_DEFINITION_NAME);
-
-	}
-
-	private void createNewWave() {
-		Debug.debugManager().logger().i(getClass().getSimpleName(), "Creating New Wave");
-
-		final float lTimeMod = 2.0f;
-		mCurrentWave = mWaveManager.getFreePooledItem();
-
-		final var lWaveSpawner = mWaveManager.waveSpawner();
-
-		lWaveSpawner.addSpawnItem(700, -150, 0 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
-		lWaveSpawner.addSpawnItem(700, +150, 5000 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
-		lWaveSpawner.addSpawnItem(700, 0, 200 * lTimeMod, MobDefEnemyMine.MOB_DEFINITION_NAME);
 
 	}
 

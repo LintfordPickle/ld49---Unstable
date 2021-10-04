@@ -12,7 +12,7 @@ public class LevelController extends BaseController {
 
 	public static final String CONTROLLER_NAME = "Level Controller";
 
-	public static final float SCROLL_SPEED = 0.4f;
+	public static final float SCROLL_SPEED = 0.3f;
 
 	// --------------------------------------
 	// Variables
@@ -77,8 +77,7 @@ public class LevelController extends BaseController {
 		mWorldPositionX += SCROLL_SPEED;
 
 		final var lScreenPositionX = mWorldPositionX;
-		final var lScreenPositionY = lGameCamera.getPosition().y;
 
-		lGameCamera.setPosition(lScreenPositionX, lScreenPositionY);
+		lGameCamera.setPosition(lScreenPositionX, 0);
 	}
 }

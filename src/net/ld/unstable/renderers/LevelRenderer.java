@@ -95,7 +95,7 @@ public class LevelRenderer extends BaseRenderer {
 
 		lSpriteBatch.begin(pCore.gameCamera());
 
-		final var lWaterColor = ColorConstants.getWhiteWithAlpha(.5f);
+		final var lWaterColor = ColorConstants.getWhiteWithAlpha(.35f);
 
 		final float lLeftEdge = lCameraRect.left() - lWavesWidth;
 		for (int t = (int) lLeftEdge; t < lLeftEdge + 100 + lCameraRect.w() + lWavesWidth * 2; t += (int) lWavesWidth) {

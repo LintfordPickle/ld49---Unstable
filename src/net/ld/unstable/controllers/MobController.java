@@ -3,6 +3,7 @@ package net.ld.unstable.controllers;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.ld.unstable.ConstantsGame;
 import net.ld.unstable.data.explosions.ExplosionsController;
 import net.ld.unstable.data.mobs.MobManager;
 import net.ld.unstable.data.mobs.ShmupMob;
@@ -44,8 +45,12 @@ public class MobController extends BaseController {
 	private ProjectileController mProjectileController;
 	private SpriteGraphController mSpriteGraphController;
 	private LevelController mLevelController;
+	private GameStateController mGameStateController;
+
 	private final MobManager mMobManager;
 	private final List<ShmupMob> mUpdateMobList = new ArrayList<>();
+
+	private int mCurrentWaveNumber = 0;
 
 	// --------------------------------------
 	// Properties
@@ -82,6 +87,7 @@ public class MobController extends BaseController {
 		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
 		mProjectileController = (ProjectileController) lControllerManager.getControllerByNameRequired(ProjectileController.CONTROLLER_NAME, entityGroupID());
 		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
+		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
 
 		final float lFloorLevel = pCore.gameCamera().boundingRectangle().bottom();
 
@@ -90,7 +96,7 @@ public class MobController extends BaseController {
 		CosMover = new MovingDefCosineMover();
 		surfaceMover = new MovingDefSurfaceMover(mLevelController.seaLevel());
 		surfaceMoveWithStop = new MovingDefSurfaceMoverWithStop(mLevelController.seaLevel());
-		movingDefEnemyMine = new MovingDefEnemyMine();
+		movingDefEnemyMine = new MovingDefEnemyMine(mLevelController.seaLevel());
 		movingDefEnemySubStop = new MovingDefEnemySubStop(mLevelController.seaLevel());
 	}
 
@@ -122,8 +128,9 @@ public class MobController extends BaseController {
 			if (lMobInstance.isPlayerControlled)
 				continue;
 
-			final float lDespawnTol = 75.f;
-			if (lMobInstance.worldPositionX + lDespawnTol < pCore.gameCamera().boundingRectangle().left()) {
+			final float lDespawnTol = 200.f;
+			final float lLeftOfScreen = pCore.gameCamera().getPosition().x - ConstantsGame.WINDOW_WIDTH * .5f;
+			if (lMobInstance.worldPositionX + lDespawnTol < lLeftOfScreen) {
 				Debug.debugManager().logger().i(getClass().getSimpleName(), "Despawn mob");
 
 				lMobInstance.kill();
@@ -151,6 +158,13 @@ public class MobController extends BaseController {
 				}
 			}
 		}
+
+		if (mGameStateController.hasWaveFinishedSpawning() && mCurrentWaveNumber == mGameStateController.currentWaveNumber() && lMobCount <= 1) {
+			Debug.debugManager().logger().i(getClass().getSimpleName(), "All mobs killed (#" + mCurrentWaveNumber + ")");
+			mGameStateController.waveComplete();
+			mCurrentWaveNumber = mGameStateController.currentWaveNumber();
+		}
+
 	}
 
 	private void updatePlayerSubmarineCollisions(LintfordCore pCore, ShmupMob pPlayerSub) {
@@ -232,6 +246,10 @@ public class MobController extends BaseController {
 	// --------------------------------------
 	// Methods
 	// --------------------------------------
+
+	public void startNewGame() {
+		mCurrentWaveNumber = mGameStateController.currentWaveNumber();
+	}
 
 	public ShmupMob addNewMob(boolean pPlayerControlled, String pDefinitionName, float pScreenX, float pScreenY) {
 		final var lNewMobDefinition = mMobManager.mobDefinitionManager().getMobDefinitionByName(pDefinitionName);
