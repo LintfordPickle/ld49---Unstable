@@ -14,6 +14,7 @@ public class BackgroundScreen extends Screen {
 	// --------------------------------------
 
 	private Texture mLogoTexture;
+	private Texture mBackgroundTexture;
 
 	// --------------------------------------
 	// Constructor
@@ -33,25 +34,30 @@ public class BackgroundScreen extends Screen {
 		super.loadGLContent(pResourceManager);
 
 		mLogoTexture = pResourceManager.textureManager().loadTexture("TEXTURE_MENU_LOGO", "res/textures/textureMenuLogo.png", entityGroupID());
-
+		mBackgroundTexture = pResourceManager.textureManager().loadTexture("TEXTURE_MENU_BACKGROUND", "res/textures/textureMenuBackground.png", entityGroupID());
 	}
 
 	@Override
 	public void draw(LintfordCore pCore) {
 		super.draw(pCore);
-
-		final var lUiStructureController = screenManager.UiStructureController();
 		final var lHeaderRect = pCore.HUD().boundingRectangle();
 
-		final float lWidth = 960;
-		final float lHeight = 540;
+		final float lWidth = 571;
+		final float lHeight = 151;
 
 		final var ltextureBatch = rendererManager.uiTextureBatch();
 		final var lLogoColor = ColorConstants.getWhiteWithAlpha(1.f);
 
 		ltextureBatch.begin(pCore.HUD());
-		ltextureBatch.draw(mLogoTexture, 0, 0, lWidth, lHeight, -lWidth * .5f, lHeaderRect.top(), lWidth, lHeight, -0.9f, lLogoColor);
+		ltextureBatch.draw(mBackgroundTexture, 0, 0, mBackgroundTexture.getTextureWidth(), mBackgroundTexture.getTextureHeight(), -mBackgroundTexture.getTextureWidth() * .5f, -mBackgroundTexture.getTextureHeight() * .5f,
+				mBackgroundTexture.getTextureWidth(), mBackgroundTexture.getTextureHeight(), -0.9f, lLogoColor);
+		ltextureBatch.draw(mLogoTexture, 0, 0, lWidth, lHeight, -lWidth * .5f, lHeaderRect.top() + 15, lWidth, lHeight, -0.9f, lLogoColor);
 		ltextureBatch.end();
+
+		final var lTextFont = rendererManager.uiTextFont();
+		lTextFont.begin(pCore.HUD());
+		lTextFont.drawText("Created for LD49 by LintfordPickle", lHeaderRect.left() + 5f, lHeaderRect.bottom() - 35, -0.08f, 1.f);
+		lTextFont.end();
 	}
 
 }

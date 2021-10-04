@@ -13,7 +13,6 @@ public class MainMenuScreen extends MenuScreen {
 	// --------------------------------------
 
 	private static final int BUTTON_START = 0;
-	private static final int BUTTON_CREDITS = 1;
 	private static final int BUTTON_EXIT = 2;
 
 	// --------------------------------------
@@ -26,15 +25,12 @@ public class MainMenuScreen extends MenuScreen {
 		var lMainLayout = new ListLayout(this);
 
 		var lStartGameEntry = new MenuEntry(pScreenManager, lMainLayout, "Start Game");
-		var lCreditsEntry = new MenuEntry(pScreenManager, lMainLayout, "Credits");
 		var lExitEntry = new MenuEntry(pScreenManager, lMainLayout, "Exit");
 
 		lStartGameEntry.registerClickListener(this, BUTTON_START);
-		lCreditsEntry.registerClickListener(this, BUTTON_CREDITS);
 		lExitEntry.registerClickListener(this, BUTTON_EXIT);
 
 		lMainLayout.addMenuEntry(lStartGameEntry);
-		lMainLayout.addMenuEntry(lCreditsEntry);
 		lMainLayout.addMenuEntry(MenuEntry.menuSeparator());
 		lMainLayout.addMenuEntry(lExitEntry);
 
@@ -53,10 +49,6 @@ public class MainMenuScreen extends MenuScreen {
 		switch (mClickAction.consume()) {
 		case BUTTON_START:
 			LoadingScreen.load(screenManager, true, new GameScreen(screenManager));
-			break;
-
-		case BUTTON_CREDITS:
-
 			break;
 
 		case BUTTON_EXIT:

@@ -13,6 +13,8 @@ In extreme emergencies, you can unleash a wave of energy to clear a path, but th
 
 ## TODOS
  * Actually make a long level
+ * Help Screen (Controls)
+ * Story
  * Levels
     * ~~Scripted spawns~~
     * ~~scrolling background~~

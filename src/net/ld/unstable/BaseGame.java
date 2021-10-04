@@ -59,7 +59,7 @@ public class BaseGame extends LintfordCore {
 			mScreenManager.addScreen(new GameScreen(mScreenManager));
 		}
 	}
-
+	
 	@Override
 	protected void onLoadGLContent() {
 		super.onLoadGLContent();
@@ -108,7 +108,7 @@ public class BaseGame extends LintfordCore {
 		GL11.glDepthFunc(GL11.GL_LEQUAL);
 
 		// Set the clear color to corn flower blue
-		GL11.glClearColor(0.0f / 255.0f, 149.0f / 255.0f, 237.0f / 255.0f, 1.0f);
+		GL11.glClearColor(0.0f / 255.0f, 0.0f / 255.0f, 0.0f / 255.0f, 1.0f);
 
 	}
 
