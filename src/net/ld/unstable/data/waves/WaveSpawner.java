@@ -12,7 +12,7 @@ public class WaveSpawner {
 	// Constants
 	// --------------------------------------
 
-	private static final int POOL_MAX_SIZE = 16;
+	private static final int POOL_MAX_SIZE = 100;
 
 	// --------------------------------------
 	// Inner-Classes
@@ -76,6 +76,9 @@ public class WaveSpawner {
 				final float lWorldY = lSpawnBlock.y;
 				final String lMobDefName = lSpawnBlock.mobDefName;
 
+				if(lMobDefName != null)
+					Debug.debugManager().logger().w(getClass().getSimpleName(), "Spawing mob: " + lMobDefName);
+				
 				mMobSpawner.spawnMob(lWorldX, lWorldY, lMobDefName);
 			} else {
 				Debug.debugManager().logger().w(getClass().getSimpleName(), "Mob Spawner not assigned");

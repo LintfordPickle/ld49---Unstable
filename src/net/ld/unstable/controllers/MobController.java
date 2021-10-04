@@ -93,7 +93,7 @@ public class MobController extends BaseController {
 
 		turretMovementDef = new MovingDefTurret(lFloorLevel);
 		StraightPattern = new MovingDefStraightMover();
-		CosMover = new MovingDefCosineMover();
+		CosMover = new MovingDefCosineMover(mLevelController.seaLevel());
 		surfaceMover = new MovingDefSurfaceMover(mLevelController.seaLevel());
 		surfaceMoveWithStop = new MovingDefSurfaceMoverWithStop(mLevelController.seaLevel());
 		movingDefEnemyMine = new MovingDefEnemyMine(mLevelController.seaLevel());
@@ -122,6 +122,12 @@ public class MobController extends BaseController {
 
 		for (int i = 0; i < lMobCount; i++) {
 			final var lMobInstance = mUpdateMobList.get(i);
+			
+			if(lMobInstance.mobDefinition == null) {
+				lMobInstance.kill();
+				lMobs.remove(lMobInstance);
+				continue;
+			}
 
 			updateSubmarine(pCore, lMobInstance);
 
@@ -131,7 +137,7 @@ public class MobController extends BaseController {
 			final float lDespawnTol = 200.f;
 			final float lLeftOfScreen = pCore.gameCamera().getPosition().x - ConstantsGame.WINDOW_WIDTH * .5f;
 			if (lMobInstance.worldPositionX + lDespawnTol < lLeftOfScreen) {
-				Debug.debugManager().logger().i(getClass().getSimpleName(), "Despawn mob");
+				Debug.debugManager().logger().i(getClass().getSimpleName(), "Despawn mob: " + lMobInstance.mobDefinition.getClass().getSimpleName());
 
 				lMobInstance.kill();
 				lMobs.remove(lMobInstance);

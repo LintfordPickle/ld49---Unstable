@@ -12,7 +12,7 @@ public class LevelController extends BaseController {
 
 	public static final String CONTROLLER_NAME = "Level Controller";
 
-	public static final float SCROLL_SPEED = 0.3f;
+	public static final float SCROLL_SPEED = 1.f;
 
 	// --------------------------------------
 	// Variables

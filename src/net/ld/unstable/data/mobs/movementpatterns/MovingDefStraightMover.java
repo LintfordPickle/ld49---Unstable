@@ -9,7 +9,7 @@ public class MovingDefStraightMover implements MovingDefBase {
 	public void update(LintfordCore pCore, ShmupMob pMob) {
 		float lDelta = (float) pCore.appTime().elapsedTimeMilli() / 1000f;
 
-		pMob.dx = -100.0f;
+		pMob.dx = -20.0f;
 		pMob.dy = 0.0f;
 
 		pMob.worldPositionX += pMob.dx * lDelta;

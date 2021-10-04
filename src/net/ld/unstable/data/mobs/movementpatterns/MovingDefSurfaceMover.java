@@ -15,9 +15,6 @@ public class MovingDefSurfaceMover implements MovingDefBase {
 	public void update(LintfordCore pCore, ShmupMob pMob) {
 		float lDelta = (float) pCore.appTime().elapsedTimeMilli() / 1000f;
 
-		pMob.dx = -100.0f;
-		pMob.dy = 0.0f;
-
 		// Need to move the base position along
 		pMob.baseWorldPositionX += pMob.dx * lDelta;
 		pMob.baseWorldPositionY = mSeaLevel - 20;
