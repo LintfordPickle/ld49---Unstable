@@ -26,7 +26,6 @@ public class ScreenShakeController extends BaseController {
 	protected float mShakeMag;
 	protected float mShakeDur;
 	protected float mShakeTimer;
-	private boolean mNeedsCleanup;
 
 	protected final Vector2f mOffsetPosition = new Vector2f();
 

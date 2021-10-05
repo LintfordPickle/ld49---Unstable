@@ -46,6 +46,7 @@ public class MobController extends BaseController {
 	private SpriteGraphController mSpriteGraphController;
 	private LevelController mLevelController;
 	private GameStateController mGameStateController;
+	private ScreenShakeController mScreenShakeController;
 
 	private final MobManager mMobManager;
 	private final List<ShmupMob> mUpdateMobList = new ArrayList<>();
@@ -88,6 +89,7 @@ public class MobController extends BaseController {
 		mProjectileController = (ProjectileController) lControllerManager.getControllerByNameRequired(ProjectileController.CONTROLLER_NAME, entityGroupID());
 		mExplosionController = (ExplosionsController) lControllerManager.getControllerByNameRequired(ExplosionsController.CONTROLLER_NAME, entityGroupID());
 		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
+		mScreenShakeController = (ScreenShakeController) lControllerManager.getControllerByNameRequired(ScreenShakeController.CONTROLLER_NAME, entityGroupID());
 
 		final float lFloorLevel = pCore.gameCamera().getPosition().y + ConstantsGame.WINDOW_HEIGHT * .5f;
 
@@ -122,8 +124,8 @@ public class MobController extends BaseController {
 
 		for (int i = 0; i < lMobCount; i++) {
 			final var lMobInstance = mUpdateMobList.get(i);
-			
-			if(lMobInstance.mobDefinition == null) {
+
+			if (lMobInstance.mobDefinition == null) {
 				lMobInstance.kill();
 				lMobs.remove(lMobInstance);
 				continue;
@@ -151,7 +153,7 @@ public class MobController extends BaseController {
 				} else {
 					mExplosionController.addMajorExplosion(lMobInstance.baseWorldPositionX, lMobInstance.baseWorldPositionY);
 				}
-				
+
 				mGameStateController.increaseScore(50);
 
 				lMobInstance.kill();
@@ -188,12 +190,11 @@ public class MobController extends BaseController {
 			if (lMobB.mobDefinition instanceof MobDefEnemyMine) {
 				if (pPlayerSub.collides(lMobB.worldPositionX, lMobB.worldPositionY, lMobB.mobDefinition.collisionRadius)) {
 
-					// SHAKE
+					mScreenShakeController.shakeCamera(350.f, 20.f);
 
-					// EXPLODE
 					mExplosionController.addMajorExplosion(lMobB.worldPositionX, lMobB.worldPositionY);
 
-					pPlayerSub.dealDamage(40);
+					pPlayerSub.dealDamage(50, 80);
 					lMobB.kill();
 				}
 			}

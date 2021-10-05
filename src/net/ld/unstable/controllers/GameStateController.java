@@ -108,8 +108,6 @@ public class GameStateController extends BaseController {
 		if (!mHasGameStarted || mHasGameEnded)
 			return;
 
-		System.out.println("multipler: " + mScoreMultiplier);
-
 		if (mScoreMultiplier > 0) {
 			mMultiplierCooldownTimer -= pCore.gameTime().elapsedTimeMilli();
 			if (mMultiplierCooldownTimer <= 0) {

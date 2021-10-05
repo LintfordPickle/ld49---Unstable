@@ -117,9 +117,9 @@ public class ShmupMob implements AnimatedSpriteGraphListener {
 		mobDefinition = pMobDefinition;
 	}
 
-	public void dealDamage(int pDamage) {
+	public void dealDamage(int pDamage, int pCoolandDamage) {
 		health -= pDamage;
-		coolant -= pDamage * 5;
+		coolant -= pCoolandDamage;
 	}
 
 	public void reset() {

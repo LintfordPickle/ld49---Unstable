@@ -15,8 +15,8 @@ public class BarrelShooter extends ProjectilePattern {
 	protected void update(LintfordCore pCore, Projectile pProjectile) {
 		float lDelta = (float) pCore.appTime().elapsedTimeMilli() / 1000f;
 
-		pProjectile.dx = pProjectile.odx * (1.f / pProjectile.timeSinceStart);
-		pProjectile.dy = pProjectile.ody;
+		pProjectile.dx *= 0.99f;
+		pProjectile.dr *= 0.99f;
 
 		pProjectile.worldPositionX += pProjectile.dx * lDelta;
 		pProjectile.worldPositionY += pProjectile.dy * lDelta;
