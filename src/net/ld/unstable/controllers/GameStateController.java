@@ -17,6 +17,8 @@ public class GameStateController extends BaseController {
 	public static final int END_CONDITION_COOLANT = 2;
 	public static final int END_CONDITION_HEALTH = 3;
 
+	public static final float MULTIPLIER_COOLDOWN_TIME = 1500;
+
 	// --------------------------------------
 	// Variables
 	// --------------------------------------
@@ -27,6 +29,10 @@ public class GameStateController extends BaseController {
 	private boolean mHasGameStarted;
 	private boolean mHasGameEnded;
 	private int mGameEndCondition;
+
+	private int mScoreMultiplier;
+	private float mMultiplierCooldownTimer;
+	private int mScore;
 
 	private boolean mWaveFinishedSpawning;
 	private int mCurrentWaveNumber;
@@ -58,6 +64,14 @@ public class GameStateController extends BaseController {
 	@Override
 	public boolean isInitialized() {
 		return false;
+	}
+
+	public int scoreMultiplier() {
+		return mScoreMultiplier;
+	}
+
+	public int score() {
+		return mScore;
 	}
 
 	// --------------------------------------
@@ -94,6 +108,20 @@ public class GameStateController extends BaseController {
 		if (!mHasGameStarted || mHasGameEnded)
 			return;
 
+		System.out.println("multipler: " + mScoreMultiplier);
+
+		if (mScoreMultiplier > 0) {
+			mMultiplierCooldownTimer -= pCore.gameTime().elapsedTimeMilli();
+			if (mMultiplierCooldownTimer <= 0) {
+				mScoreMultiplier--;
+				if (mScoreMultiplier > 0) {
+					mMultiplierCooldownTimer = MULTIPLIER_COOLDOWN_TIME;
+				} else {
+					mMultiplierCooldownTimer = 0;
+				}
+			}
+		}
+
 		final var lPlayerSub = mMobController.mobManager().playerSubmarine;
 
 		// check for a win condition
@@ -119,6 +147,13 @@ public class GameStateController extends BaseController {
 	// Methods
 	// --------------------------------------
 
+	public void increaseScore(int pAmt) {
+		mMultiplierCooldownTimer = MULTIPLIER_COOLDOWN_TIME;
+		mScoreMultiplier++;
+
+		mScore += pAmt * mScoreMultiplier;
+	}
+
 	public void startGame() {
 		Debug.debugManager().logger().i(getClass().getSimpleName(), "Starting Game");
 
@@ -130,6 +165,8 @@ public class GameStateController extends BaseController {
 
 		mWaveController.startNewGame();
 		mMobController.startNewGame();
+
+		mScore = 0;
 	}
 
 	public void setWaveHasFinishedSpawning() {

@@ -1,5 +1,6 @@
 package net.ld.unstable.renderers;
 
+import net.ld.unstable.controllers.GameStateController;
 import net.ld.unstable.controllers.LevelController;
 import net.ld.unstable.controllers.MobController;
 import net.lintford.library.core.LintfordCore;
@@ -8,6 +9,7 @@ import net.lintford.library.core.graphics.Color;
 import net.lintford.library.core.graphics.ColorConstants;
 import net.lintford.library.core.graphics.textures.Texture;
 import net.lintford.library.core.maths.MathHelper;
+import net.lintford.library.core.noise.SimplexNoise;
 import net.lintford.library.renderers.BaseRenderer;
 import net.lintford.library.renderers.RendererManager;
 
@@ -23,9 +25,14 @@ public class HudRenderer extends BaseRenderer {
 	// Variable
 	// --------------------------------------
 
+	private GameStateController mGameStateController;
 	private LevelController mLevelController;
 	private MobController mMobController;
 	private Texture mHudtexture;
+	private final SimplexNoise noise = new SimplexNoise(10, 2, 192182);
+	private int rRamp = 0;
+	private int gRamp = 0;
+	private int bRamp = 0;
 
 	// --------------------------------------
 	// Properties
@@ -54,6 +61,7 @@ public class HudRenderer extends BaseRenderer {
 
 		mLevelController = (LevelController) lControllerManager.getControllerByNameRequired(LevelController.CONTROLLER_NAME, entityGroupID());
 		mMobController = (MobController) lControllerManager.getControllerByNameRequired(MobController.CONTROLLER_NAME, entityGroupID());
+		mGameStateController = (GameStateController) lControllerManager.getControllerByNameRequired(GameStateController.CONTROLLER_NAME, entityGroupID());
 	}
 
 	@Override
@@ -75,6 +83,38 @@ public class HudRenderer extends BaseRenderer {
 		if (!isInitialized())
 			return;
 
+		drawScore(pCore);
+		drawSubmarineStats(pCore);
+
+	}
+
+	private void drawScore(LintfordCore pCore) {
+		final var lHudBounds = pCore.HUD().boundingRectangle();
+
+		final var lScore = String.valueOf(mGameStateController.score());
+		final var lHudFont = rendererManager().uiTextFont();
+		lHudFont.begin(pCore.HUD());
+		final float lScoreLabelWidthHalf = lHudFont.getStringWidth("Score") * .5f;
+		lHudFont.drawText("Score", lHudBounds.right() - 75.f - lScoreLabelWidthHalf, lHudBounds.top() + 5f, -0.35f, 1.f);
+		final float lScoreWidthHalf = lHudFont.getStringWidth(lScore) * .5f;
+		lHudFont.drawText(lScore, lHudBounds.right() - 75.f - lScoreWidthHalf, lHudBounds.top() + 30f, -0.35f, 1.f);
+		if (mGameStateController.scoreMultiplier() > 1) {
+			final String lMultiplier = mGameStateController.scoreMultiplier() + "x";
+			final float lMultiplierWidth = lHudFont.getStringWidth(lMultiplier) * .5f;
+
+			final float r = (float) noise.getNoise(rRamp += 1, 2);
+			final float g = (float) noise.getNoise(gRamp += 2, 2);
+			final float b = (float) noise.getNoise(bRamp += 3, 2);
+
+			final var lRandomColor = ColorConstants.getColor(r, g, b);
+
+			lHudFont.drawText(lMultiplier, lHudBounds.right() - 75.f - lMultiplierWidth, lHudBounds.top() + 55f, -0.35f, lRandomColor, 1.f);
+		}
+
+		lHudFont.end();
+	}
+
+	private void drawSubmarineStats(LintfordCore pCore) {
 		final var lHudBounds = pCore.HUD().boundingRectangle();
 
 		final var lTextureBatch = rendererManager().uiTextureBatch();

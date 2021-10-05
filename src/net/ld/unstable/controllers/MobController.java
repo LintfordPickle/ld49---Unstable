@@ -151,6 +151,8 @@ public class MobController extends BaseController {
 				} else {
 					mExplosionController.addMajorExplosion(lMobInstance.baseWorldPositionX, lMobInstance.baseWorldPositionY);
 				}
+				
+				mGameStateController.increaseScore(50);
 
 				lMobInstance.kill();
 				lMobs.remove(lMobInstance);
